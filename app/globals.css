@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+/* ============================================================
+   quirq · design tokens
+   black void · prismatic spectrum · geometric mark
+   ============================================================ */
+@theme {
+  --color-void: #000000;
+  --color-ink: #f4f3f0;
+  --color-dim: #a3a39e;
+  --color-faint: #6f6f6a;
+  --color-hair: rgba(244, 243, 240, 0.1);
+  --color-hair-soft: rgba(244, 243, 240, 0.055);
+
+  --color-spec-red: #ff453a;
+  --color-spec-orange: #ff9f0a;
+  --color-spec-yellow: #ffd60a;
+  --color-spec-green: #30d158;
+  --color-spec-cyan: #2fd2ff;
+  --color-spec-blue: #0a84ff;
+  --color-spec-purple: #bf5af2;
+
+  --font-mark: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  --spectrum: linear-gradient(
+    90deg,
+    #ff453a,
+    #ff9f0a,
+    #ffd60a,
+    #30d158,
+    #2fd2ff,
+    #0a84ff,
+    #bf5af2
+  );
+  /* written every frame by the scroll runtime */
+  --scroll: 0;
+}
+
+/* ============================== base ============================== */
+html {
+  background: #000;
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 380;
+  letter-spacing: 0.004em;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(244, 243, 240, 0.92);
+  color: #000;
+}
+
+/* Lenis smooth-scroll contract */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* ============================== primitives ============================== */
+.label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.spectrum-text {
+  background: var(--spectrum);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.spectrum-rule {
+  background: var(--spectrum);
+}
+
+.display {
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-size: clamp(36px, 6.3vw, 88px);
+}
+
+.display-sm {
+  font-weight: 600;
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  font-size: clamp(29px, 4.6vw, 56px);
+}
+
+.lede {
+  color: var(--color-dim);
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.6;
+  max-width: 36ch;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* legibility over the live 3D stage */
+.over-stage {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.55),
+    0 4px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================== film grain ============================== */
+.grain {
+  position: fixed;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-drift 8s steps(5) infinite;
+}
+
+@keyframes grain-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-2%, 1%);
+  }
+  40% {
+    transform: translate(1%, -2%);
+  }
+  60% {
+    transform: translate(-1%, 2%);
+  }
+  80% {
+    transform: translate(2%, -1%);
+  }
+}
+
+/* vignette keeps type readable against the glass bloom */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: radial-gradient(
+    135% 105% at 50% 50%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* ============================== live pulse ============================== */
+.pulse-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-spec-green);
+  flex: none;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-spec-green);
+  animation: pulse-ring 2.2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
+/* ============================== reduced motion ============================== */
+@media (prefers-reduced-motion: reduce) {
+  .grain,
+  .pulse-dot::after {
+    animation: none;
+  }
+}

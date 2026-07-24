@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "pid": "d59a4366-3834-4f6a-b057-b479f1ddb2ca",
+  "name": "web",
+  "owner_user_id": "local",
+  "created_at": "2026-07-24T23:05:09Z",
+  "classification": {
+    "computed_at": "2026-07-24T23:45:35Z",
+    "category": "engineering",
+    "categories": [
+      "engineering"
+    ],
+    "ptype": "app",
+    "label": "web",
+    "files": 39,
+    "xotype_counts": {
+      "inbox": 2,
+      "output": 31,
+      "system": 6
+    },
+    "signals": {
+      "iac": 0,
+      "contract": 0,
+      "images": 4,
+      "has_slides": false,
+      "docs_site": false
+    },
+    "last_touched": "2026-07-24",
+    "first_commit": "2026-05-28",
+    "facts": {
+      "files": 11,
+      "exts": [
+        [
+          ".md",
+          3
+        ],
+        [
+          ".ts",
+          2
+        ],
+        [
+          ".json",
+          2
+        ],
+        [
+          ".yaml",
+          2
+        ]
+      ],
+      "iac_signal": 0,
+      "contract_signal": 0,
+      "image_files": 0,
+      "research_signal": 0,
+      "code_files": 6,
+      "tests": 0,
+      "language": "JavaScript",
+      "name": "web",
+      "description": null,
+      "scripts": [
+        "dev",
+        "build",
+        "start"
+      ]
+    }
+  }
+}
