@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
+import { MotionProvider } from "@/components/motion-provider";
 import "./globals.css";
 
 /* Geometric for the mark, grotesque for reading, mono for anything metered. */
@@ -24,18 +25,21 @@ const jetbrains = JetBrains_Mono({
 });
 
 const DESCRIPTION =
-  "Tokens meter what your AI consumed. quirq meters what it delivered — verified against captured state, priced by the person who wanted it, costed all-in.";
+  "Tokens meter what your AI consumed. quirq meters what it delivered: verified against captured state, priced by the person who wanted it, costed all-in.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://quirq.ai"),
-  title: "quirq · watch the work, not the meter",
+  title: {
+    default: "quirq · work at light speed",
+    template: "%s · quirq",
+  },
   description: DESCRIPTION,
   icons: {
     icon: "/assets/favicon.svg",
     apple: "/assets/quirq-mark.jpg",
   },
   openGraph: {
-    title: "quirq · watch the work, not the meter",
+    title: "quirq · work at light speed",
     description: DESCRIPTION,
     url: "https://quirq.ai",
     type: "website",
@@ -43,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "quirq · watch the work, not the meter",
+    title: "quirq · work at light speed",
     description: DESCRIPTION,
     images: ["/assets/og.jpg"],
   },
@@ -65,11 +69,15 @@ export default function RootLayout({
       <head>
         {/* Entrance animations start from opacity:0. Without JS those inline
             styles would never be cleared, so the page would render blank. */}
+        {/* The chevron disclosure can never open without JS, so it is hidden
+            rather than left as a dead control; the mailto label still works. */}
         <noscript>
-          <style>{`main *, nav, nav * { opacity: 1 !important; transform: none !important; filter: none !important; }`}</style>
+          <style>{`main *, nav, nav * { opacity: 1 !important; transform: none !important; filter: none !important; } .openin-toggle { display: none !important; }`}</style>
         </noscript>
       </head>
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

@@ -112,7 +112,7 @@ export function GlassForm({ quality }: { quality: StageQuality }) {
           attenuationDistance={4}
           attenuationColor="#ffffff"
           color="#ffffff"
-          // No `background` override — the transmission sampler renders the real
+          // No `background` override: the transmission sampler renders the real
           // scene, which is the light burst upstage. That is what the glass bends.
           envMapIntensity={LIGHT.envMapIntensity}
           backsideEnvMapIntensity={LIGHT.backsideEnvMapIntensity}

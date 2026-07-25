@@ -3,7 +3,7 @@ import * as THREE from "three";
 type RibbonOptions = {
   /** Radius of the loop the ribbon is swept around. */
   radius?: number;
-  /** Width of the ribbon face — the broad surface light disperses through. */
+  /** Width of the ribbon face: the broad surface light disperses through. */
   width?: number;
   /** Ribbon thickness. Thin reads as glass; the refraction depth is set on the material. */
   thickness?: number;
@@ -18,12 +18,12 @@ type RibbonOptions = {
 };
 
 /**
- * A closed, twisted glass ribbon — the quirq mark's mobius, built procedurally.
+ * A closed, twisted glass ribbon: the quirq mark's mobius, built procedurally.
  *
  * Swept as four separate quad strips (one per face of the rectangular
  * cross-section) rather than one welded tube. Each face owns its vertices, so
  * `computeVertexNormals` leaves the long edges crisp instead of rounding them
- * into a soft tube — those hard edges are what throw the sharp caustics and
+ * into a soft tube: those hard edges are what throw the sharp caustics and
  * split light into the spectrum.
  */
 export function createRibbonGeometry({
@@ -86,7 +86,7 @@ export function createRibbonGeometry({
       normal.copy(radial).addScaledVector(tangent, -radial.dot(tangent)).normalize();
       binormal.crossVectors(tangent, normal).normalize();
 
-      // Roll the cross-section as it travels — this is the twist.
+      // Roll the cross-section as it travels: this is the twist.
       const phi = twists * u;
       const cos = Math.cos(phi);
       const sin = Math.sin(phi);

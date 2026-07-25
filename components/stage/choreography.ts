@@ -1,5 +1,5 @@
 /**
- * One keyframe per beat. The glass form is a single object that never unmounts —
+ * One keyframe per beat. The glass form is a single object that never unmounts;
  * it is transformed and re-tuned as the page scrolls, so the whole site reads as
  * one continuous shot rather than five separate scenes.
  *
@@ -18,7 +18,7 @@ export type Keyframe = {
   /** Absolute tilt targets. */
   tiltX: number;
   tiltZ: number;
-  /** Optics — how far the refracted RGB channels separate. Colour = value. */
+  /** Optics: how far the refracted RGB channels separate. Colour = value. */
   chroma: number;
   /** Refraction depth. Thicker glass bends light further. */
   thickness: number;
@@ -27,7 +27,7 @@ export type Keyframe = {
   rough: number;
   ior: number;
   /**
-   * Brightness of the light source upstage — what the glass has to refract.
+   * Brightness of the light source upstage: what the glass has to refract.
    * These are the base levels; `LIGHT.burstGain` in lib/lighting.ts scales all
    * of them together, so change the preset there to re-light the page rather
    * than editing these one by one.
@@ -36,7 +36,7 @@ export type Keyframe = {
 };
 
 export const KEYFRAMES: Keyframe[] = [
-  // 0 · hero — centred behind the wordmark, breathing slowly.
+  // 0 · hero: centred behind the wordmark, breathing slowly.
   {
     x: 0,
     y: -0.32,
@@ -53,7 +53,7 @@ export const KEYFRAMES: Keyframe[] = [
     ior: 1.62,
     burst: 0.56,
   },
-  // 1 · the meter you already have — colour drained out, glass gone murky.
+  // 1 · the meter you already have: colour drained out, glass gone murky.
   {
     x: 2.5,
     y: -0.15,
@@ -70,7 +70,7 @@ export const KEYFRAMES: Keyframe[] = [
     ior: 1.32,
     burst: 0.19,
   },
-  // 2 · the meter that was missing — full spectrum floods back.
+  // 2 · the meter that was missing: full spectrum floods back.
   {
     x: -2.35,
     y: 0.15,
@@ -87,7 +87,7 @@ export const KEYFRAMES: Keyframe[] = [
     ior: 1.72,
     burst: 0.66,
   },
-  // 3 · the ledger — recedes upstage so the numbers own the frame.
+  // 3 · the ledger: recedes upstage so the numbers own the frame.
   {
     x: 3.05,
     y: 1.5,
@@ -104,7 +104,7 @@ export const KEYFRAMES: Keyframe[] = [
     ior: 1.6,
     burst: 0.42,
   },
-  // 4 · the invitation — returns centre, biggest, fully lit.
+  // 4 · the invitation: returns centre, biggest, fully lit.
   {
     x: 0,
     y: 0,

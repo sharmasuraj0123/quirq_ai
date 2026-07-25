@@ -1,13 +1,27 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
-import { Mark } from "./primitives";
+import { cn, Mark } from "./primitives";
+import { OpenIn } from "./open-in";
 
 export function Nav() {
+  const pathname = usePathname();
+  const home = pathname === "/";
+  const onWhat = pathname.startsWith("/what-is-quirq");
+  const onHow = pathname.startsWith("/how-it-works");
+  const onBeats = pathname.startsWith("/beats");
+  const onResearch = pathname.startsWith("/research");
+  // Pages that run the 3D shot supply their own darkness and a live
+  // scroll-progress value; text pages get the glass bar instead.
+  const onStage = home || onWhat || onHow || onBeats;
+
   return (
     <>
       {/* Scroll progress. Driven by the --scroll custom property the scroll
-          runtime writes each frame, so it costs no React renders. */}
+          runtime writes each frame, so it costs no React renders. Pages
+          without the runtime leave it at 0, so the rule simply never shows. */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50 h-px">
         <div
           className="spectrum-rule h-full origin-left"
@@ -18,22 +32,110 @@ export function Nav() {
       <motion.nav
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between px-5 sm:px-8 lg:px-11"
+        // The long delay belongs to the stage entrance choreography; text
+        // pages shouldn't wait for an entrance that isn't happening.
+        transition={{
+          duration: 0.9,
+          delay: onStage ? 0.8 : 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className={cn(
+          "fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between px-5 sm:px-8 lg:px-11",
+          !onStage && "border-b border-hair-soft bg-black/60 backdrop-blur-xl",
+        )}
       >
-        <a
-          href="#hero"
+        <Link
+          href="/"
           className="flex items-center gap-2.5 text-ink"
-          aria-label="quirq, back to top"
+          aria-label={home ? "quirq, back to top" : "quirq, home"}
         >
           <Mark className="h-[19px] w-auto" />
           <span className="font-mark text-[19px] font-semibold tracking-tight">
             quirq
           </span>
-        </a>
+        </Link>
 
         <div className="flex items-center gap-5 sm:gap-7">
-          {/* Drops out on phones so the CTA never gets pushed off the edge —
+          {/* Hidden on phones like the whitepaper link: the mark, Research
+              and the CTA are the load-bearing trio at small widths. */}
+          <Link
+            href="/what-is-quirq"
+            aria-current={onWhat ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              onWhat && "text-ink",
+            )}
+          >
+            {onWhat && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            What is quirq
+          </Link>
+
+          <Link
+            href="/how-it-works"
+            aria-current={onHow ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              onHow && "text-ink",
+            )}
+          >
+            {onHow && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            How it works
+          </Link>
+
+          {/* Deepest of the dev pages; earns its slot only where the bar has
+              room to spare. */}
+          <Link
+            href="/beats"
+            aria-current={onBeats ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink lg:inline-flex",
+              onBeats && "text-ink",
+            )}
+          >
+            {onBeats && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            Beats
+          </Link>
+
+          <Link
+            href="/research"
+            aria-current={onResearch ? "page" : undefined}
+            // Invisible padding: the 10px label alone is far under a usable
+            // touch target, and the transparent bleed moves no geometry.
+            className={cn(
+              "label inline-flex items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink",
+              onResearch && "text-ink",
+            )}
+          >
+            {/* The active page gets the spectrum tick; hover only gets ink. */}
+            {onResearch && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            Research
+          </Link>
+
+          {/* Drops out on phones so the CTA never gets pushed off the edge;
               the whitepaper is still linked from the ledger note and footer. */}
           {/* Opens in its own tab: it's a PDF, and losing the page you were
               reading to a document viewer is a bad trade. */}
@@ -41,7 +143,7 @@ export function Nav() {
             href="/quirq-whitepaper.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="label hidden items-center gap-1.5 transition-colors hover:text-ink sm:inline-flex"
+            className="label hidden items-center gap-1.5 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex"
           >
             Whitepaper
             <svg
@@ -62,12 +164,8 @@ export function Nav() {
             </svg>
             <span className="sr-only">(opens in a new tab)</span>
           </a>
-          <a
-            href="mailto:suraj@xo.builders?subject=quirq%20early%20access"
-            className="rounded-full bg-ink px-4 py-2 font-mono text-[10.5px] uppercase tracking-[0.14em] text-void transition-transform duration-300 hover:-translate-y-0.5"
-          >
-            Early access
-          </a>
+
+          <OpenIn variant="nav" />
         </div>
       </motion.nav>
     </>

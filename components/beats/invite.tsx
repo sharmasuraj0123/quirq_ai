@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Mark, Reveal, Rise, TextScrim } from "@/components/ui/primitives";
+import { Mark, Reveal, Rise } from "@/components/ui/primitives";
+import { GlassPool, GlassText } from "@/components/ui/glass";
 
 const MAIL = "mailto:suraj@xo.builders?subject=quirq%20early%20access";
 
@@ -14,11 +15,11 @@ export function Invite() {
     >
       <div className="flex flex-1 items-center py-28">
         <div className="relative mx-auto w-full max-w-[1180px] px-5 text-center sm:px-8 lg:px-11">
-          <TextScrim className="mx-auto max-w-3xl" />
+          <GlassPool scrimClassName="mx-auto max-w-3xl">
           <h2 className="display over-stage mx-auto max-w-[16ch]">
             <Reveal delay={0.05}>Put a meter on</Reveal>
             <Reveal delay={0.13}>
-              <span className="spectrum-text">the other side.</span>
+              <GlassText>the other side.</GlassText>
             </Reveal>
           </h2>
 
@@ -33,7 +34,7 @@ export function Invite() {
               href={MAIL}
               whileHover={{ y: -3 }}
               transition={{ type: "spring", stiffness: 320, damping: 22 }}
-              className="group relative mt-11 inline-flex items-center gap-4 rounded-full bg-ink px-8 py-5 text-void sm:px-10"
+              className="group focus-on-ink relative mt-11 inline-flex items-center gap-4 rounded-full bg-ink px-8 py-5 text-void sm:px-10"
             >
               {/* Spectrum bloom that lights up under the button on hover. */}
               <span
@@ -62,6 +63,7 @@ export function Invite() {
               </svg>
             </motion.a>
           </Rise>
+          </GlassPool>
         </div>
       </div>
 
@@ -81,7 +83,7 @@ export function Invite() {
             </div>
             <p className="mt-3 font-mono text-[10px] tracking-[0.14em] text-faint uppercase">
               Tokens meter consumption.{" "}
-              <span className="spectrum-text">Quirqs meter delivery.</span>
+              <span className="glass-text">Quirqs meter delivery.</span>
             </p>
           </div>
 
@@ -97,7 +99,7 @@ export function Invite() {
                 href={link.href}
                 target={link.newTab ? "_blank" : undefined}
                 rel={link.newTab ? "noopener noreferrer" : undefined}
-                className="label transition-colors hover:text-ink"
+                className="label px-2 py-2 -mx-2 -my-2 transition-colors hover:text-ink"
               >
                 {link.label}
               </a>

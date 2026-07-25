@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# quirq · landing site
 
-## Getting Started
+The marketing site for [quirq](https://quirq.ai), the unit of verified agent work: tokens meter what agents consume, quirqs meter what they deliver. One click, and your agents run in an environment that snapshots state, verifies outcomes, and mints value against an auditable ledger.
 
-First, run the development server:
+The site is deliberately not a wall of copy. It is one continuous 3D shot: a twisted glass ribbon travels behind five "beats" of content, re-staged by scroll, with color doing the arguing (drained monochrome at the tokens beat, full spectrum at the quirqs beat).
+
+## Pages
+
+| Route | What it is |
+|---|---|
+| `/` | The five-beat scroll story: hero, ecosystem shelf, tokens, quirqs, ledger, invite |
+| `/what-is-quirq` | The explainer cut: same stage and keyframe track, its own five beats (`app/what-is-quirq/beats.tsx`) |
+| `/how-it-works` | The stage documented by itself: the scroll pipeline, the three formulas, and the list-to-tree migration plan |
+| `/beats` | The beats-array deep dive: fractional traversal, a live `stage.beat` meter, and the array's honest limits |
+| `/research` | Research index: single posts adapted from [docs.xo.builders/research](https://docs.xo.builders/research) |
+| `/research/[slug]` | Individual research posts |
+| `/quirq-whitepaper.pdf` | The whitepaper (static) |
+| `/llm.txt` | The whitepaper as one plain-text document for language models; the "Open in" menu hands this to agents |
+
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) · **React 19** · **Tailwind 4**
+- **react-three-fiber 9 + drei 10 + three** for the glass stage (lazily imported, ~1MB stays off the critical path)
+- **motion 12** for entrance choreography · **Lenis** for smooth scroll
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev        # http://localhost:3000
+pnpm build      # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The workspace launch config (`.claude/launch.json` at the workspace root) runs it as `quirq-web` on port 3210.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How the page works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A full walkthrough of the scroll/animation system (and a proposal for evolving
+its flat beat list into a tree) lives in [docs/animation.md](docs/animation.md).
 
-## Learn More
+```
+app/
+  page.tsx              the home beats, in order
+  what-is-quirq/        a second stage page: same shell, different beats
+  how-it-works/         a third: the system explaining itself, plus the plan
+  beats/                a fourth: the traversal deep dive, with a live meter
+  research/             index + [slug] post pages
+  globals.css           design tokens: void black, ink, the spectrum gradient
+components/
+  stage-page.tsx        the shared shell: runtime + stage + overlays + nav
+  scroll-runtime.tsx    Lenis + rAF loop; measures the active beat, writes --scroll
+  stage/
+    stage.tsx           fixed full-viewport canvas host
+    scene.tsx           lazy three/drei entry point (keep the imports here)
+    glass-form.tsx      MeshTransmissionMaterial ribbon
+    ribbon-geometry.ts  procedural twisted ribbon, 4 quad strips
+    choreography.ts     one keyframe per beat; scroll interpolates between them
+    light-burst.tsx     shader plane upstage; the glass needs light to refract
+  beats/                hero, ecosystem, consumption, delivery, ledger, invite
+  ui/
+    nav.tsx             fixed nav, page links, scroll progress rule
+    open-in.tsx         early-access split button + "open in agent" menu
+    primitives.tsx      Beat, Reveal, Rise, TextScrim, Marker, ActionLink, Mark
+lib/
+  lighting.ts           LIGHTING preset: one switch for page brightness
+  research.ts           research posts as data; the routes render from this
+  spectrum.ts           the seven spectrum stops
+```
 
-To learn more about Next.js, take a look at the following resources:
+The invariants that keep it coherent:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **One object, never remounted.** The ribbon exists once; sections carry `data-beat={n}` and the scroll runtime maps section positions to `choreography.ts` keyframe `n`. A section without `data-beat` (the ecosystem shelf) is invisible to the 3D and the glass just keeps travelling.
+- **Brightness is one switch.** `LIGHTING` in `lib/lighting.ts` drives the burst shader, the glass `envMapIntensity`, and both scrim gradients together. Change the preset, never the individual call sites; they are coupled.
+- **Text over live 3D always sits on a `TextScrim`.**
+- **Fixed geometry only.** No marquees, nothing sliced at an edge; grids stay perfect rectangles (the ecosystem lattice keeps 12 items because 12 divides by its 2/4/6 column counts).
+- **Sections stay about one viewport tall**, or a beat's visual peak desyncs from its copy.
+- **No JS still renders.** Entrance animations start at `opacity: 0`, so `app/layout.tsx` carries a `<noscript>` override; keep it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Editing content
 
-## Deploy on Vercel
+- **Hero copy / CTA:** `components/beats/hero.tsx`. The early-access dropdown and its agent deep links (Claude Code, Codex, Cursor) live in `components/ui/open-in.tsx`.
+- **Add a research post:** add an entry to `lib/research.ts` (slug, dek, dated body blocks). The index and post routes pick it up; no other change needed.
+- **Ledger numbers:** `components/beats/ledger.tsx`; they trace to the whitepaper's worked quarter, and the "illustrative" caption is load-bearing. Do not drop it.
+- **Ecosystem lattice:** the `ECOSYSTEM` array in `components/beats/ecosystem.tsx`. These are supported runtimes and clouds, not customers; never present them as customers.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Standard Next.js production build (`pnpm build && pnpm start`), or any host that runs Next 16. All content is static or client-side; there are no server environment variables.

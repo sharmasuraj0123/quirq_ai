@@ -8,7 +8,8 @@
   --color-void: #000000;
   --color-ink: #f4f3f0;
   --color-dim: #a3a39e;
-  --color-faint: #6f6f6a;
+  /* 5.7:1 on black: the old #6f6f6a sat at 4.16:1, under AA for small text. */
+  --color-faint: #85857f;
   --color-hair: rgba(244, 243, 240, 0.1);
   --color-hair-soft: rgba(244, 243, 240, 0.055);
 
@@ -81,6 +82,15 @@ html.lenis body {
   border-radius: 8px;
 }
 
+/* Controls that are themselves ink-filled: the default ink ring is invisible
+   on them, and an outside ring gets clipped by the pill's overflow-hidden.
+   Unlayered on purpose; it must beat the rule above, and Tailwind utilities
+   (which live in a layer) cannot. */
+.focus-on-ink:focus-visible {
+  outline-color: var(--color-void);
+  outline-offset: -4px;
+}
+
 /* ============================== primitives ============================== */
 .label {
   font-family: var(--font-mono);
@@ -95,6 +105,43 @@ html.lenis body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Translucent glass type. The fill is mostly transparent so the live burst
+   behind reads through the glyphs; the uneven gradient plays as facets, and
+   the hairline stroke plus bloom keep the edges reading as polished glass
+   rather than missing ink. text-shadow must go: the inherited over-stage
+   shadow would print a dark ghost inside the transparent fill. */
+.glass-text {
+  color: transparent;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.14) 32%,
+    rgba(255, 255, 255, 0.5) 52%,
+    rgba(255, 255, 255, 0.16) 74%,
+    rgba(255, 255, 255, 0.38) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* em-scaled so the same class works from 10px mono captions to the 88px
+     display sizes: about 1px of rim and a fifth of an em of bloom. */
+  -webkit-text-stroke: 0.013em rgba(255, 255, 255, 0.32);
+  text-shadow: none;
+  filter: drop-shadow(0 0 0.2em rgba(255, 255, 255, 0.22));
+}
+
+/* The aperture where the i's dot was: a genuinely transparent hole in the
+   wordmark. It carries no fill of its own; the hero scrim gets a matching
+   circular mask cut out of it at runtime, so the raw burst light passes
+   through undimmed. Only a hairline rim marks the rim of the hole. The
+   backdrop-* utilities on the element itself add the slight lens gather
+   (declared as Tailwind utilities: Lightning CSS strips hand-written
+   backdrop-filter declarations from this file). */
+.dot-aperture {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 .spectrum-rule {
@@ -164,6 +211,19 @@ html.lenis body {
   80% {
     transform: translate(2%, -1%);
   }
+}
+
+/* Static stand-in for the light burst on pages without the 3D stage:
+   the same spectrum, rising from beyond the top edge, at whisper level. */
+.research-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(58% 40% at 50% -12%, rgba(191, 90, 242, 0.13), transparent 70%),
+    radial-gradient(48% 34% at 84% -8%, rgba(10, 132, 255, 0.1), transparent 70%),
+    radial-gradient(44% 32% at 14% -8%, rgba(255, 69, 58, 0.09), transparent 70%);
 }
 
 /* vignette keeps type readable against the glass bloom */

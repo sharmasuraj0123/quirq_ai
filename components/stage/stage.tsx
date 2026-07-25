@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import type { StageQuality } from "./glass-form";
 
 // three.js, drei and the shaders are ~1MB of the bundle. Loading them lazily
-// keeps them off the critical path — the hero renders from static HTML first.
+// keeps them off the critical path: the hero renders from static HTML first.
 const Scene = dynamic(() => import("./scene"), { ssr: false });
 
 /** Does this browser have a GL context to give us at all? */
@@ -33,7 +33,7 @@ function detectQuality(): StageQuality {
 
 /**
  * The persistent 3D layer. Mounts once, behind everything, and is never
- * remounted between beats — the continuity of that single object is the design.
+ * remounted between beats: the continuity of that single object is the design.
  */
 export default function Stage() {
   const [quality, setQuality] = useState<StageQuality | null>(null);

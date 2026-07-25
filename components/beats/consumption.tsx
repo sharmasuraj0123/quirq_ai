@@ -6,7 +6,7 @@ import { Beat, Marker, Reveal, Rise, TextScrim } from "@/components/ui/primitive
 
 /** Where the demo counter starts, so it reads as mid-month rather than day one. */
 const START = 1_284_930_441;
-/** Tokens per second. Deliberately absurd — that is the point being made. */
+/** Tokens per second. Deliberately absurd: that is the point being made. */
 const RATE = 734_219;
 
 /**
@@ -40,7 +40,7 @@ function TwinMeter() {
       total += dt * RATE;
       el.textContent = Math.floor(total).toLocaleString("en-US");
       if (bar.current) {
-        // Fills, resets, fills again — a meter that never completes anything.
+        // Fills, resets, fills again: a meter that never completes anything.
         const cycle = ((now / 1000) % 2.6) / 2.6;
         bar.current.style.transform = `scaleX(${cycle})`;
       }
@@ -90,7 +90,7 @@ export function Consumption() {
     <Beat index={1} id="consumption">
       <div className="relative max-w-2xl md:max-w-[60%]">
         <TextScrim />
-        <Marker>01 — the meter you have</Marker>
+        <Marker>01 · the meter you have</Marker>
 
         <h2 className="display over-stage mt-8">
           <Reveal delay={0.05}>Tokens count</Reveal>

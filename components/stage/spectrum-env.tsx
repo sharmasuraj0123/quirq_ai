@@ -8,7 +8,7 @@ import { SPECTRUM } from "@/lib/spectrum";
  *
  * Nothing here is a rainbow texture: one hot white core plus seven coloured
  * emitters ringed around the form, baked into an environment map. The spectrum
- * on screen is real dispersion — white light entering glass and leaving split.
+ * on screen is real dispersion: white light entering glass and leaving split.
  * Baked once (`frames={1}`) because the lights hold still and the form turns.
  */
 export function SpectrumEnv({ resolution = 256 }: { resolution?: number }) {

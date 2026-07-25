@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import { Beat, Marker, Reveal, Rise, TextScrim, cn } from "@/components/ui/primitives";
+import { GlassPool, GlassText } from "@/components/ui/glass";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -15,7 +16,7 @@ type StatProps = {
   suffix?: string;
   decimals?: number;
   note: string;
-  tone?: "ink" | "green" | "spectrum";
+  tone?: "ink" | "green" | "glass";
 };
 
 function Stat({
@@ -69,7 +70,7 @@ function Stat({
         className={cn(
           "numeric mt-2.5 text-[clamp(22px,2.5vw,31px)] font-semibold tabular-nums",
           tone === "green" && "text-spec-green",
-          tone === "spectrum" && "spectrum-text",
+          tone === "glass" && "glass-text",
           tone === "ink" && "text-ink",
         )}
       >
@@ -101,7 +102,7 @@ const FEED: Row[] = [
 
 /**
  * Timestamps are derived from the row's position in the stream, not stored on
- * it. Rows cycle, so fixed times would scramble the clock as the feed wraps —
+ * it. Rows cycle, so fixed times would scramble the clock as the feed wraps,
  * and a ledger whose entries run backwards in time is not a ledger.
  * Deterministic (no randomness) so server and client markup agree.
  */
@@ -189,7 +190,7 @@ function Feed() {
             <span className="numeric w-[74px] shrink-0 text-right tabular-nums">
               <span
                 className={
-                  row.minted === null ? "text-faint" : "spectrum-text font-semibold"
+                  row.minted === null ? "text-faint" : "glass-text font-semibold"
                 }
               >
                 {row.minted === null ? "held" : `+$${row.minted.toFixed(2)}`}
@@ -246,16 +247,17 @@ export function Ledger() {
   return (
     <Beat index={3} id="ledger">
       <div className="relative max-w-2xl">
-        <TextScrim />
-        <Marker>03 — the ledger</Marker>
-        {/* Smaller than the other beats on purpose: here the panel is the
-            subject and the headline only has to introduce it. */}
-        <h2 className="display-sm over-stage mt-7">
-          <Reveal delay={0.05}>An auditable</Reveal>
-          <Reveal delay={0.13}>
-            P&amp;L <span className="spectrum-text">for your AI.</span>
-          </Reveal>
-        </h2>
+        <GlassPool>
+          <Marker>03 · the ledger</Marker>
+          {/* Smaller than the other beats on purpose: here the panel is the
+              subject and the headline only has to introduce it. */}
+          <h2 className="display-sm over-stage mt-7">
+            <Reveal delay={0.05}>An auditable</Reveal>
+            <Reveal delay={0.13}>
+              P&amp;L <GlassText>for your AI.</GlassText>
+            </Reveal>
+          </h2>
+        </GlassPool>
       </div>
 
       <Rise delay={0.2} className="mt-9">
@@ -297,7 +299,7 @@ export function Ledger() {
               value={11.4}
               decimals={1}
               suffix="%"
-              note="from 18.1% — trust is growing"
+              note="from 18.1%, trust is growing"
             />
           </div>
 
@@ -320,7 +322,7 @@ export function Ledger() {
       <Rise delay={0.3} className="relative mt-5 max-w-[62ch]">
         <TextScrim />
         <p className="relative font-mono text-[10.5px] leading-relaxed text-dim">
-          Illustrative — the worked quarter from the{" "}
+          Illustrative: the worked quarter from the{" "}
           <a
             href="/quirq-whitepaper.pdf"
             target="_blank"

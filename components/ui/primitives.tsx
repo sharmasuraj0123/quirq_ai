@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { LIGHT } from "@/lib/lighting";
 
 export const cn = (...parts: Array<string | false | null | undefined>) =>
@@ -43,7 +43,7 @@ export function Beat({
 
 /**
  * Type that rises out of a clipping mask. The mask is what makes it read as
- * printing rather than fading — nothing is visible above the line until it moves.
+ * printing rather than fading: nothing is visible above the line until it moves.
  */
 export function Reveal({
   children,
@@ -54,25 +54,21 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
   // Watch the mask, not the thing being masked. The inner span starts pushed
-  // 115% down, so it is fully clipped by this wrapper's `overflow-hidden` —
+  // 115% down, so it is fully clipped by this wrapper's `overflow-hidden`;
   // observing it directly would mean it never intersects, and so never reveals.
   const mask = useRef<HTMLSpanElement>(null);
   const inView = useInView(mask, { once: true, amount: 0.3 });
 
+  // No useReducedMotion branch: it is null during SSR, so branching initial
+  // desyncs server HTML from a reduced-motion client and the y offset never
+  // clears. MotionConfig reducedMotion="user" snaps the transform instead.
   return (
     <span ref={mask} className={cn("block overflow-hidden", className)}>
       <motion.span
         className="block will-change-transform"
-        initial={reduced ? { opacity: 0 } : { y: "115%", opacity: 0 }}
-        animate={
-          inView
-            ? reduced
-              ? { opacity: 1 }
-              : { y: "0%", opacity: 1 }
-            : undefined
-        }
+        initial={{ y: "115%", opacity: 0 }}
+        animate={inView ? { y: "0%", opacity: 1 } : undefined}
         transition={{ duration: 1, delay, ease: EASE }}
       >
         {children}
@@ -81,7 +77,7 @@ export function Reveal({
   );
 }
 
-/** A softer entrance for things that shouldn't slide — panels, figures. */
+/** A softer entrance for things that shouldn't slide: panels, figures. */
 export function Rise({
   children,
   delay = 0,
@@ -91,11 +87,10 @@ export function Rise({
   delay?: number;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
   return (
     <motion.div
       className={className}
-      initial={reduced ? { opacity: 0 } : { y: 26, opacity: 0 }}
+      initial={{ y: 26, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 1.05, delay, ease: EASE }}
@@ -106,24 +101,37 @@ export function Rise({
 }
 
 /**
- * A soft pool of shadow behind a block of copy.
+ * The eclipse: a soft elliptical pool of shadow behind a block of copy.
  *
  * The glass and its bloom move with the scroll, so at some widths they land
  * directly under the text. Rather than choreographing around every breakpoint,
- * each text block carries its own falloff — legible at any size, and invisible
+ * each text block carries its own falloff: legible at any size, and invisible
  * against the black everywhere else.
  *
  * The box is oversized because the gradient's radii are percentages of the box
  * and must stay at or under 50% to reach transparent before the edge. Larger
  * radii get clipped while still opaque, which shows up as a hard rectangular
  * seam over a bright background.
+ *
+ * The overshoot scales with the block (so a headline's pool is grander than a
+ * caption's) with pixel floors so one-line labels still get enough falloff
+ * room for the gradient to fade before its edge.
  */
-export function TextScrim({ className }: { className?: string }) {
+export function TextScrim({
+  className,
+  ref,
+}: {
+  className?: string;
+  /** For callers that carve into the pool at runtime (the hero's i-dot
+      aperture masks a hole out of its scrim). */
+  ref?: React.Ref<HTMLDivElement>;
+}) {
   return (
     <div
+      ref={ref}
       aria-hidden
       className={cn(
-        "pointer-events-none absolute -inset-x-20 -inset-y-16 -z-10",
+        "pointer-events-none absolute -inset-x-[max(72px,16%)] -inset-y-[max(56px,32%)] -z-10",
         className,
       )}
       style={{ background: LIGHT.scrimGradient }}

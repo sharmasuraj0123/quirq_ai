@@ -8,7 +8,7 @@ import { stage } from "@/lib/stage-store";
  * Owns smooth scrolling and turns raw scroll into a fractional beat index.
  *
  * Beat position is measured from each section's real centre rather than assuming
- * every beat is exactly 100vh — sections grow on small screens, and hard-coding
+ * every beat is exactly 100vh: sections grow on small screens, and hard-coding
  * viewport multiples would drift the 3D choreography out of sync with the copy.
  */
 export default function ScrollRuntime() {
@@ -57,6 +57,16 @@ export default function ScrollRuntime() {
       root.style.setProperty("--scroll", stage.progress.toFixed(4));
     };
 
+    // The inline --scroll survives client navigations (the <html> element
+    // persists), which would freeze the nav's progress rule at its last value
+    // on pages without this runtime. Clearing it lets the :root default (0)
+    // take over; the stage store is a module singleton, so it is reset too.
+    const clear = () => {
+      root.style.removeProperty("--scroll");
+      stage.beat = 0;
+      stage.progress = 0;
+    };
+
     measure();
 
     // Reduced motion: skip Lenis entirely and track native scroll instead, so
@@ -79,12 +89,13 @@ export default function ScrollRuntime() {
       return () => {
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onResize);
+        clear();
       };
     }
 
     const lenis = new Lenis({
       duration: 1.15,
-      // Long, soft tail — the glass form keeps moving after the wheel stops.
+      // Long, soft tail: the glass form keeps moving after the wheel stops.
       easing: (t: number) => 1 - Math.pow(1 - t, 3.2),
       wheelMultiplier: 0.95,
       touchMultiplier: 1.6,
@@ -93,6 +104,13 @@ export default function ScrollRuntime() {
 
     lenis.on("scroll", ({ scroll, limit }: { scroll: number; limit: number }) =>
       write(scroll, limit),
+    );
+
+    // Eager first write: Lenis only emits on movement, so a page restored
+    // mid-scroll would otherwise show a zeroed rule until the first wheel.
+    write(
+      window.scrollY,
+      document.documentElement.scrollHeight - window.innerHeight,
     );
 
     // Dev-only handle. Lenis owns the scroll position, so calling
@@ -143,6 +161,7 @@ export default function ScrollRuntime() {
       window.removeEventListener("pointermove", onPointer);
       document.removeEventListener("click", onClick);
       lenis.destroy();
+      clear();
     };
   }, []);
 

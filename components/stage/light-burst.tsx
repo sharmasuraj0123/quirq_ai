@@ -10,7 +10,7 @@ import { stage } from "@/lib/stage-store";
 /**
  * The source the glass refracts.
  *
- * Transmission needs something behind the object to bend — against a pure black
+ * Transmission needs something behind the object to bend: against a pure black
  * void it renders black glass. So the void gets a light: a centred prismatic
  * burst, far upstage, which is both the thing the ribbon disperses *and* the
  * brand's own cover image.
@@ -30,7 +30,7 @@ const FRAGMENT = /* glsl */ `
   uniform float uIntensity;
   uniform float uAspect;
 
-  /* Cosine palette across the spectrum — same seven hues, continuous. */
+  /* Cosine palette across the spectrum: same seven hues, continuous. */
   vec3 spectrum(float t) {
     return 0.5 + 0.5 * cos(6.28318 * (t + vec3(0.0, -0.333, -0.667)));
   }
@@ -64,7 +64,7 @@ const FRAGMENT = /* glsl */ `
 
 /**
  * The burst plane sits far upstage, so to stay visually behind the form it has
- * to move further than the form does — in proportion to their distances from
+ * to move further than the form does: in proportion to their distances from
  * the camera (~20 units vs ~8.5).
  */
 const PARALLAX = 2.2;

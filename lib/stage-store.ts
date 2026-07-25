@@ -3,7 +3,7 @@
  *
  * The <Canvas> from react-three-fiber renders through its own reconciler root,
  * so provider context from the DOM tree is not reliably visible inside it.
- * More importantly, scroll and pointer values change every frame — routing them
+ * More importantly, scroll and pointer values change every frame: routing them
  * through React state would re-render the whole page ~60×/second. The scroll
  * runtime writes here; useFrame reads here. No renders, no context bridge.
  */
