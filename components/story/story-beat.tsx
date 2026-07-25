@@ -2,12 +2,11 @@
 
 import { ActionLink, Beat, Marker, Reveal, Rise, TextScrim, cn } from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
-import type { BeatData } from "./story";
+import type { BeatData } from "./types";
 
 /**
- * This page practices what it preaches: the middle is nothing but the STORY
- * array below, rendered by one generic StoryBeat component inside the static
- * shell. The page itself still prerenders to static HTML at build time.
+ * One generic component renders any story beat from its data. /dynamic,
+ * /scenes and the /editor all compose their middles from this.
  */
 
 
@@ -153,7 +152,12 @@ export function StoryBeat({ data }: { data: BeatData }) {
               )}
             >
               {data.links.map((link) => (
-                <ActionLink key={link.href} href={link.href} tone={link.tone}>
+                <ActionLink
+                  key={link.href}
+                  href={link.href}
+                  tone={link.tone}
+                  newTab={link.newTab}
+                >
                   {link.label}
                 </ActionLink>
               ))}

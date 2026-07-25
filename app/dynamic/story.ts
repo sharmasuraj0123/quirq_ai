@@ -3,27 +3,9 @@
  * the server page can map over it; the client renderer imports the type.
  */
 
-export type BeatData = {
-  index: number;
-  id: string;
-  /** Where the copy block sits relative to the travelling glass. */
-  layout: "center" | "left" | "right";
-  marker?: string;
-  /** Two reveal lines; `glass` names the one that becomes a light aperture. */
-  title: [string, string];
-  glass?: 0 | 1;
-  lede?: string;
-  /** Numbered rows, open hairline style. */
-  rows?: { title: string; note: string }[];
-  /** Numbered rows inside a panel. */
-  panelRows?: { title: string; note: string }[];
-  /** Labelled tiles in a panel grid. */
-  tiles?: { label: string; body: string }[];
-  /** A mono snippet panel. */
-  code?: string;
-  caption?: string;
-  links?: { href: string; label: string; tone?: "solid" | "ghost" }[];
-};
+import type { BeatData } from "@/components/story/types";
+
+export type { BeatData };
 
 export const STORY: BeatData[] = [
   {
@@ -121,7 +103,7 @@ export const STORY: BeatData[] = [
     lede: "The registry and tree phases push this further: middles that register themselves at runtime, tracks per page, branches per audience. The shell will not notice; it never has.",
     links: [
       { href: "/beats", label: "The beats array" },
-      { href: "/how-it-works", label: "The migration plan", tone: "ghost" },
+      { href: "/how-it-works", label: "Write a journey", tone: "ghost" },
     ],
   },
 ];

@@ -209,8 +209,8 @@ const LIMITS = [
     note: "The sampler and the runtime read the array's length; a sixth keyframe plus a sixth section works today. Five is simply how many shots the story needed.",
   },
   {
-    title: "One global track, shared by every page.",
-    note: "Until the sampler takes the track as an argument (phase 1), every stage page blends the same KEYFRAMES. Pages differ in copy, not in choreography.",
+    title: "One resolved track, shared by every page.",
+    note: "The sampler takes any track now, but all pages still resolve the same choreography tree. Per-page trees and sub-beats are the next step (phase 5).",
   },
   {
     title: "More sections than keyframes pins the glass.",
@@ -294,7 +294,7 @@ export function BeatsDynamic() {
             delay={0.34}
             className="mt-11 flex flex-wrap items-center justify-center gap-3"
           >
-            <ActionLink href="/how-it-works">The migration plan</ActionLink>
+            <ActionLink href="/tree">The tree that did it</ActionLink>
             <ActionLink href="/what-is-quirq" tone="ghost">
               The first swap
             </ActionLink>

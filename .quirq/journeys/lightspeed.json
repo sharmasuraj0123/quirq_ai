@@ -1,0 +1,162 @@
+{
+  "slug": "lightspeed",
+  "name": "Work at light speed",
+  "rules": {
+    "start": "root",
+    "maxDepth": 4,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "start",
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Speed is not",
+          "the bottleneck."
+        ],
+        "glass": 1,
+        "lede": "Your agents already produce faster than anyone can check. This short walk is about what actually slows shipping down. Loaded from .quirq/journeys/lightspeed.json; edit the file and reload."
+      },
+      "prompt": "What actually slows you down?",
+      "choices": [
+        {
+          "label": "The review queue",
+          "to": "review"
+        },
+        {
+          "label": "The handoffs",
+          "to": "handoffs"
+        }
+      ],
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 0,
+          "y": -0.32,
+          "z": -2.6,
+          "scale": 1.34,
+          "spin": 0.075,
+          "tiltX": 0.42,
+          "tiltZ": -0.12,
+          "chroma": 0.5,
+          "thickness": 1.5,
+          "distortion": 0.15,
+          "aniso": 0.22,
+          "rough": 0.05,
+          "ior": 1.62,
+          "burst": 0.56
+        }
+      }
+    },
+    "review": {
+      "short": "review",
+      "beat": {
+        "layout": "left",
+        "marker": "the queue",
+        "title": [
+          "Every output waits",
+          "for a human."
+        ],
+        "lede": "Twenty minutes of senior review per artifact is the largest cost in the program, paid in a currency the token bill never shows. Verification against captured state is how the queue empties.",
+        "links": [
+          {
+            "href": "/what-is-quirq",
+            "label": "The mint rule"
+          },
+          {
+            "href": "/research",
+            "label": "The research",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 2.5,
+          "y": -0.15,
+          "z": -0.7,
+          "scale": 1,
+          "spin": 0.045,
+          "tiltX": 0.86,
+          "tiltZ": 0.3,
+          "chroma": 0.015,
+          "thickness": 0.5,
+          "distortion": 0.7,
+          "aniso": 0.6,
+          "rough": 0.26,
+          "ior": 1.32,
+          "burst": 0.25
+        }
+      }
+    },
+    "handoffs": {
+      "short": "handoffs",
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Work at",
+          "light speed."
+        ],
+        "glass": 1,
+        "lede": "When the environment snapshots, verifies and meters as a side effect of hosting the work, the handoff is the ledger entry. Nothing waits on a summary being written or believed.",
+        "links": [
+          {
+            "href": "/",
+            "label": "The full story"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2,
+          "scale": 1.42,
+          "spin": 0.26,
+          "tiltX": 0.55,
+          "tiltZ": 0.5,
+          "chroma": 1.15,
+          "thickness": 2.6,
+          "distortion": 0.12,
+          "aniso": 0.1,
+          "rough": 0.02,
+          "ior": 1.78,
+          "burst": 0.9
+        }
+      }
+    }
+  },
+  "recording": {
+    "journey": "lightspeed",
+    "startedAt": 1784987653288,
+    "events": [
+      {
+        "at": 1784987653288,
+        "kind": "start",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      },
+      {
+        "at": 1784987657507,
+        "kind": "choose",
+        "label": "The handoffs",
+        "node": "handoffs",
+        "path": [
+          "root",
+          "handoffs"
+        ]
+      }
+    ]
+  }
+}

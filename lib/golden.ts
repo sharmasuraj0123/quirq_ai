@@ -49,9 +49,18 @@ export async function captureGolden(steps = 21): Promise<Golden> {
     const scroll = f * limit;
     if (lenis) lenis.scrollTo(scroll, { immediate: true });
     else window.scrollTo(0, scroll);
-    // The write happens synchronously on the lenis scroll event; the small
-    // wait only lets any layout settle.
-    await new Promise((r) => setTimeout(r, 25));
+    // The write happens synchronously on the lenis scroll event; the wait
+    // only lets a visible frame settle. Hidden documents throttle both
+    // timers and rAF, and nothing paints there anyway, so skip the wait
+    // entirely rather than letting the walk crawl in a background tab.
+    await new Promise<void>((resolve) => {
+      if (document.hidden) return resolve();
+      const timer = setTimeout(resolve, 80);
+      requestAnimationFrame(() => {
+        clearTimeout(timer);
+        resolve();
+      });
+    });
 
     const k = sampleKeyframes(getTrack(), stage.beat, out);
     const values: Record<string, number> = {};

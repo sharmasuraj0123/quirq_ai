@@ -1,0 +1,564 @@
+{
+  "slug": "whitepaper",
+  "name": "The whitepaper, walked",
+  "rules": {
+    "start": "root",
+    "maxDepth": 6,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "start",
+      "beat": {
+        "layout": "center",
+        "title": [
+          "One paper,",
+          "every reader."
+        ],
+        "glass": 1,
+        "lede": "The quirq whitepaper argues one thing: the token measures what AI consumes, never what it delivers, so work needs a second meter. How you should read it depends on who you are. Choose, and this walk becomes your edition of the paper."
+      },
+      "prompt": "Who is reading?",
+      "choices": [
+        {
+          "label": "I run the numbers",
+          "to": "exec"
+        },
+        {
+          "label": "I build the systems",
+          "to": "builder"
+        },
+        {
+          "label": "I want the proof",
+          "to": "skeptic"
+        }
+      ],
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 0,
+          "y": -0.32,
+          "z": -2.6,
+          "scale": 1.34,
+          "spin": 0.075,
+          "tiltX": 0.42,
+          "tiltZ": -0.12,
+          "chroma": 0.5,
+          "thickness": 1.5,
+          "distortion": 0.15,
+          "aniso": 0.22,
+          "rough": 0.05,
+          "ior": 1.62,
+          "burst": 0.56
+        }
+      }
+    },
+    "exec": {
+      "short": "the operator",
+      "beat": {
+        "layout": "left",
+        "marker": "your edition · the operator",
+        "title": [
+          "An invoice is not",
+          "an outcome."
+        ],
+        "lede": "Token spend can rise 83 percent in a quarter and tell you nothing about whether the quarter worked. The paper's claim for you: AI's business impact becomes readable only when delivery is metered next to consumption, in one ledger."
+      },
+      "prompt": "What should that ledger show?",
+      "choices": [
+        {
+          "label": "A quarter I can audit",
+          "to": "exec-quarter"
+        },
+        {
+          "label": "The weekly read",
+          "to": "exec-decisions"
+        }
+      ],
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 2.5,
+          "y": -0.15,
+          "z": -0.7,
+          "scale": 1,
+          "spin": 0.045,
+          "tiltX": 0.86,
+          "tiltZ": 0.3,
+          "chroma": 0.015,
+          "thickness": 0.5,
+          "distortion": 0.7,
+          "aniso": 0.6,
+          "rough": 0.26,
+          "ior": 1.32,
+          "burst": 0.19
+        }
+      }
+    },
+    "exec-quarter": {
+      "short": "the quarter",
+      "beat": {
+        "layout": "left",
+        "marker": "the worked quarter",
+        "title": [
+          "A quarter you",
+          "can audit."
+        ],
+        "rows": [
+          {
+            "title": "$38,000 of verified work delivered.",
+            "note": "Not claimed by the agents: minted against captured state, job by job."
+          },
+          {
+            "title": "$6,830 all-in cost.",
+            "note": "Tokens, compute and human minutes counted together, so nothing hides."
+          },
+          {
+            "title": "$5.60 delivered per $1, 11.4% needed a human.",
+            "note": "The two lines a board actually asks about, with their trend."
+          }
+        ],
+        "caption": "Illustrative numbers from the paper's worked quarter: the shape of the ledger, not a customer's books.",
+        "links": [
+          {
+            "href": "/research/the-company-dashboard",
+            "label": "The company dashboard"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper (PDF)",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 2.5,
+          "y": -0.15,
+          "z": -1.8,
+          "scale": 1,
+          "spin": 0.045,
+          "tiltX": 0.86,
+          "tiltZ": 0.3,
+          "chroma": 0.015,
+          "thickness": 0.5,
+          "distortion": 0.7,
+          "aniso": 0.6,
+          "rough": 0.26,
+          "ior": 1.32,
+          "burst": 0.22
+        }
+      }
+    },
+    "exec-decisions": {
+      "short": "the weekly read",
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Trend lines,",
+          "not arguments."
+        ],
+        "glass": 1,
+        "lede": "Cost per quirq, quirqs per all-in dollar, intervention rate: three lines read weekly. 'Is AI working here' stops being a quarterly debate and becomes a chart with a slope. That is the paper's promise to whoever owns the P&L.",
+        "links": [
+          {
+            "href": "/what-is-quirq",
+            "label": "What is quirq"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper (PDF)",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2,
+          "scale": 1.42,
+          "spin": 0.2,
+          "tiltX": 0.55,
+          "tiltZ": 0.5,
+          "chroma": 1.15,
+          "thickness": 2.6,
+          "distortion": 0.12,
+          "aniso": 0.1,
+          "rough": 0.02,
+          "ior": 1.78,
+          "burst": 0.9
+        }
+      }
+    },
+    "builder": {
+      "short": "the builder",
+      "beat": {
+        "layout": "right",
+        "marker": "your edition · the builder",
+        "title": [
+          "State in,",
+          "state out."
+        ],
+        "glass": 1,
+        "lede": "For you the paper is a systems design: an environment that hosts any agent runtime and, as a side effect of hosting, snapshots the world before the work, snapshots it after, and scores the diff against a definition of done."
+      },
+      "prompt": "Which mechanism first?",
+      "choices": [
+        {
+          "label": "The mint rule",
+          "to": "builder-mint"
+        },
+        {
+          "label": "The environment",
+          "to": "builder-env"
+        }
+      ],
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": -2.35,
+          "y": 0.15,
+          "z": 0.5,
+          "scale": 1.12,
+          "spin": 0.16,
+          "tiltX": 0.2,
+          "tiltZ": -0.42,
+          "chroma": 0.95,
+          "thickness": 2.3,
+          "distortion": 0.1,
+          "aniso": 0.14,
+          "rough": 0.02,
+          "ior": 1.72,
+          "burst": 0.66
+        }
+      }
+    },
+    "builder-mint": {
+      "short": "the mint",
+      "beat": {
+        "layout": "right",
+        "marker": "the calculus",
+        "title": [
+          "Q equals V",
+          "times B."
+        ],
+        "code": "V = value the owner budgeted for the job\nB = verified score in [0, 1], read from\n    captured state, never from the agent\n\nQ = V * B        # minted on verification\ncost = tokens + compute + human minutes",
+        "caption": "The worker's testimony never enters the ledger; the world's change is the receipt."
+      },
+      "prompt": "Deeper still?",
+      "choices": [
+        {
+          "label": "The all-in cost model",
+          "to": "builder-cost"
+        },
+        {
+          "label": "The energy bridge",
+          "to": "builder-energy"
+        }
+      ],
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2,
+          "scale": 1.42,
+          "spin": 0.22,
+          "tiltX": 0.55,
+          "tiltZ": 0.5,
+          "chroma": 1.15,
+          "thickness": 2.6,
+          "distortion": 0.12,
+          "aniso": 0.1,
+          "rough": 0.02,
+          "ior": 1.78,
+          "burst": 0.9
+        }
+      }
+    },
+    "builder-cost": {
+      "short": "the denominator",
+      "beat": {
+        "layout": "left",
+        "marker": "the denominator",
+        "title": [
+          "All-in, or the",
+          "ratio lies."
+        ],
+        "lede": "Token bills alone flatter the machine. The paper's cost model charges every job with its tokens, its compute and the human minutes it consumed, so cost per quirq absorbs each intervention instead of hiding it in someone's calendar.",
+        "links": [
+          {
+            "href": "/research/the-quirq-calculus",
+            "label": "The quirq calculus"
+          },
+          {
+            "href": "/research/the-company-dashboard",
+            "label": "The dashboard it feeds",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 2.5,
+          "y": -0.15,
+          "z": -2.2,
+          "scale": 1,
+          "spin": 0.045,
+          "tiltX": 0.86,
+          "tiltZ": 0.3,
+          "chroma": 0.08,
+          "thickness": 0.5,
+          "distortion": 0.7,
+          "aniso": 0.6,
+          "rough": 0.26,
+          "ior": 1.32,
+          "burst": 0.18
+        }
+      }
+    },
+    "builder-energy": {
+      "short": "the bridge",
+      "beat": {
+        "layout": "left",
+        "marker": "the bridge",
+        "title": [
+          "Joules to value,",
+          "one chain."
+        ],
+        "lede": "The calculus closes by pricing the chain end to end: energy to compute, compute to tokens, tokens to quirqs. The power bill and the value ledger finally share a unit, which is what any serious build-out decision was missing.",
+        "links": [
+          {
+            "href": "/research/the-quirq-calculus",
+            "label": "The quirq calculus"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper (PDF)",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 3.05,
+          "y": 1.5,
+          "z": -3.2,
+          "scale": 0.8,
+          "spin": 0.1,
+          "tiltX": 1.15,
+          "tiltZ": 0.2,
+          "chroma": 0.6,
+          "thickness": 1.6,
+          "distortion": 0.2,
+          "aniso": 0.2,
+          "rough": 0.06,
+          "ior": 1.6,
+          "burst": 0.55
+        }
+      }
+    },
+    "builder-env": {
+      "short": "the environment",
+      "beat": {
+        "layout": "left",
+        "marker": "the environment",
+        "title": [
+          "The proof is",
+          "the host."
+        ],
+        "lede": "Wrap the runtime and verification stops being a pipeline stage someone maintains: snapshot, score and mint happen because the work ran there. Scale the fleet and the proof scales with it. One click, any runtime.",
+        "links": [
+          {
+            "href": "/",
+            "label": "One click, any runtime"
+          },
+          {
+            "href": "/what-is-quirq",
+            "label": "What is quirq",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 3.05,
+          "y": 1.5,
+          "z": -1.6,
+          "scale": 0.8,
+          "spin": 0.1,
+          "tiltX": 1.15,
+          "tiltZ": 0.2,
+          "chroma": 0.6,
+          "thickness": 1.6,
+          "distortion": 0.2,
+          "aniso": 0.2,
+          "rough": 0.06,
+          "ior": 1.6,
+          "burst": 0.4
+        }
+      }
+    },
+    "skeptic": {
+      "short": "the skeptic",
+      "beat": {
+        "layout": "left",
+        "marker": "your edition · the skeptic",
+        "title": [
+          "Claims with",
+          "falsifiers attached."
+        ],
+        "lede": "The paper separates what is measured from what is projected. Every empirical claim is stated with the result that would kill it and bound to numbered experiments, E1 through E7, each one completed or scheduled."
+      },
+      "prompt": "What would move you?",
+      "choices": [
+        {
+          "label": "Show me an experiment",
+          "to": "skeptic-exp"
+        },
+        {
+          "label": "Show me the edges",
+          "to": "skeptic-limits"
+        }
+      ],
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 3.05,
+          "y": 1.5,
+          "z": -3.2,
+          "scale": 0.8,
+          "spin": 0.1,
+          "tiltX": 1.15,
+          "tiltZ": 0.2,
+          "chroma": 0.2,
+          "thickness": 1.6,
+          "distortion": 0.2,
+          "aniso": 0.2,
+          "rough": 0.06,
+          "ior": 1.6,
+          "burst": 0.42
+        }
+      }
+    },
+    "skeptic-exp": {
+      "short": "the experiment",
+      "beat": {
+        "layout": "right",
+        "marker": "measured",
+        "title": [
+          "Fiction minted",
+          "exactly zero."
+        ],
+        "glass": 1,
+        "lede": "In the harness, every false claim of done settled and minted while the scorer read the agent's own account. The same claims minted zero when the environment read captured state. And across 84 controlled runs, agents read the surface and skipped the substance: incuriosity is measurable too.",
+        "links": [
+          {
+            "href": "/research/validation",
+            "label": "Validation"
+          },
+          {
+            "href": "/research/the-incurious-agent",
+            "label": "The Incurious Agent",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": -2.35,
+          "y": 0.15,
+          "z": 0.5,
+          "scale": 1.12,
+          "spin": 0.16,
+          "tiltX": 0.2,
+          "tiltZ": -0.42,
+          "chroma": 0.95,
+          "thickness": 2.3,
+          "distortion": 0.1,
+          "aniso": 0.14,
+          "rough": 0.02,
+          "ior": 1.72,
+          "burst": 0.6
+        }
+      }
+    },
+    "skeptic-limits": {
+      "short": "the edges",
+      "beat": {
+        "layout": "left",
+        "marker": "what would break it",
+        "title": [
+          "Honest edges,",
+          "stated up front."
+        ],
+        "rows": [
+          {
+            "title": "Measured is labelled measured.",
+            "note": "Projections and worked examples are flagged as illustrative, never blended in."
+          },
+          {
+            "title": "Every claim carries its falsifier.",
+            "note": "The result that would kill each hypothesis is written next to it, E1 through E7."
+          },
+          {
+            "title": "You are supposed to check.",
+            "note": "The paper is written to be audited; the walk you just took is the tour, not the trial."
+          }
+        ],
+        "links": [
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "Read the claims yourself"
+          },
+          {
+            "href": "/research",
+            "label": "All research",
+            "tone": "ghost"
+          }
+        ]
+      },
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 2.5,
+          "y": -0.15,
+          "z": -0.7,
+          "scale": 1,
+          "spin": 0.045,
+          "tiltX": 0.9,
+          "tiltZ": 0.3,
+          "chroma": 0.015,
+          "thickness": 0.5,
+          "distortion": 0.7,
+          "aniso": 0.6,
+          "rough": 0.26,
+          "ior": 1.32,
+          "burst": 0.16
+        }
+      }
+    }
+  },
+  "recording": {
+    "journey": "whitepaper",
+    "startedAt": 1784963604605,
+    "events": [
+      {
+        "at": 1784963604605,
+        "kind": "start",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      }
+    ]
+  }
+}

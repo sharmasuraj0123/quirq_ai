@@ -1,0 +1,129 @@
+{
+  "slug": "sample-4",
+  "name": "Sample · four nodes",
+  "rules": {
+    "start": "root",
+    "maxDepth": 4,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "the hero",
+      "pose": {
+        "base": "centre"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Work at",
+          "light speed."
+        ],
+        "glass": 1,
+        "lede": "The landing page's own story, four beats long: the hero, the meter you have, the meter that was missing, and the ledger that holds them together."
+      },
+      "prompt": "Start the story",
+      "choices": [
+        {
+          "label": "The meter you have",
+          "to": "tokens"
+        }
+      ]
+    },
+    "tokens": {
+      "short": "tokens",
+      "pose": {
+        "base": "drained"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "01 · the meter you have",
+        "title": [
+          "Tokens count what",
+          "the machine burned."
+        ],
+        "lede": "The bill climbs whether or not the job got done. Every token metered, every outcome invisible."
+      },
+      "prompt": "And what it bought?",
+      "choices": [
+        {
+          "label": "The missing meter",
+          "to": "quirqs"
+        }
+      ]
+    },
+    "quirqs": {
+      "short": "quirqs",
+      "pose": {
+        "base": "flooded"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "02 · the meter that was missing",
+        "title": [
+          "Quirqs count",
+          "what it delivered."
+        ],
+        "glass": 1,
+        "lede": "A human budgets the outcome. The workspace verifies it against captured state, then mints the value. Never self-reported."
+      },
+      "prompt": "Both meters, one place?",
+      "choices": [
+        {
+          "label": "The ledger",
+          "to": "ledger"
+        }
+      ]
+    },
+    "ledger": {
+      "short": "the ledger",
+      "pose": {
+        "base": "recede"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "03 · the ledger",
+        "title": [
+          "One ledger,",
+          "both meters."
+        ],
+        "lede": "What ran, what it consumed, who verified it, the value minted, and what it cost all-in: an auditable P&L for the whole fleet.",
+        "links": [
+          {
+            "href": "/",
+            "label": "The live page"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  },
+  "recording": {
+    "journey": "sample-4",
+    "startedAt": 1784982327599,
+    "events": [
+      {
+        "at": 1784982327599,
+        "kind": "start",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      },
+      {
+        "at": 1784982331339,
+        "kind": "choose",
+        "label": "The meter you have",
+        "node": "tokens",
+        "path": [
+          "root",
+          "tokens"
+        ]
+      }
+    ]
+  }
+}

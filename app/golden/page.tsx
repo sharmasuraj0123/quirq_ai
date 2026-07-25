@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
 import { StagePage } from "@/components/stage-page";
 import { SiteFooter } from "@/components/ui/footer";
-import { STORY } from "./story";
 import { StoryBeat } from "@/components/story/story-beat";
+import { STORY } from "./story";
 
 export const metadata: Metadata = {
-  title: "Dynamic main, static shell",
+  title: 'The golden harness',
   description:
-    "How the middle of a stage page swaps while everything around it stays static: composition, data-driven beats, deferred slots, and the contract the middle must honor.",
+    'The dev harness that snapshots what the page actually does, so every refactor of the animation system is provable instead of hopeful.',
 };
 
-/**
- * The fifth stage page, and the first whose middle is pure data: STORY is an
- * array, StoryBeat is the only component, and the shell neither knows nor
- * cares.
- */
+/** Feature page: golden. Story data in ./story.ts, rendered by StoryBeat. */
 export default function Page() {
   return (
     <StagePage>
@@ -22,8 +18,6 @@ export default function Page() {
         <StoryBeat key={beat.id} data={beat} />
       ))}
 
-      {/* The form is at its largest under the last beat, so the footer needs
-          a base to sit on rather than floating over the glass. */}
       <div className="relative">
         <div
           aria-hidden

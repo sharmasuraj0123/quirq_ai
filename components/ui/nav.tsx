@@ -12,10 +12,19 @@ export function Nav() {
   const onWhat = pathname.startsWith("/what-is-quirq");
   const onHow = pathname.startsWith("/how-it-works");
   const onBeats = pathname.startsWith("/beats");
+  const onJourney = pathname.startsWith("/journey");
   const onResearch = pathname.startsWith("/research");
   // Pages that run the 3D shot supply their own darkness and a live
-  // scroll-progress value; text pages get the glass bar instead.
-  const onStage = home || onWhat || onHow || onBeats;
+  // scroll-progress value; text pages get the glass bar instead. Every route
+  // that mounts StagePage belongs in this list.
+  const onStage =
+    home ||
+    onWhat ||
+    onHow ||
+    onBeats ||
+    ["/dynamic", "/scenes", "/editor", "/journey", "/golden", "/registry", "/tree"].some(
+      (route) => pathname.startsWith(route),
+    );
 
   return (
     <>
@@ -92,6 +101,24 @@ export function Nav() {
               />
             )}
             How it works
+          </Link>
+
+          <Link
+            href="/journey"
+            aria-current={onJourney ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink lg:inline-flex",
+              onJourney && "text-ink",
+            )}
+          >
+            {onJourney && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            Journey
           </Link>
 
           {/* Deepest of the dev pages; earns its slot only where the bar has

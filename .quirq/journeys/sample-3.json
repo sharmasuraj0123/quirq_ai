@@ -1,0 +1,113 @@
+{
+  "slug": "sample-3",
+  "name": "Sample · three nodes",
+  "rules": {
+    "start": "root",
+    "maxDepth": 3,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "the break",
+      "pose": {
+        "base": "centre"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "The token",
+          "broke."
+        ],
+        "glass": 1,
+        "lede": "The unit AI runs on prices effort, not outcomes: a verbose failure costs more than a terse success, and the invoice cannot tell them apart."
+      },
+      "prompt": "So what replaces it?",
+      "choices": [
+        {
+          "label": "The mint rule",
+          "to": "mint"
+        }
+      ]
+    },
+    "mint": {
+      "short": "the mint",
+      "pose": {
+        "base": "flooded"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "the mechanism",
+        "title": [
+          "Minted, never",
+          "self-reported."
+        ],
+        "glass": 1,
+        "lede": "Snapshot the world before the work, snapshot it after, score the diff against a definition of done, mint V times B. The worker's testimony never enters the ledger."
+      },
+      "prompt": "Does it hold up?",
+      "choices": [
+        {
+          "label": "Show me a quarter",
+          "to": "proof"
+        }
+      ]
+    },
+    "proof": {
+      "short": "the proof",
+      "pose": {
+        "base": "finale"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "the worked quarter",
+        "title": [
+          "A quarter you",
+          "can audit."
+        ],
+        "rows": [
+          {
+            "title": "$38,000 of verified work delivered.",
+            "note": "Minted against captured state, job by job, never claimed by the agents."
+          },
+          {
+            "title": "$6,830 all-in cost.",
+            "note": "Tokens, compute and human minutes counted together."
+          },
+          {
+            "title": "$5.60 per $1, 11.4% needed a human.",
+            "note": "The two lines a board actually asks about."
+          }
+        ],
+        "caption": "Illustrative numbers from the whitepaper's worked quarter: the shape of the ledger, not a customer's books.",
+        "links": [
+          {
+            "href": "/research/the-company-dashboard",
+            "label": "The company dashboard"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  },
+  "recording": {
+    "journey": "sample-3",
+    "startedAt": 1784963922456,
+    "events": [
+      {
+        "at": 1784963922456,
+        "kind": "start",
+        "node": "proof",
+        "path": [
+          "root",
+          "mint",
+          "proof"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "slug": "sample-5",
+  "name": "Sample · five nodes",
+  "rules": {
+    "start": "root",
+    "maxDepth": 5,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "one file",
+      "pose": {
+        "base": "centre"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "A journey is",
+          "one file."
+        ],
+        "glass": 1,
+        "lede": "Every branching walk on /journey is a single JSON document in .quirq/journeys: the whole tree of beats and choices, plus the rules of the walk. This journey IS the how-it-works page, five beats long."
+      },
+      "prompt": "Open the file",
+      "choices": [
+        {
+          "label": "The four keys",
+          "to": "shape"
+        }
+      ]
+    },
+    "shape": {
+      "short": "the shape",
+      "pose": {
+        "base": "drained"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "01 · the shape",
+        "title": [
+          "Four keys,",
+          "one document."
+        ],
+        "rows": [
+          {
+            "title": "slug and name.",
+            "note": "slug is kebab-case identity: the filename, the ?j= share link, the trace scope. name is the label on the journey chip row."
+          },
+          {
+            "title": "rules.",
+            "note": "start names the opening node; maxDepth force-ends any branch at that length; allowRewind and allowReplay show or hide those controls."
+          },
+          {
+            "title": "nodes.",
+            "note": "The tree itself: a map of id to node. Ids are what choices point at and what share links encode."
+          },
+          {
+            "title": "Where it lives.",
+            "note": "Save as .quirq/journeys/<slug>.json. Store to .quirq seeds the file, Reload .quirq picks up edits, and in development it also records your walk."
+          }
+        ]
+      },
+      "prompt": "Inside a node?",
+      "choices": [
+        {
+          "label": "The anatomy",
+          "to": "node"
+        }
+      ]
+    },
+    "node": {
+      "short": "a node",
+      "pose": {
+        "base": "flooded"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "02 · a node",
+        "title": [
+          "A beat, a pose,",
+          "and a fork."
+        ],
+        "glass": 1,
+        "code": "\"trust\": {\n  \"short\": \"the trust\",\n  \"pose\": { \"base\": \"flooded\", \"tweaks\": { \"spin\": 0.2 } },\n  \"beat\": {\n    \"layout\": \"right\",\n    \"title\": [\"Trust is a\", \"state comparison.\"],\n    \"glass\": 1,\n    \"lede\": \"...\"\n  },\n  \"prompt\": \"Who checks the work?\",\n  \"choices\": [{ \"label\": \"The world is checked\", \"to\": \"trust-verify\" }]\n}",
+        "caption": "A node without choices is an ending; endings usually carry beat.links instead, the calls to action."
+      },
+      "prompt": "What does each key move?",
+      "choices": [
+        {
+          "label": "The effects",
+          "to": "affects"
+        }
+      ]
+    },
+    "affects": {
+      "short": "the effects",
+      "pose": {
+        "base": "recede"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "03 · what affects what",
+        "title": [
+          "Every key",
+          "moves something."
+        ],
+        "panelRows": [
+          {
+            "title": "pose moves the glass.",
+            "note": "base picks the shot: centre, drained, flooded, recede, finale. tweaks override any channel: z dollies, chroma colours, burst lights."
+          },
+          {
+            "title": "beat writes the page.",
+            "note": "layout, title lines, glass line, marker, lede, links: the StoryBeat vocabulary from /dynamic, one viewport per node."
+          },
+          {
+            "title": "short names the trail.",
+            "note": "The chip in Your path, the words in saved traces. Two or three words reads best."
+          },
+          {
+            "title": "choices define the legal edges.",
+            "note": "Share links and traces are validated against them; anything stale or dangling fails closed, never crashes."
+          },
+          {
+            "title": "rules govern the walk.",
+            "note": "start opens the walk, maxDepth ends it, allowRewind and allowReplay grant the controls."
+          }
+        ]
+      },
+      "prompt": "Ready to write one?",
+      "choices": [
+        {
+          "label": "Ship it",
+          "to": "ship"
+        }
+      ]
+    },
+    "ship": {
+      "short": "ship it",
+      "pose": {
+        "base": "finale"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Ship your",
+          "own walk."
+        ],
+        "glass": 1,
+        "lede": "The loop: Store to .quirq, open the JSON, change the copy, the poses, the forks and the rules, then Reload .quirq and walk it. The glass performs whatever tree you wrote.",
+        "links": [
+          {
+            "href": "/how-it-works",
+            "label": "The full manual"
+          },
+          {
+            "href": "/dynamic",
+            "label": "The beat vocabulary",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  },
+  "recording": {
+    "journey": "sample-5",
+    "startedAt": 1784982335447,
+    "events": [
+      {
+        "at": 1784982335447,
+        "kind": "start",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      },
+      {
+        "at": 1784982339883,
+        "kind": "choose",
+        "label": "The four keys",
+        "node": "shape",
+        "path": [
+          "root",
+          "shape"
+        ]
+      },
+      {
+        "at": 1784982345790,
+        "kind": "rewind",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      },
+      {
+        "at": 1784982348776,
+        "kind": "choose",
+        "label": "The four keys",
+        "node": "shape",
+        "path": [
+          "root",
+          "shape"
+        ]
+      },
+      {
+        "at": 1784982355043,
+        "kind": "choose",
+        "label": "The anatomy",
+        "node": "node",
+        "path": [
+          "root",
+          "shape",
+          "node"
+        ]
+      }
+    ]
+  }
+}

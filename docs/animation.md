@@ -1,8 +1,15 @@
 # How the scroll animation works, and a path from list to tree
 
-Part 1 documents the system as it is. Part 2 answers "could this be a tree
-instead of a single list?" with a concrete migration plan. Nothing in Part 2
-is implemented; it is a proposal.
+Part 1 documents the system as it was originally built; its per-frame story
+is unchanged. Part 2 was the migration proposal, and phases 0 to 4 are now
+IMPLEMENTED, golden-gated (max delta 0.000000 against docs/goldens/*.json):
+the harness is `window.__golden` (dev only, lib/golden.ts), the sampler takes
+the track as an argument, sections register via lib/beat-registry.ts (the
+data-beat query remains as a fallback; a section with custom layout registers
+directly, see invite.tsx), and the track resolves from the CHOREOGRAPHY tree
+in components/stage/choreo-tree.ts with cascading partial keyframes and
+`when` predicates re-resolved on resize. Phase 5 (the first live branch or
+sub-beat) is intentionally left for a design decision.
 
 ---
 

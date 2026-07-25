@@ -17,16 +17,16 @@ import {
   CHOREOGRAPHY,
   resolveTrack,
   type Keyframe,
+  type ResolvedLeaf,
   type TrackContext,
 } from "./choreo-tree";
 
-export type { Keyframe, TrackContext } from "./choreo-tree";
+export type { Keyframe, ResolvedLeaf, TrackContext } from "./choreo-tree";
 
 const DEFAULT_CTX: TrackContext = { width: 1280 };
 
-let TRACK: readonly Keyframe[] = resolveTrack(CHOREOGRAPHY, DEFAULT_CTX).map(
-  (leaf) => leaf.keyframe,
-);
+let LEAVES: readonly ResolvedLeaf[] = resolveTrack(CHOREOGRAPHY, DEFAULT_CTX);
+let TRACK: readonly Keyframe[] = LEAVES.map((leaf) => leaf.keyframe);
 
 /**
  * The initial resolve, kept as a stable reference: seeds for the damped live
@@ -35,9 +35,37 @@ let TRACK: readonly Keyframe[] = resolveTrack(CHOREOGRAPHY, DEFAULT_CTX).map(
  */
 export const KEYFRAMES: readonly Keyframe[] = TRACK;
 
+/**
+ * Editor override: a tool (the /editor page) can stand its own leaves in
+ * front of the resolved tree. While set, getTrack()/getResolvedLeaves()
+ * serve the override, so the live glass restages instantly and the runtime's
+ * id binding follows the override's ids. Cleared on editor unmount; pages
+ * never set this, so the golden baselines are unaffected.
+ */
+let OVERRIDE: {
+  leaves: readonly ResolvedLeaf[];
+  track: readonly Keyframe[];
+} | null = null;
+
+export function overrideLeaves(leaves: readonly ResolvedLeaf[] | null) {
+  OVERRIDE = leaves
+    ? { leaves, track: leaves.map((leaf) => leaf.keyframe) }
+    : null;
+}
+
 /** The live track. Read per frame; the reference swaps on re-resolution. */
 export function getTrack(): readonly Keyframe[] {
-  return TRACK;
+  return OVERRIDE?.track ?? TRACK;
+}
+
+/**
+ * The resolved leaves behind the live track, ids included. The runtime uses
+ * these to bind registered sections to leaves BY ID when the page's ids match
+ * the tree, which is what makes pruning a middle leaf safe: positional
+ * binding would shift every later section onto the wrong pose.
+ */
+export function getResolvedLeaves(): readonly ResolvedLeaf[] {
+  return OVERRIDE?.leaves ?? LEAVES;
 }
 
 /**
@@ -46,7 +74,8 @@ export function getTrack(): readonly Keyframe[] {
  * a page changes its walk. The scroll runtime calls this before measuring.
  */
 export function refreshTrack(ctx: TrackContext): readonly Keyframe[] {
-  TRACK = resolveTrack(CHOREOGRAPHY, ctx).map((leaf) => leaf.keyframe);
+  LEAVES = resolveTrack(CHOREOGRAPHY, ctx);
+  TRACK = LEAVES.map((leaf) => leaf.keyframe);
   return TRACK;
 }
 

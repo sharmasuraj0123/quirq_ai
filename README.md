@@ -10,8 +10,12 @@ The site is deliberately not a wall of copy. It is one continuous 3D shot: a twi
 |---|---|
 | `/` | The five-beat scroll story: hero, ecosystem shelf, tokens, quirqs, ledger, invite |
 | `/what-is-quirq` | The explainer cut: same stage and keyframe track, its own five beats (`app/what-is-quirq/beats.tsx`) |
-| `/how-it-works` | The stage documented by itself: the scroll pipeline, the three formulas, and the list-to-tree migration plan |
+| `/how-it-works` | The journey-authoring manual: the .quirq file's shape, node anatomy, and what each key affects |
 | `/beats` | The beats-array deep dive: fractional traversal, a live `stage.beat` meter, and the array's honest limits |
+| `/scenes` | The scene-customization guide: anatomy, the fourteen knobs, camera-by-relativity, pose presets |
+| `/editor` | The live page editor: beats, tree, registry and golden tabs; drag the real glass, diff captures, save drafts out |
+| `/journey` | The branching walk: choices generate the page, traces save/share/replay, and whole journeys (tree + rules) load from the local `.quirq/journeys/` folder |
+| `/golden` `/registry` `/tree` | Feature pages for the migration's machinery: the golden harness, the beat registry, the choreography tree |
 | `/research` | Research index: single posts adapted from [docs.xo.builders/research](https://docs.xo.builders/research) |
 | `/research/[slug]` | Individual research posts |
 | `/quirq-whitepaper.pdf` | The whitepaper (static) |
@@ -44,17 +48,24 @@ app/
   what-is-quirq/        a second stage page: same shell, different beats
   how-it-works/         a third: the system explaining itself, plus the plan
   beats/                a fourth: the traversal deep dive, with a live meter
+  scenes/               the scene-customization guide, as story data
+  editor/               the live page editor (inspector over the real stage)
+  journey/              the branching walk; defs.tsx is the definition model
+  api/journeys/         reads (and, in dev, writes) .quirq/journeys/*.json
+  golden/ registry/ tree/  feature pages, each a story.ts + StoryBeat map
   research/             index + [slug] post pages
   globals.css           design tokens: void black, ink, the spectrum gradient
 components/
   stage-page.tsx        the shared shell: runtime + stage + overlays + nav
+  story/                BeatData type + the StoryBeat renderer (data-driven middles)
   scroll-runtime.tsx    Lenis + rAF loop; measures the active beat, writes --scroll
   stage/
     stage.tsx           fixed full-viewport canvas host
     scene.tsx           lazy three/drei entry point (keep the imports here)
     glass-form.tsx      MeshTransmissionMaterial ribbon
     ribbon-geometry.ts  procedural twisted ribbon, 4 quad strips
-    choreography.ts     one keyframe per beat; scroll interpolates between them
+    choreo-tree.ts      the choreography as a tree: cascade + branch predicates
+    choreography.ts     resolved track state + the track-agnostic sampler
     light-burst.tsx     shader plane upstage; the glass needs light to refract
   beats/                hero, ecosystem, consumption, delivery, ledger, invite
   ui/
@@ -62,6 +73,8 @@ components/
     open-in.tsx         early-access split button + "open in agent" menu
     primitives.tsx      Beat, Reveal, Rise, TextScrim, Marker, ActionLink, Mark
 lib/
+  beat-registry.ts      sections self-register; the runtime measures the registry
+  golden.ts             dev harness (window.__golden); baselines in docs/goldens/
   lighting.ts           LIGHTING preset: one switch for page brightness
   research.ts           research posts as data; the routes render from this
   spectrum.ts           the seven spectrum stops
@@ -82,6 +95,25 @@ The invariants that keep it coherent:
 - **Add a research post:** add an entry to `lib/research.ts` (slug, dek, dated body blocks). The index and post routes pick it up; no other change needed.
 - **Ledger numbers:** `components/beats/ledger.tsx`; they trace to the whitepaper's worked quarter, and the "illustrative" caption is load-bearing. Do not drop it.
 - **Ecosystem lattice:** the `ECOSYSTEM` array in `components/beats/ecosystem.tsx`. These are supported runtimes and clouds, not customers; never present them as customers.
+
+## The .quirq folder
+
+`.quirq/journeys/*.json` holds journey definitions: the entire node tree
+(beats, poses as named presets plus tweaks, prompts, choices) and the rules
+(start node, maxDepth, allowRewind, allowReplay). The /journey page lists the
+folder, loads any definition live, and in development can store the active
+journey back as an editable file. Definitions are validated on load (edges
+must resolve, poses must exist); a bad file is refused with a note, never a
+crash.
+
+The walk itself is recorded: every transition (start, choose, rewind, loop,
+trace jump) is captured with a full path snapshot. Recordings persist to
+localStorage everywhere and, in development, are written into the journey's
+own JSON as a `recording` key, so the file grows with the walk. At the end of
+a branch the page shows the recap and can replay every transition, swapping
+the path back through each snapshot while the glass re-walks it. Endings are
+circular (Walk again loops to the start node), and any link that leaves the
+journey opens in a new tab.
 
 ## Deploy
 

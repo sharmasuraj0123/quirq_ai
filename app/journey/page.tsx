@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import { StagePage } from "@/components/stage-page";
 import { SiteFooter } from "@/components/ui/footer";
-import { StoryBeat } from "@/components/story/story-beat";
-import { STORY } from "./story";
+import { Journey } from "./journey";
 
 export const metadata: Metadata = {
-  title: "How it works",
+  title: "The journey",
   description:
-    "How to write a journey JSON for the .quirq folder: the shape of the file, the anatomy of a node, and what each component affects, from the glass's pose to the legal edges of the walk.",
+    "A branching walk: the page's content is generated from your previous choices, the glass follows the path you take, and the trail rewinds to explore the other branches of the tree.",
 };
 
-/** The journey-authoring manual, staged by the scene the journeys drive. */
+/**
+ * The first live branching walk: content generated from previous choices,
+ * choreography following the chosen path. Phase 5's machinery, in use.
+ */
 export default function Page() {
   return (
     <StagePage>
-      {STORY.map((beat) => (
-        <StoryBeat key={beat.id} data={beat} />
-      ))}
+      <Journey />
 
       <div className="relative">
         <div

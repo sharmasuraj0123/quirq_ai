@@ -1,0 +1,76 @@
+{
+  "slug": "sample-2",
+  "name": "Sample · two nodes",
+  "rules": {
+    "start": "root",
+    "maxDepth": 2,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "tokens",
+      "pose": {
+        "base": "drained"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "01 · the meter you have",
+        "title": [
+          "Tokens count what",
+          "the machine burned."
+        ],
+        "lede": "The bill climbs whether or not the job got done. Spend is visible to the cent; the value it bought measures zero."
+      },
+      "prompt": "And the other meter?",
+      "choices": [
+        {
+          "label": "Show me delivery",
+          "to": "quirqs"
+        }
+      ]
+    },
+    "quirqs": {
+      "short": "quirqs",
+      "pose": {
+        "base": "flooded"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "02 · the meter that was missing",
+        "title": [
+          "Quirqs count",
+          "what it delivered."
+        ],
+        "glass": 1,
+        "lede": "A human budgets the outcome. The workspace verifies it against captured state, then mints the value. Never self-reported.",
+        "links": [
+          {
+            "href": "/what-is-quirq",
+            "label": "What is quirq"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  },
+  "recording": {
+    "journey": "sample-2",
+    "startedAt": 1784963932177,
+    "events": [
+      {
+        "at": 1784963932177,
+        "kind": "start",
+        "node": "quirqs",
+        "path": [
+          "root",
+          "quirqs"
+        ]
+      }
+    ]
+  }
+}

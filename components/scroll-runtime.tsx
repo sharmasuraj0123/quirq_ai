@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { stage } from "@/lib/stage-store";
 import { beatEntries, onBeatsChange } from "@/lib/beat-registry";
-import { refreshTrack } from "@/components/stage/choreography";
+import {
+  getResolvedLeaves,
+  refreshTrack,
+} from "@/components/stage/choreography";
 
 /**
  * Owns smooth scrolling and turns raw scroll into a fractional beat index.
@@ -26,18 +29,46 @@ export default function ScrollRuntime() {
       // Phase 2: registered sections first; the data-beat query remains as
       // the fallback for pages composed without the Beat primitive.
       const registered = beatEntries();
-      const sections = registered.length
-        ? registered.map((entry) => entry.el)
-        : Array.from(
-            document.querySelectorAll<HTMLElement>("[data-beat]"),
-          ).sort(
-            (a, b) => Number(a.dataset.beat ?? 0) - Number(b.dataset.beat ?? 0),
+      let sections: HTMLElement[];
+      if (registered.length) {
+        // Bind sections to resolved leaves BY ID when the page's ids match
+        // the tree: the only ordering that stays correct once a `when`
+        // predicate prunes a middle leaf. Pages whose ids are not in the
+        // tree bind positionally, exactly as before.
+        const leaves = getResolvedLeaves();
+        const byId = new Map(registered.map((entry) => [entry.id, entry.el]));
+        const idBound =
+          leaves.length === registered.length &&
+          leaves.every((leaf) => byId.has(leaf.id));
+        sections = idBound
+          ? leaves.map((leaf) => byId.get(leaf.id) as HTMLElement)
+          : registered.map((entry) => entry.el);
+        if (
+          process.env.NODE_ENV !== "production" &&
+          !idBound &&
+          registered.length !== leaves.length
+        ) {
+          console.warn(
+            `[stage] ${registered.length} sections vs ${leaves.length} track leaves: positional binding may sample the wrong pose. Match section ids to tree leaf ids.`,
           );
+        }
+      } else {
+        sections = Array.from(
+          document.querySelectorAll<HTMLElement>("[data-beat]"),
+        ).sort(
+          (a, b) => Number(a.dataset.beat ?? 0) - Number(b.dataset.beat ?? 0),
+        );
+      }
       centres = sections.map((el) => {
         const box = el.getBoundingClientRect();
         return box.top + window.scrollY + box.height / 2;
       });
     };
+
+    // fonts.ready outlives unmount (the document persists across client
+    // navigations), so late callbacks must be gated: a dead runtime must
+    // never write --scroll or the stage store after clear() has run.
+    let alive = true;
 
     // Phase 4: the track resolves against the live context before anything
     // is measured, and again on resize; with no active branch predicates
@@ -95,6 +126,13 @@ export default function ScrollRuntime() {
         onScroll();
       };
       onScroll();
+      // Programmatic drive (replay, tools): scroll requests arrive as events
+      // so callers never need a handle on the scrolling machinery.
+      const onDrive = (e: Event) => {
+        const y = (e as CustomEvent<{ y?: number }>).detail?.y;
+        if (typeof y === "number") window.scrollTo({ top: y, behavior: "smooth" });
+      };
+      window.addEventListener("stage:scrollto", onDrive);
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onResize);
       // Sections registering or leaving (a dynamic middle) re-measure too.
@@ -103,8 +141,14 @@ export default function ScrollRuntime() {
         onScroll();
       });
       // Section heights shift once the webfonts swap in.
-      document.fonts?.ready.then(onResize).catch(() => {});
+      document.fonts?.ready
+        .then(() => {
+          if (alive) onResize();
+        })
+        .catch(() => {});
       return () => {
+        alive = false;
+        window.removeEventListener("stage:scrollto", onDrive);
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onResize);
         offBeats();
@@ -166,14 +210,33 @@ export default function ScrollRuntime() {
       );
     });
 
-    // Fonts change section heights after they swap in; re-measure once settled.
-    document.fonts?.ready.then(measure).catch(() => {});
+    // Fonts change section heights after they swap in; re-measure once
+    // settled and re-write, so the pose and the nav rule pick up the new
+    // centres without waiting for the first wheel.
+    document.fonts?.ready
+      .then(() => {
+        if (!alive) return;
+        measure();
+        write(
+          window.scrollY,
+          document.documentElement.scrollHeight - window.innerHeight,
+        );
+      })
+      .catch(() => {});
 
     const onPointer = (e: PointerEvent) => {
       stage.pointerX = (e.clientX / window.innerWidth) * 2 - 1;
       stage.pointerY = -((e.clientY / window.innerHeight) * 2 - 1);
     };
     window.addEventListener("pointermove", onPointer, { passive: true });
+
+    // Programmatic drive (replay, tools): requests ride Lenis like a wheel
+    // gesture would, so the damped glass gets a real camera move.
+    const onDrive = (e: Event) => {
+      const y = (e as CustomEvent<{ y?: number }>).detail?.y;
+      if (typeof y === "number") lenis.scrollTo(y, { duration: 1.35 });
+    };
+    window.addEventListener("stage:scrollto", onDrive);
 
     // Anchor links inside the page should ride Lenis, not jump.
     const onClick = (e: MouseEvent) => {
@@ -191,7 +254,9 @@ export default function ScrollRuntime() {
     document.addEventListener("click", onClick);
 
     return () => {
+      alive = false;
       cancelAnimationFrame(frame);
+      window.removeEventListener("stage:scrollto", onDrive);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("pointermove", onPointer);
       document.removeEventListener("click", onClick);

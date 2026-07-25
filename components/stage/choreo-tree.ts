@@ -59,6 +59,17 @@ export const CHANNELS = [
   "burst",
 ] as const satisfies readonly (keyof Keyframe)[];
 
+/**
+ * Exhaustiveness guard: the `satisfies` above only checks that each listed
+ * name is a Keyframe key, not that every key is listed. This alias fails to
+ * compile the moment a Keyframe key is missing from CHANNELS, so a new
+ * channel can never silently freeze at its seed value in the sampler.
+ */
+type AssertNever<T extends never> = T;
+export type _ChannelsAreExhaustive = AssertNever<
+  Exclude<keyof Keyframe, (typeof CHANNELS)[number]>
+>;
+
 /** What predicates may branch on. Extend as branches need it. */
 export type TrackContext = {
   width: number;

@@ -1,0 +1,52 @@
+{
+  "slug": "sample-1",
+  "name": "Sample · one node",
+  "rules": {
+    "start": "root",
+    "maxDepth": 1,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "root": {
+      "short": "the pitch",
+      "pose": {
+        "base": "centre"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Work at",
+          "light speed."
+        ],
+        "glass": 1,
+        "lede": "One click gives every agent an environment that snapshots, verifies and meters its work. Tokens meter what AI consumes; quirqs meter what it delivers. The whole pitch, one page.",
+        "links": [
+          {
+            "href": "/",
+            "label": "The full story"
+          },
+          {
+            "href": "/quirq-whitepaper.pdf",
+            "label": "The whitepaper",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  },
+  "recording": {
+    "journey": "sample-1",
+    "startedAt": 1784963941841,
+    "events": [
+      {
+        "at": 1784963941841,
+        "kind": "start",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      }
+    ]
+  }
+}
