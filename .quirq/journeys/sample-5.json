@@ -165,10 +165,10 @@
   },
   "recording": {
     "journey": "sample-5",
-    "startedAt": 1784982335447,
+    "startedAt": 1784992283785,
     "events": [
       {
-        "at": 1784982335447,
+        "at": 1784992283785,
         "kind": "start",
         "node": "root",
         "path": [
@@ -176,42 +176,13 @@
         ]
       },
       {
-        "at": 1784982339883,
+        "at": 1784992284840,
         "kind": "choose",
         "label": "The four keys",
         "node": "shape",
         "path": [
           "root",
           "shape"
-        ]
-      },
-      {
-        "at": 1784982345790,
-        "kind": "rewind",
-        "node": "root",
-        "path": [
-          "root"
-        ]
-      },
-      {
-        "at": 1784982348776,
-        "kind": "choose",
-        "label": "The four keys",
-        "node": "shape",
-        "path": [
-          "root",
-          "shape"
-        ]
-      },
-      {
-        "at": 1784982355043,
-        "kind": "choose",
-        "label": "The anatomy",
-        "node": "node",
-        "path": [
-          "root",
-          "shape",
-          "node"
         ]
       }
     ]

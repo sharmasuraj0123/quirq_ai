@@ -164,6 +164,13 @@ export function Marker({ children }: { children: ReactNode }) {
   );
 }
 
+/** Shared hover spring for every CTA pill, matched to the invite button. */
+export const CTA_SPRING = {
+  type: "spring",
+  stiffness: 320,
+  damping: 22,
+} as const;
+
 export function ActionLink({
   href,
   children,
@@ -178,19 +185,31 @@ export function ActionLink({
   className?: string;
 }) {
   return (
-    <a
+    <motion.a
       href={href}
       target={newTab ? "_blank" : undefined}
       rel={newTab ? "noopener noreferrer" : undefined}
+      whileHover={{ y: -3 }}
+      transition={CTA_SPRING}
       className={cn(
-        "group inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 font-mono text-[11.5px] uppercase tracking-[0.14em] transition-all duration-300 hover:-translate-y-0.5",
+        "group relative inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 font-mono text-[11.5px] uppercase tracking-[0.14em]",
         tone === "solid"
-          ? "bg-ink text-void hover:opacity-90"
+          ? "focus-on-ink bg-ink text-void"
           : // Sits over the live bloom, so it carries its own scrim.
-            "border border-hair bg-black/40 text-ink/85 backdrop-blur-md hover:border-ink/30 hover:text-ink",
+            "border border-hair bg-black/40 text-ink/85 backdrop-blur-md transition-colors duration-300 hover:border-ink/30 hover:text-ink",
         className,
       )}
     >
+      {/* Spectrum bloom under the pill; on the dark tone it stays quieter and
+          bleeds through the smoked glass instead of haloing it. */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute -inset-px -z-10 rounded-full opacity-0 blur-lg transition-opacity duration-500",
+          tone === "solid" ? "group-hover:opacity-70" : "group-hover:opacity-40",
+        )}
+        style={{ background: "var(--spectrum)" }}
+      />
       {children}
       <svg
         width="11"
@@ -198,7 +217,7 @@ export function ActionLink({
         viewBox="0 0 12 12"
         fill="none"
         aria-hidden
-        className="transition-transform duration-300 group-hover:translate-x-0.5"
+        className="transition-transform duration-300 group-hover:translate-x-1"
       >
         <path
           d="M2 10L10 2M10 2H4M10 2V8"
@@ -209,7 +228,7 @@ export function ActionLink({
         />
       </svg>
       {newTab && <span className="sr-only">(opens in a new tab)</span>}
-    </a>
+    </motion.a>
   );
 }
 

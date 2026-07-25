@@ -14,6 +14,7 @@ import {
 import { CHOREOGRAPHY, type ChoreoNode } from "@/components/stage/choreo-tree";
 import { beatEntries, onBeatsChange } from "@/lib/beat-registry";
 import { captureGolden, type Golden } from "@/lib/golden";
+import { validateDefinition, type JourneyDefinition } from "@/app/journey/defs";
 
 /**
  * The page editor: compose story beats, drag the pose and optics of the live
@@ -144,6 +145,71 @@ function downloadText(filename: string, text: string) {
   URL.revokeObjectURL(url);
 }
 
+/** kebab-case a slug the journeys API will accept. */
+function cleanSlug(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 64);
+}
+
+/** The draft as a journey definition: a linear walk, one node per beat,
+ *  each pose collapsed to centre + full tweaks. Paste it into
+ *  .quirq/journeys/<slug>.json and /journey renders it as a page. */
+function toJourney(beats: EditorBeat[], slugRaw: string): JourneyDefinition {
+  const slug = cleanSlug(slugRaw) || "my-journey";
+  const ids = beats.map((_, i) => `b${i + 1}`);
+  const short = (b: EditorBeat, i: number) => {
+    const fromMarker = b.marker.replace(/^\s*\d+\s*·\s*/, "").trim();
+    return fromMarker || b.title[0].trim().toLowerCase() || `beat ${i + 1}`;
+  };
+  return {
+    slug,
+    name: (slug.charAt(0).toUpperCase() + slug.slice(1)).replace(/-/g, " "),
+    rules: {
+      start: ids[0],
+      maxDepth: beats.length,
+      allowRewind: true,
+      allowReplay: true,
+    },
+    nodes: Object.fromEntries(
+      beats.map((b, i) => [
+        ids[i],
+        {
+          short: short(b, i),
+          pose: {
+            base: "centre" as const,
+            tweaks: Object.fromEntries(
+              Object.entries(b.keyframe).map(([k, v]) => [k, round3(v)]),
+            ) as Partial<Keyframe>,
+          },
+          beat: {
+            layout: b.layout,
+            ...(b.marker ? { marker: b.marker } : {}),
+            title: b.title,
+            ...(b.glass !== null ? { glass: b.glass } : {}),
+            ...(b.lede ? { lede: b.lede } : {}),
+          },
+          ...(i < beats.length - 1
+            ? {
+                prompt: "Keep walking?",
+                choices: [
+                  {
+                    label:
+                      beats[i + 1].title.join(" ").trim() || `Beat ${i + 2}`,
+                    to: ids[i + 1],
+                  },
+                ],
+              }
+            : {}),
+        },
+      ]),
+    ),
+  };
+}
+
 type Tab = "beats" | "tree" | "registry" | "golden";
 const TABS: Tab[] = ["beats", "tree", "registry", "golden"];
 
@@ -153,6 +219,9 @@ export function Editor() {
   const [copied, setCopied] = useState(false);
   const [showJson, setShowJson] = useState(false);
   const [tab, setTab] = useState<Tab>("beats");
+  const [slug, setSlug] = useState("my-journey");
+  const [storeNote, setStoreNote] = useState<string | null>(null);
+  const [storedSlug, setStoredSlug] = useState<string | null>(null);
   const counter = useRef(0);
 
   // Draft restore happens in an effect, never in the initial state: the
@@ -235,30 +304,11 @@ export function Editor() {
       return next;
     });
 
+  // The export IS a journey file: paste it into .quirq/journeys/<slug>.json
+  // (or Create page writes it there in development) and /journey serves it.
   const exportJson = useMemo(
-    () =>
-      JSON.stringify(
-        {
-          beats: beats.map((b, i) => ({
-            index: i,
-            id: b.id,
-            layout: b.layout,
-            ...(b.marker ? { marker: b.marker } : {}),
-            title: b.title,
-            ...(b.glass !== null ? { glass: b.glass } : {}),
-            ...(b.lede ? { lede: b.lede } : {}),
-          })),
-          leaves: beats.map((b) => ({
-            id: b.id,
-            keyframe: Object.fromEntries(
-              Object.entries(b.keyframe).map(([k, v]) => [k, round3(v)]),
-            ),
-          })),
-        },
-        null,
-        2,
-      ),
-    [beats],
+    () => JSON.stringify(toJourney(beats, slug), null, 2),
+    [beats, slug],
   );
 
   const copy = async () => {
@@ -268,6 +318,32 @@ export function Editor() {
       setTimeout(() => setCopied(false), 1600);
     } catch {
       setShowJson(true);
+    }
+  };
+
+  /** Development only: write the journey into .quirq and the page exists. */
+  const createPage = async () => {
+    const def = toJourney(beats, slug);
+    const problem = validateDefinition(def);
+    if (problem) {
+      setStoredSlug(null);
+      setStoreNote(`Not a valid journey: ${problem}`);
+      return;
+    }
+    try {
+      const res = await fetch("/api/journeys", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(def),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setStoredSlug(def.slug);
+      setStoreNote(null);
+    } catch (err) {
+      setStoredSlug(null);
+      setStoreNote(
+        err instanceof Error ? err.message : "Could not create the page.",
+      );
     }
   };
 
@@ -463,23 +539,63 @@ export function Editor() {
             </div>
           ))}
 
-          {/* Export */}
-          <p className="label mt-6 text-[9px]">Export</p>
-          <div className="mt-2 flex gap-2">
-            <EditorChip onClick={copy}>{copied ? "Copied" : "Copy JSON"}</EditorChip>
+          {/* Export: the draft as a journey file */}
+          <p className="label mt-6 text-[9px]">Export · journey</p>
+          <div className="mt-2 flex items-center gap-1.5">
+            <span className="shrink-0 font-mono text-[9.5px] text-faint">
+              .quirq/journeys/
+            </span>
+            <input
+              type="text"
+              value={slug}
+              placeholder="my-journey"
+              onChange={(e) => {
+                setSlug(e.target.value);
+                setStoredSlug(null);
+              }}
+              className="min-w-0 flex-1 rounded-lg border border-hair-soft bg-white/[0.04] px-2.5 py-1.5 font-mono text-[11px] text-ink placeholder:text-faint focus:outline-none"
+            />
+            <span className="shrink-0 font-mono text-[9.5px] text-faint">
+              .json
+            </span>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <EditorChip onClick={copy}>
+              {copied ? "Copied" : "Copy journey JSON"}
+            </EditorChip>
             <EditorChip onClick={() => setShowJson((v) => !v)} active={showJson}>
               {showJson ? "Hide" : "Show"}
             </EditorChip>
+            {process.env.NODE_ENV === "development" && (
+              <EditorChip onClick={createPage}>Create page</EditorChip>
+            )}
           </div>
+          {storeNote && (
+            <p className="mt-2 font-mono text-[9.5px] leading-relaxed text-spec-orange">
+              {storeNote}
+            </p>
+          )}
+          {storedSlug && (
+            <a
+              href={`/journey?j=${storedSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block rounded-full border border-hair-soft bg-white/[0.05] px-3 py-1.5 font-mono text-[9.5px] tracking-[0.08em] text-ink/85 uppercase transition-colors hover:border-ink/30 hover:text-ink"
+            >
+              Page created · open /journey?j={storedSlug}
+            </a>
+          )}
           {showJson && (
             <pre className="mt-2 max-h-56 overflow-auto rounded-lg border border-hair-soft bg-white/[0.03] p-3 font-mono text-[10px] leading-relaxed text-ink/75">
               {exportJson}
             </pre>
           )}
           <p className="mt-3 pb-2 font-mono text-[9.5px] leading-relaxed text-faint">
-            Paste the beats into a story.ts and render them with StoryBeat; the
-            leaves become tree leaves (or a future per-page track). See
-            /dynamic for the pattern.
+            The JSON is a complete journey: beats chained in order, poses
+            included. Paste it as .quirq/journeys/{cleanSlug(slug) || "my-journey"}.json and
+            Reload .quirq on /journey, or in development hit Create page and
+            it is written for you. Open forks later by editing choices in the
+            file.
           </p>
             </>
           )}

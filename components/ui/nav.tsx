@@ -12,19 +12,25 @@ export function Nav() {
   const onWhat = pathname.startsWith("/what-is-quirq");
   const onHow = pathname.startsWith("/how-it-works");
   const onBeats = pathname.startsWith("/beats");
-  const onJourney = pathname.startsWith("/journey");
   const onResearch = pathname.startsWith("/research");
-  // Pages that run the 3D shot supply their own darkness and a live
-  // scroll-progress value; text pages get the glass bar instead. Every route
-  // that mounts StagePage belongs in this list.
+  const onPaper = pathname.startsWith("/whitepaper");
+  const onDemo = pathname.startsWith("/demo");
+  const onDashboard = pathname.startsWith("/dashboard");
+  const onJourney = pathname.startsWith("/journey");
+  // Every page runs the 3D shot now, so the glass bar is the exception rather
+  // than the rule. /demo and /dashboard joined once the scroll runtime started
+  // observing section heights: an interactive surface that grows after mount
+  // no longer desyncs the choreography from the copy. /research keeps the bar
+  // because it is long-form text and mounts no stage.
   const onStage =
     home ||
     onWhat ||
     onHow ||
     onBeats ||
-    ["/dynamic", "/scenes", "/editor", "/journey", "/golden", "/registry", "/tree"].some(
-      (route) => pathname.startsWith(route),
-    );
+    onPaper ||
+    onDemo ||
+    onDashboard ||
+    onJourney;
 
   return (
     <>
@@ -65,13 +71,72 @@ export function Nav() {
         </Link>
 
         <div className="flex items-center gap-5 sm:gap-7">
-          {/* Hidden on phones like the whitepaper link: the mark, Research
-              and the CTA are the load-bearing trio at small widths. */}
+          {/* The bar's breakpoint budget is fully spent, so a new route means
+              re-ranking rather than appending, and eight links do not fit at
+              1280. The three surfaces where the product is actually doing
+              something rank first: Demo survives to phone widths, Dashboard
+              and Journey join at sm. The pages that only describe it follow.
+              Beats moved to the footer: it is a dev deep-dive and it was the
+              cheapest seat to give up. */}
+          <Link
+            href="/demo"
+            aria-current={onDemo ? "page" : undefined}
+            className={cn(
+              "label inline-flex items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink",
+              onDemo && "text-ink",
+            )}
+          >
+            {onDemo && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            Demo
+          </Link>
+
+          <Link
+            href="/dashboard"
+            aria-current={onDashboard ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              onDashboard && "text-ink",
+            )}
+          >
+            {onDashboard && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            Dashboard
+          </Link>
+
+          <Link
+            href="/journey"
+            aria-current={onJourney ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              onJourney && "text-ink",
+            )}
+          >
+            {onJourney && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
+              />
+            )}
+            Journey
+          </Link>
+
           <Link
             href="/what-is-quirq"
             aria-current={onWhat ? "page" : undefined}
             className={cn(
-              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink lg:inline-flex",
               onWhat && "text-ink",
             )}
           >
@@ -89,7 +154,7 @@ export function Nav() {
             href="/how-it-works"
             aria-current={onHow ? "page" : undefined}
             className={cn(
-              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink lg:inline-flex",
               onHow && "text-ink",
             )}
           >
@@ -104,50 +169,12 @@ export function Nav() {
           </Link>
 
           <Link
-            href="/journey"
-            aria-current={onJourney ? "page" : undefined}
-            className={cn(
-              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink lg:inline-flex",
-              onJourney && "text-ink",
-            )}
-          >
-            {onJourney && (
-              <span
-                aria-hidden
-                className="h-1.5 w-1.5 rounded-[2px]"
-                style={{ background: "var(--spectrum)" }}
-              />
-            )}
-            Journey
-          </Link>
-
-          {/* Deepest of the dev pages; earns its slot only where the bar has
-              room to spare. */}
-          <Link
-            href="/beats"
-            aria-current={onBeats ? "page" : undefined}
-            className={cn(
-              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink lg:inline-flex",
-              onBeats && "text-ink",
-            )}
-          >
-            {onBeats && (
-              <span
-                aria-hidden
-                className="h-1.5 w-1.5 rounded-[2px]"
-                style={{ background: "var(--spectrum)" }}
-              />
-            )}
-            Beats
-          </Link>
-
-          <Link
             href="/research"
             aria-current={onResearch ? "page" : undefined}
             // Invisible padding: the 10px label alone is far under a usable
             // touch target, and the transparent bleed moves no geometry.
             className={cn(
-              "label inline-flex items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink",
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink xl:inline-flex",
               onResearch && "text-ink",
             )}
           >
@@ -163,34 +190,26 @@ export function Nav() {
           </Link>
 
           {/* Drops out on phones so the CTA never gets pushed off the edge;
-              the whitepaper is still linked from the ledger note and footer. */}
-          {/* Opens in its own tab: it's a PDF, and losing the page you were
-              reading to a document viewer is a bad trade. */}
-          <a
-            href="/quirq-whitepaper.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="label hidden items-center gap-1.5 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex"
+              the whitepaper is still linked from the ledger note and footer.
+              Points at the readable page, not the PDF: the PDF is one click
+              further in, from that page's own calls to action. */}
+          <Link
+            href="/whitepaper"
+            aria-current={onPaper ? "page" : undefined}
+            className={cn(
+              "label hidden items-center gap-2 px-2 py-3 -mx-2 -my-3 transition-colors hover:text-ink sm:inline-flex",
+              onPaper && "text-ink",
+            )}
           >
-            Whitepaper
-            <svg
-              width="9"
-              height="9"
-              viewBox="0 0 12 12"
-              fill="none"
-              aria-hidden
-              className="translate-y-px opacity-70"
-            >
-              <path
-                d="M4.5 1.5H10.5V7.5M10.5 1.5L5.5 6.5M8.5 8.5V10.5H1.5V3.5H3.5"
-                stroke="currentColor"
-                strokeWidth="1.3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {onPaper && (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-[2px]"
+                style={{ background: "var(--spectrum)" }}
               />
-            </svg>
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
+            )}
+            Whitepaper
+          </Link>
 
           <OpenIn variant="nav" />
         </div>

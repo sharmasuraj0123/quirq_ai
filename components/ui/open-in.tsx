@@ -3,7 +3,14 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { cn } from "./primitives";
+import { cn, CTA_SPRING } from "./primitives";
+import {
+  AnthropicIcon,
+  ClaudeCodeIcon,
+  CodexIcon,
+  CursorIcon,
+  OpenaiIcon,
+} from "./brand-icons";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -21,6 +28,7 @@ type Target = {
   name: string;
   note: string;
   href: string;
+  Icon: (props: { className?: string }) => React.ReactElement;
 };
 
 /* URL schemes verified against what the "Open in" menus on shadcn, Expo,
@@ -32,28 +40,38 @@ const TARGETS: Target[] = [
     name: "Claude Code",
     note: "claude.ai/code",
     href: `https://claude.ai/code/new?q=${PROMPT}`,
+    Icon: ClaudeCodeIcon,
   },
   {
     name: "Codex",
     note: "needs the app",
     href: `codex://new?prompt=${PROMPT}`,
+    Icon: CodexIcon,
   },
   {
     name: "Cursor",
     note: "cursor.com/link",
     href: `https://cursor.com/link/prompt?text=${PROMPT}`,
+    Icon: CursorIcon,
   },
   {
     name: "Claude",
     note: "claude.ai",
     href: `https://claude.ai/new?q=${PROMPT}`,
+    Icon: AnthropicIcon,
   },
   {
     name: "ChatGPT",
     note: "chatgpt.com",
     href: `https://chatgpt.com/?q=${PROMPT}`,
+    Icon: OpenaiIcon,
   },
 ];
+
+/* The marks shown on the button itself. A row of logos says "this opens in
+   your agent" faster than any label can, so the control leads with them and
+   the words only confirm it. */
+const LEAD = TARGETS.slice(0, 3);
 
 const MENU_WIDTH = 256; // w-64, needed to clamp the fixed panel to the viewport
 const GAP = 10;
@@ -144,58 +162,84 @@ export function OpenIn({
 
   return (
     <div ref={host} className={cn("relative", className)}>
-      <div className="inline-flex items-stretch overflow-hidden rounded-full bg-ink text-void transition-transform duration-300 hover:-translate-y-0.5">
-        <a
-          href={MAIL}
-          className={cn(
-            "focus-on-ink inline-flex items-center font-mono uppercase transition-opacity hover:opacity-85",
-            hero
-              ? "gap-2.5 py-3.5 pl-6 pr-4 text-[11.5px] tracking-[0.14em]"
-              : "py-2 pl-4 pr-2.5 text-[10.5px] tracking-[0.14em]",
-          )}
-        >
-          {hero ? "Get early access" : "Early access"}
-        </a>
-        {/* The divider lives inside the button so there is no dead sliver
+      {/* Same gesture as the invite CTA: spring lift + spectrum bloom. The
+          bloom lives on this wrapper because the pill clips its overflow for
+          the segment divider, which would crop the halo. */}
+      <motion.div
+        className="group relative inline-flex"
+        whileHover={{ y: hero ? -3 : -2 }}
+        transition={CTA_SPRING}
+      >
+        <span
+          aria-hidden
+          className="absolute -inset-px -z-10 rounded-full opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-70"
+          style={{ background: "var(--spectrum)" }}
+        />
+        <div className="inline-flex items-stretch overflow-hidden rounded-full bg-ink text-void">
+          <a
+            href={MAIL}
+            className={cn(
+              "focus-on-ink inline-flex items-center font-mono uppercase transition-opacity hover:opacity-85",
+              hero
+                ? "gap-2.5 py-3.5 pl-6 pr-4 text-[11.5px] tracking-[0.14em]"
+                : "py-2 pl-4 pr-2.5 text-[10.5px] tracking-[0.14em]",
+            )}
+          >
+            {/* The marks carry the affordance; the words only confirm it. */}
+            <span aria-hidden className={cn("flex items-center", hero ? "gap-1.5" : "gap-1")}>
+              {LEAD.map((target) => (
+                <target.Icon
+                  key={target.name}
+                  className={hero ? "h-[15px] w-[15px]" : "h-3 w-3"}
+                />
+              ))}
+            </span>
+            <span className={hero ? "ml-0.5" : "ml-px"}>Open in</span>
+          </a>
+          {/* The divider lives inside the button so there is no dead sliver
             between the two segments; every pixel right of the label toggles.
             `openin-toggle` lets the noscript override hide it: without JS the
             disclosure can never open, so the chevron would be a dead control. */}
-        <button
-          ref={trigger}
-          type="button"
-          aria-expanded={open}
-          aria-controls={menuId}
-          aria-label="Open quirq in an agent"
-          onClick={() => setAnchor(open ? null : place())}
-          className={cn(
-            "openin-toggle focus-on-ink inline-flex items-center justify-center gap-0 transition-opacity hover:opacity-85",
-            hero ? "pr-4.5" : "pr-3",
-          )}
-        >
-          <span
-            aria-hidden
-            className={cn("w-px self-stretch bg-void/20", hero ? "my-2.5" : "my-2")}
-          />
-          <span aria-hidden className={hero ? "w-3" : "w-2"} />
-          <motion.svg
-            width={hero ? 12 : 10}
-            height={hero ? 12 : 10}
-            viewBox="0 0 12 12"
-            fill="none"
-            aria-hidden
-            animate={{ rotate: open ? 180 : 0 }}
-            transition={{ duration: 0.35, ease: EASE }}
+          <button
+            ref={trigger}
+            type="button"
+            aria-expanded={open}
+            aria-controls={menuId}
+            aria-label="Open quirq in an agent"
+            onClick={() => setAnchor(open ? null : place())}
+            className={cn(
+              "openin-toggle focus-on-ink inline-flex items-center justify-center gap-0 transition-opacity hover:opacity-85",
+              hero ? "pr-4.5" : "pr-3",
+            )}
           >
-            <path
-              d="M2.5 4.5L6 8L9.5 4.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <span
+              aria-hidden
+              className={cn(
+                "w-px self-stretch bg-void/20",
+                hero ? "my-2.5" : "my-2",
+              )}
             />
-          </motion.svg>
-        </button>
-      </div>
+            <span aria-hidden className={hero ? "w-3" : "w-2"} />
+            <motion.svg
+              width={hero ? 12 : 10}
+              height={hero ? 12 : 10}
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.35, ease: EASE }}
+            >
+              <path
+                d="M2.5 4.5L6 8L9.5 4.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          </button>
+        </div>
+      </motion.div>
 
       {typeof document !== "undefined" &&
         createPortal(
@@ -211,17 +255,23 @@ export function OpenIn({
                 initial={
                   reduced ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.98 }
                 }
-                animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                animate={
+                  reduced ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }
+                }
                 exit={{ opacity: 0, transition: { duration: 0.18 } }}
                 transition={{ duration: 0.4, ease: EASE }}
-                style={{ top: anchor?.top, left: anchor?.left, width: MENU_WIDTH }}
+                style={{
+                  top: anchor?.top,
+                  left: anchor?.left,
+                  width: MENU_WIDTH,
+                }}
                 className="fixed z-[70] overflow-hidden rounded-2xl border border-hair bg-black/85 shadow-[0_30px_90px_rgba(0,0,0,0.7)] backdrop-blur-xl"
               >
                 <p className="border-b border-hair-soft px-4 pb-2.5 pt-3 font-mono text-[9.5px] tracking-[0.22em] text-faint uppercase">
                   Hand quirq to your agent
                 </p>
                 <div className="py-1.5">
-                  {TARGETS.map((target, i) => (
+                  {TARGETS.map((target) => (
                     <a
                       key={target.name}
                       href={target.href}
@@ -230,9 +280,7 @@ export function OpenIn({
                       onClick={close}
                       className="group flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-white/[0.06]"
                     >
-                      <span className="font-mono text-[9.5px] text-faint">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                      <target.Icon className="h-[17px] w-[17px] shrink-0 text-dim transition-colors group-hover:text-ink" />
                       <span className="flex-1">
                         <span className="block text-[13.5px] font-medium text-ink">
                           Open in {target.name}

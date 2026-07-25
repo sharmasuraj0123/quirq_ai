@@ -104,24 +104,14 @@
   },
   "recording": {
     "journey": "sample-4",
-    "startedAt": 1784982327599,
+    "startedAt": 1784992281529,
     "events": [
       {
-        "at": 1784982327599,
+        "at": 1784992281529,
         "kind": "start",
         "node": "root",
         "path": [
           "root"
-        ]
-      },
-      {
-        "at": 1784982331339,
-        "kind": "choose",
-        "label": "The meter you have",
-        "node": "tokens",
-        "path": [
-          "root",
-          "tokens"
         ]
       }
     ]

@@ -1,8 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
-import { Beat, Marker, Reveal, Rise, TextScrim, cn } from "@/components/ui/primitives";
+import Link from "next/link";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from "motion/react";
+import {
+  Beat,
+  Marker,
+  Reveal,
+  Rise,
+  TextScrim,
+  cn,
+} from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -92,12 +105,48 @@ type Row = {
 };
 
 const FEED: Row[] = [
-  { agent: "support-bot", task: "Closed billing ticket #4821", state: "verified", minted: 4.0, cost: 0.13 },
-  { agent: "eng-agent", task: "PR #212 merged · fix login redirect", state: "verified", minted: 25.0, cost: 1.87 },
-  { agent: "docs-agent", task: "Refund policy article updated", state: "partial", minted: 9.6, cost: 0.42 },
-  { agent: "ops-agent", task: "Weekly usage report compiled", state: "verified", minted: 8.0, cost: 0.28 },
-  { agent: "research-bot", task: "Competitor pricing brief drafted", state: "review", minted: null, cost: 0.95 },
-  { agent: "sales-agent", task: "Lead list enriched · 142 rows", state: "verified", minted: 15.0, cost: 0.66 },
+  {
+    agent: "support-bot",
+    task: "Closed billing ticket #4821",
+    state: "verified",
+    minted: 4.0,
+    cost: 0.13,
+  },
+  {
+    agent: "eng-agent",
+    task: "PR #212 merged · fix login redirect",
+    state: "verified",
+    minted: 25.0,
+    cost: 1.87,
+  },
+  {
+    agent: "docs-agent",
+    task: "Refund policy article updated",
+    state: "partial",
+    minted: 9.6,
+    cost: 0.42,
+  },
+  {
+    agent: "ops-agent",
+    task: "Weekly usage report compiled",
+    state: "verified",
+    minted: 8.0,
+    cost: 0.28,
+  },
+  {
+    agent: "research-bot",
+    task: "Competitor pricing brief drafted",
+    state: "review",
+    minted: null,
+    cost: 0.95,
+  },
+  {
+    agent: "sales-agent",
+    task: "Lead list enriched · 142 rows",
+    state: "verified",
+    minted: 15.0,
+    cost: 0.66,
+  },
 ];
 
 /**
@@ -144,7 +193,10 @@ function Feed() {
     if (!inView || reduced) return;
     const timer = setInterval(() => {
       setRows((prev) => {
-        const next = { ...FEED[cursor.current % FEED.length], id: cursor.current };
+        const next = {
+          ...FEED[cursor.current % FEED.length],
+          id: cursor.current,
+        };
         cursor.current += 1;
         return [next, ...prev.slice(0, VISIBLE - 1)];
       });
@@ -178,7 +230,9 @@ function Feed() {
             <span className="hidden shrink-0 rounded-full border border-hair-soft bg-white/5 px-2.5 py-1 font-mono text-[10px] text-dim md:block">
               {row.agent}
             </span>
-            <span className="min-w-0 flex-1 truncate text-ink/90">{row.task}</span>
+            <span className="min-w-0 flex-1 truncate text-ink/90">
+              {row.task}
+            </span>
             <span
               className={cn(
                 "shrink-0 rounded-full px-2.5 py-1 font-mono text-[9.5px] tracking-[0.08em] uppercase",
@@ -190,7 +244,9 @@ function Feed() {
             <span className="numeric w-[74px] shrink-0 text-right tabular-nums">
               <span
                 className={
-                  row.minted === null ? "text-faint" : "glass-text font-semibold"
+                  row.minted === null
+                    ? "text-faint"
+                    : "glass-text font-semibold"
                 }
               >
                 {row.minted === null ? "held" : `+$${row.minted.toFixed(2)}`}
@@ -323,14 +379,12 @@ export function Ledger() {
         <TextScrim />
         <p className="relative font-mono text-[10.5px] leading-relaxed text-dim">
           Illustrative: the worked quarter from the{" "}
-          <a
-            href="/quirq-whitepaper.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/whitepaper"
             className="text-dim underline underline-offset-4"
           >
             quirq whitepaper
-          </a>
+          </Link>
           . Your ledger is built from your own agents&rsquo; verified output.
         </p>
       </Rise>

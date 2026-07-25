@@ -49,3 +49,21 @@ export function onBeatsChange(fn: () => void): () => void {
     listeners.delete(fn);
   };
 }
+
+/**
+ * Tell the runtime a section's height changed, without the set changing.
+ *
+ * The runtime also watches every registered section with a ResizeObserver,
+ * which covers this automatically in a normal tab. This exists because that
+ * delivery is part of the rendering lifecycle: a backgrounded or throttled
+ * tab stops delivering resize records the same way it stops firing rAF, so an
+ * interactive page that grows while hidden and is then revealed would be
+ * measuring stale geometry until the next resize.
+ *
+ * Call it after a deliberate layout change (a panel opening, a table filling
+ * in, a journey step advancing) when you would rather not depend on that. It
+ * is idempotent and cheap: the runtime coalesces to one measurement per frame.
+ */
+export function beatsResized(): void {
+  notify();
+}

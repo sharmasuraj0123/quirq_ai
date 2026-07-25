@@ -18,7 +18,9 @@ export async function generateMetadata({
   return { title: post.title, description: post.dek };
 }
 
-/** One block of article body. Kinds map 1:1 to the shapes in lib/research.ts. */
+/**
+ * One block of long-form article body. Kinds map 1:1 to the shapes in lib/research.ts.
+ */
 function BodyBlock({ block }: { block: Block }) {
   switch (block.kind) {
     case "h2":
@@ -87,7 +89,10 @@ function BodyBlock({ block }: { block: Block }) {
             </thead>
             <tbody>
               {block.rows.map((row, r) => (
-                <tr key={r} className="border-b border-hair-soft last:border-b-0">
+                <tr
+                  key={r}
+                  className="border-b border-hair-soft last:border-b-0"
+                >
                   {row.map((cell, c) => (
                     <td
                       key={c}

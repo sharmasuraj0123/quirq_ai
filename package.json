@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test \"lib/quirq/*.test.mjs\"",
+    "typecheck": "tsc --noEmit",
+    "sample-ledger": "node scripts/build-sample-ledger.mjs",
+    "quirq": "node lib/quirq/cli.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

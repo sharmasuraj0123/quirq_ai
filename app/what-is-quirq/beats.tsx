@@ -1,6 +1,14 @@
 "use client";
 
-import { ActionLink, Beat, Marker, Reveal, Rise, TextScrim } from "@/components/ui/primitives";
+import Link from "next/link";
+import {
+  ActionLink,
+  Beat,
+  Marker,
+  Reveal,
+  Rise,
+  TextScrim,
+} from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
 import { OpenIn } from "@/components/ui/open-in";
 
@@ -189,14 +197,12 @@ export function WhatNumbers() {
         <TextScrim />
         <p className="relative font-mono text-[10.5px] leading-relaxed text-dim">
           All of them fall out of one ledger. The full calculus is in the{" "}
-          <a
-            href="/quirq-whitepaper.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/whitepaper"
             className="text-dim underline underline-offset-4"
           >
             whitepaper
-          </a>{" "}
+          </Link>{" "}
           and the{" "}
           <a href="/research" className="text-dim underline underline-offset-4">
             research notes
@@ -224,8 +230,7 @@ export function WhatRun() {
           <Rise delay={0.24}>
             <p className="lede mx-auto mt-7 text-center">
               quirq wraps your agents in an environment that snapshots,
-              verifies, and meters: on your laptop, in your cloud, in one
-              click.
+              verifies, and meters: on your laptop, in your cloud, in one click.
             </p>
           </Rise>
 
@@ -234,7 +239,7 @@ export function WhatRun() {
             className="mt-11 flex flex-wrap items-center justify-center gap-3"
           >
             <OpenIn />
-            <ActionLink href="/quirq-whitepaper.pdf" tone="ghost" newTab>
+            <ActionLink href="/whitepaper" tone="ghost">
               Read the whitepaper
             </ActionLink>
           </Rise>

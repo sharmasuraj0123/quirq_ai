@@ -1,7 +1,15 @@
 import { Mark } from "./primitives";
 
 const LINKS = [
-  { href: "/quirq-whitepaper.pdf", label: "Whitepaper", newTab: true },
+  { href: "/demo", label: "Demo", newTab: false },
+  { href: "/journey", label: "Journey", newTab: false },
+  // The dashboard is not in the nav (its breakpoints are spent), so the
+  // footer is where it stays reachable from every page.
+  { href: "/dashboard", label: "Dashboard", newTab: false },
+  { href: "/whitepaper", label: "Whitepaper", newTab: false },
+  // The nav has no room for Beats at any breakpoint, so this is its only
+  // route in. It is a dev deep-dive, which is why it lost the seat.
+  { href: "/beats", label: "Beats", newTab: false },
   { href: "/llm.txt", label: "llm.txt", newTab: true },
   { href: "https://xo.builders", label: "xo.builders", newTab: true },
   { href: "mailto:suraj@xo.builders", label: "Contact", newTab: false },

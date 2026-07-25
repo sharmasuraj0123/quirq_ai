@@ -140,6 +140,36 @@ export default function ScrollRuntime() {
         measure();
         onScroll();
       });
+
+      /**
+       * Sections that change height after mount.
+       *
+       * Without this, centres only refresh on mount, resize, font swap and
+       * registry change, so anything that grows in place (a panel opening, a
+       * table filling in, a journey step advancing) silently desyncs the pose
+       * from the copy. Throttled to one rAF because ResizeObserver fires per
+       * element and one interaction can move several at once.
+       */
+      let pending = 0;
+      const observer = new ResizeObserver(() => {
+        if (pending) return;
+        pending = requestAnimationFrame(() => {
+          pending = 0;
+          measure();
+          onScroll();
+        });
+      });
+      const observeBeats = () => {
+        observer.disconnect();
+        const registered = beatEntries();
+        const sections = registered.length
+          ? registered.map((entry) => entry.el)
+          : Array.from(document.querySelectorAll<HTMLElement>("[data-beat]"));
+        for (const section of sections) observer.observe(section);
+      };
+      observeBeats();
+      const offObserve = onBeatsChange(observeBeats);
+
       // Section heights shift once the webfonts swap in.
       document.fonts?.ready
         .then(() => {
@@ -148,6 +178,9 @@ export default function ScrollRuntime() {
         .catch(() => {});
       return () => {
         alive = false;
+        if (pending) cancelAnimationFrame(pending);
+        observer.disconnect();
+        offObserve();
         window.removeEventListener("stage:scrollto", onDrive);
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onResize);
@@ -182,6 +215,7 @@ export default function ScrollRuntime() {
     // __golden captures the scroll-to-beat mapping for refactor gating.
     if (process.env.NODE_ENV !== "production") {
       (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+      (window as unknown as { __stage?: typeof stage }).__stage = stage;
       import("@/lib/golden").then(({ captureGolden }) => {
         (window as unknown as { __golden?: typeof captureGolden }).__golden =
           captureGolden;
@@ -200,15 +234,52 @@ export default function ScrollRuntime() {
     };
     window.addEventListener("resize", onResize);
 
-    // Sections registering or leaving (a dynamic middle) re-measure and
-    // re-write, so the rule and the 3D pick the change up immediately.
-    const offBeats = onBeatsChange(() => {
+    const remeasure = () => {
       measure();
       write(
         window.scrollY,
         document.documentElement.scrollHeight - window.innerHeight,
       );
+    };
+
+    // Sections registering or leaving (a dynamic middle) re-measure and
+    // re-write, so the rule and the 3D pick the change up immediately.
+    // beatsResized() from lib/beat-registry drives this same path when a
+    // section only changes height.
+    const offBeats = onBeatsChange(remeasure);
+
+    /**
+     * Sections that change height after mount.
+     *
+     * centres otherwise only refresh on mount, resize, font swap and registry
+     * change, so anything that grows in place (a panel opening, a table
+     * filling in, a journey step advancing) silently desyncs the pose from
+     * the copy: the glass keeps playing against the geometry the page had
+     * when it loaded.
+     *
+     * Throttled to one rAF because ResizeObserver fires per element and a
+     * single interaction can move several at once.
+     */
+    let pendingMeasure = 0;
+    const observer = new ResizeObserver(() => {
+      if (pendingMeasure) return;
+      pendingMeasure = requestAnimationFrame(() => {
+        pendingMeasure = 0;
+        remeasure();
+      });
     });
+
+    /** Re-attach whenever the set of beats changes, not just on mount. */
+    const observeBeats = () => {
+      observer.disconnect();
+      const registered = beatEntries();
+      const sections = registered.length
+        ? registered.map((entry) => entry.el)
+        : Array.from(document.querySelectorAll<HTMLElement>("[data-beat]"));
+      for (const section of sections) observer.observe(section);
+    };
+    observeBeats();
+    const offObserve = onBeatsChange(observeBeats);
 
     // Fonts change section heights after they swap in; re-measure once
     // settled and re-write, so the pose and the nav rule pick up the new
@@ -256,6 +327,9 @@ export default function ScrollRuntime() {
     return () => {
       alive = false;
       cancelAnimationFrame(frame);
+      if (pendingMeasure) cancelAnimationFrame(pendingMeasure);
+      observer.disconnect();
+      offObserve();
       window.removeEventListener("stage:scrollto", onDrive);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("pointermove", onPointer);

@@ -549,10 +549,10 @@
   },
   "recording": {
     "journey": "whitepaper",
-    "startedAt": 1784963604605,
+    "startedAt": 1784992294890,
     "events": [
       {
-        "at": 1784963604605,
+        "at": 1784992294890,
         "kind": "start",
         "node": "root",
         "path": [

@@ -1,0 +1,93 @@
+{
+  "slug": "my-journey",
+  "name": "My journey",
+  "rules": {
+    "start": "b1",
+    "maxDepth": 2,
+    "allowRewind": true,
+    "allowReplay": true
+  },
+  "nodes": {
+    "b1": {
+      "short": "beat 1",
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": -0.05,
+          "y": 0,
+          "z": 0,
+          "scale": 1,
+          "spin": 0.3,
+          "tiltX": 1,
+          "tiltZ": 0,
+          "chroma": 0,
+          "thickness": 0.3,
+          "distortion": 1,
+          "aniso": 0.02,
+          "rough": 0,
+          "ior": 1.1,
+          "burst": 0.2
+        }
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "",
+          ""
+        ]
+      },
+      "prompt": "Keep walking?",
+      "choices": [
+        {
+          "label": "End on the bright side.",
+          "to": "b2"
+        }
+      ]
+    },
+    "b2": {
+      "short": "end on the",
+      "pose": {
+        "base": "centre",
+        "tweaks": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2,
+          "scale": 1,
+          "spin": 0.3,
+          "tiltX": -0.5,
+          "tiltZ": 0.8,
+          "chroma": 1.15,
+          "thickness": 2.6,
+          "distortion": 0.12,
+          "aniso": 0.1,
+          "rough": 0.02,
+          "ior": 1.78,
+          "burst": 0.8
+        }
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "End on the",
+          "bright side."
+        ],
+        "glass": 1,
+        "lede": "The finale pose returns the form to centre, biggest and fully lit."
+      }
+    }
+  },
+  "recording": {
+    "journey": "my-journey",
+    "startedAt": 1784993585208,
+    "events": [
+      {
+        "at": 1784993585208,
+        "kind": "start",
+        "node": "b1",
+        "path": [
+          "b1"
+        ]
+      }
+    ]
+  }
+}

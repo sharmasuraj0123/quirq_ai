@@ -100,7 +100,7 @@ export function Invite() {
 
           <div className="flex flex-wrap gap-5 sm:gap-7">
             {[
-              { href: "/quirq-whitepaper.pdf", label: "Whitepaper", newTab: true },
+              { href: "/whitepaper", label: "Whitepaper", newTab: false },
               { href: "/llm.txt", label: "llm.txt", newTab: true },
               { href: "https://xo.builders", label: "xo.builders", newTab: true },
               { href: "mailto:suraj@xo.builders", label: "Contact", newTab: false },

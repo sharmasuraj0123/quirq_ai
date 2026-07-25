@@ -1,0 +1,2624 @@
+[
+  {
+    "seq": 0,
+    "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "record": {
+      "id": "u-000",
+      "title": "Ship change request CR-220",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-01T09:24:55.887Z",
+      "settledAt": "2026-06-01T09:29:58.395Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 91.76,
+      "Q": 91.76,
+      "cost": 0.240855,
+      "costBreakdown": {
+        "inference": 0.147494,
+        "compute": 0.003361,
+        "api": 0.06,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.002625,
+      "margin": 91.519145,
+      "multiple": 380.97658,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr0.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr0.test.js present (sha256 84f0ab9ca5b3)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 1,
+          "bytes": 71
+        },
+        "after": {
+          "count": 2,
+          "bytes": 109
+        },
+        "diff": {
+          "added": [
+            "src/cr0.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "697c1cf475aac50b0b9466b92d60c0e1e82542cc10f65b5932cdd31777c0276b"
+  },
+  {
+    "seq": 1,
+    "prevHash": "697c1cf475aac50b0b9466b92d60c0e1e82542cc10f65b5932cdd31777c0276b",
+    "record": {
+      "id": "u-001",
+      "title": "Ship change request CR-221",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-02T10:17:37.764Z",
+      "settledAt": "2026-06-02T10:23:21.085Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 180.37,
+      "Q": 180.37,
+      "cost": 0.204261,
+      "costBreakdown": {
+        "inference": 0.150446,
+        "compute": 0.003815,
+        "api": 0.02,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001132,
+      "margin": 180.165739,
+      "multiple": 883.037173,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr1.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr1.test.js present (sha256 466bfa082f44)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 3,
+          "bytes": 180
+        },
+        "after": {
+          "count": 4,
+          "bytes": 218
+        },
+        "diff": {
+          "added": [
+            "src/cr1.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "b8f1f0eb7c01a73fc0e45e77b69d9a316edfef31be3ec75740e1b1b9c64fc3bc"
+  },
+  {
+    "seq": 2,
+    "prevHash": "b8f1f0eb7c01a73fc0e45e77b69d9a316edfef31be3ec75740e1b1b9c64fc3bc",
+    "record": {
+      "id": "u-002",
+      "title": "Ship change request CR-222",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-03T03:02:27.090Z",
+      "settledAt": "2026-06-03T03:07:07.351Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 129.2,
+      "Q": 129.2,
+      "cost": 0.184408,
+      "costBreakdown": {
+        "inference": 0.111294,
+        "compute": 0.003114,
+        "api": 0.04,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001427,
+      "margin": 129.015592,
+      "multiple": 700.622184,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr2.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr2.test.js present (sha256 22cb835093ce)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 5,
+          "bytes": 289
+        },
+        "after": {
+          "count": 6,
+          "bytes": 327
+        },
+        "diff": {
+          "added": [
+            "src/cr2.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "e73404cda83a4ab95535475b1bd090e96fd4b954f1c1093c5c280b7610cc41e4"
+  },
+  {
+    "seq": 3,
+    "prevHash": "e73404cda83a4ab95535475b1bd090e96fd4b954f1c1093c5c280b7610cc41e4",
+    "record": {
+      "id": "u-003",
+      "title": "Ship change request CR-223",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-04T00:52:05.477Z",
+      "settledAt": "2026-06-04T00:55:12.854Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 141.29,
+      "Q": 141.29,
+      "cost": 0.230772,
+      "costBreakdown": {
+        "inference": 0.148691,
+        "compute": 0.002082,
+        "api": 0.05,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001633,
+      "margin": 141.059228,
+      "multiple": 612.248074,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr3.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr3.test.js present (sha256 f9128726eba2)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 7,
+          "bytes": 398
+        },
+        "after": {
+          "count": 8,
+          "bytes": 436
+        },
+        "diff": {
+          "added": [
+            "src/cr3.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "b56e9a6a1ab4590c69657c0dbb356727be3821f53854a7f6329eac71cd547c0e"
+  },
+  {
+    "seq": 4,
+    "prevHash": "b56e9a6a1ab4590c69657c0dbb356727be3821f53854a7f6329eac71cd547c0e",
+    "record": {
+      "id": "u-004",
+      "title": "Resolve support ticket #4104",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-04T18:43:13.086Z",
+      "settledAt": "2026-06-04T18:49:02.775Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 28.42,
+      "Q": 28.42,
+      "cost": 0.125932,
+      "costBreakdown": {
+        "inference": 0.082047,
+        "compute": 0.003885,
+        "api": 0.01,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.004431,
+      "margin": 28.294068,
+      "multiple": 225.676564,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t4.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t4.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t4.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 8,
+          "bytes": 436
+        },
+        "after": {
+          "count": 9,
+          "bytes": 513
+        },
+        "diff": {
+          "added": [
+            "tickets/t4.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "1184f569c7d2f9e1b04fe204f716b40e0ac2bfb6fde30412e5ad1544bb1d545d"
+  },
+  {
+    "seq": 5,
+    "prevHash": "1184f569c7d2f9e1b04fe204f716b40e0ac2bfb6fde30412e5ad1544bb1d545d",
+    "record": {
+      "id": "u-005",
+      "title": "Ship change request CR-225",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-05T17:31:24.985Z",
+      "settledAt": "2026-06-05T17:37:07.406Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 189.71,
+      "Q": 189.71,
+      "cost": 0.184989,
+      "costBreakdown": {
+        "inference": 0.091185,
+        "compute": 0.003805,
+        "api": 0.06,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.000975,
+      "margin": 189.525011,
+      "multiple": 1025.51942,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr5.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr5.test.js present (sha256 7be4a6caa3f9)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 10,
+          "bytes": 584
+        },
+        "after": {
+          "count": 11,
+          "bytes": 622
+        },
+        "diff": {
+          "added": [
+            "src/cr5.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "c487aa4e356c41631ab2d5fd82ae52a5c7d1a0bb5b8582b0995d24bbef19803b"
+  },
+  {
+    "seq": 6,
+    "prevHash": "c487aa4e356c41631ab2d5fd82ae52a5c7d1a0bb5b8582b0995d24bbef19803b",
+    "record": {
+      "id": "u-006",
+      "title": "Resolve support ticket #4106",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-06T13:35:55.131Z",
+      "settledAt": "2026-06-06T13:42:01.395Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 30.79,
+      "Q": 30.79,
+      "cost": 0.184175,
+      "costBreakdown": {
+        "inference": 0.090105,
+        "compute": 0.00407,
+        "api": 0.06,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.005982,
+      "margin": 30.605825,
+      "multiple": 167.177859,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t6.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t6.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t6.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 11,
+          "bytes": 622
+        },
+        "after": {
+          "count": 12,
+          "bytes": 699
+        },
+        "diff": {
+          "added": [
+            "tickets/t6.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "e15ce1208837f009a19bcc8bfb4c9d78a936e18fb90306852ac4b64cc5138375"
+  },
+  {
+    "seq": 7,
+    "prevHash": "e15ce1208837f009a19bcc8bfb4c9d78a936e18fb90306852ac4b64cc5138375",
+    "record": {
+      "id": "u-007",
+      "title": "Review vendor contract V-77",
+      "owner": "legal@acme.test",
+      "kind": "legal",
+      "createdAt": "2026-06-07T10:14:37.993Z",
+      "settledAt": "2026-06-07T10:18:12.091Z",
+      "V": 0.8,
+      "weightSum": 1,
+      "passedWeight": 0.8,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": false,
+      "potential": 456.25,
+      "Q": 365,
+      "cost": 52.869543,
+      "costBreakdown": {
+        "inference": 0.307164,
+        "compute": 0.002379,
+        "api": 0.03,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 52.5
+      },
+      "costPerQuirq": 0.144848,
+      "margin": 312.130457,
+      "multiple": 6.903786,
+      "checks": [
+        {
+          "id": "clauses-extracted",
+          "description": "the clause set was extracted",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v7.json present (sha256 3bb083300988)"
+        },
+        {
+          "id": "risk-flagged",
+          "description": "risk is assessed",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v7.json matches /\"risk\"/"
+        },
+        {
+          "id": "countersigned",
+          "description": "a human accepted it",
+          "weight": 0.2,
+          "passed": false,
+          "evidence": "contracts/v7.json does not match /\"countersigned\": true/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 12,
+          "bytes": 699
+        },
+        "after": {
+          "count": 13,
+          "bytes": 765
+        },
+        "diff": {
+          "added": [
+            "contracts/v7.json"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "83053021029f061d0225f3589d84547caf294311f92895b29e0cc954f7ac41cf"
+  },
+  {
+    "seq": 8,
+    "prevHash": "83053021029f061d0225f3589d84547caf294311f92895b29e0cc954f7ac41cf",
+    "record": {
+      "id": "u-008",
+      "title": "Ship change request CR-228",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-08T08:08:50.470Z",
+      "settledAt": "2026-06-08T08:13:59.871Z",
+      "V": 0.7,
+      "weightSum": 1,
+      "passedWeight": 0.7,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": false,
+      "potential": 141.71,
+      "Q": 0,
+      "cost": 46.710473,
+      "costBreakdown": {
+        "inference": 0.127035,
+        "compute": 0.003438,
+        "api": 0.05,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 46.5
+      },
+      "costPerQuirq": null,
+      "margin": -46.710473,
+      "multiple": 0,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr8.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr8.test.js present (sha256 a67217283ffd)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": false,
+          "evidence": "verification surface MUTATED: test/cr8.test.js"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 14,
+          "bytes": 836
+        },
+        "after": {
+          "count": 15,
+          "bytes": 814
+        },
+        "diff": {
+          "added": [
+            "src/cr8.js"
+          ],
+          "modified": [
+            "test/cr8.test.js"
+          ],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "62e0c86f6719da6f920105ce53f5a6649d95d5e3a8c15640d52d136bd82455c8"
+  },
+  {
+    "seq": 9,
+    "prevHash": "62e0c86f6719da6f920105ce53f5a6649d95d5e3a8c15640d52d136bd82455c8",
+    "record": {
+      "id": "u-009",
+      "title": "Resolve support ticket #4109",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-09T04:26:58.584Z",
+      "settledAt": "2026-06-09T04:32:53.236Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 33.98,
+      "Q": 33.98,
+      "cost": 0.149001,
+      "costBreakdown": {
+        "inference": 0.09506,
+        "compute": 0.003941,
+        "api": 0.02,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.004385,
+      "margin": 33.830999,
+      "multiple": 228.05241,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t9.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t9.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t9.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 15,
+          "bytes": 814
+        },
+        "after": {
+          "count": 16,
+          "bytes": 891
+        },
+        "diff": {
+          "added": [
+            "tickets/t9.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "bdec0c8c37c9cbc05b032a1240b39fcc278910b68536a3b1bac6372b71596b8e"
+  },
+  {
+    "seq": 10,
+    "prevHash": "bdec0c8c37c9cbc05b032a1240b39fcc278910b68536a3b1bac6372b71596b8e",
+    "record": {
+      "id": "u-010",
+      "title": "Resolve support ticket #4110",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-09T21:34:23.010Z",
+      "settledAt": "2026-06-09T21:38:00.594Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 28.48,
+      "Q": 28.48,
+      "cost": 0.183519,
+      "costBreakdown": {
+        "inference": 0.081102,
+        "compute": 0.002418,
+        "api": 0.07,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.006444,
+      "margin": 28.296481,
+      "multiple": 155.188202,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t10.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t10.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t10.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 16,
+          "bytes": 891
+        },
+        "after": {
+          "count": 17,
+          "bytes": 968
+        },
+        "diff": {
+          "added": [
+            "tickets/t10.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "1acdd32fcbc6bf09c2470fc6746408e7fc33056ef25cea1dc1262e14e160a010"
+  },
+  {
+    "seq": 11,
+    "prevHash": "1acdd32fcbc6bf09c2470fc6746408e7fc33056ef25cea1dc1262e14e160a010",
+    "record": {
+      "id": "u-011",
+      "title": "Resolve support ticket #4111",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-10T23:56:06.518Z",
+      "settledAt": "2026-06-11T00:01:12.370Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 24.85,
+      "Q": 24.85,
+      "cost": 0.129478,
+      "costBreakdown": {
+        "inference": 0.07608,
+        "compute": 0.003398,
+        "api": 0.02,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.00521,
+      "margin": 24.720522,
+      "multiple": 191.923954,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t11.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t11.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t11.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 17,
+          "bytes": 968
+        },
+        "after": {
+          "count": 18,
+          "bytes": 1045
+        },
+        "diff": {
+          "added": [
+            "tickets/t11.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "e9b1b777ea72d9575694093089291c8b47552d63e0b253caf243a1410e263638"
+  },
+  {
+    "seq": 12,
+    "prevHash": "e9b1b777ea72d9575694093089291c8b47552d63e0b253caf243a1410e263638",
+    "record": {
+      "id": "u-012",
+      "title": "Ship change request CR-232",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-11T20:41:28.240Z",
+      "settledAt": "2026-06-11T20:43:15.257Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 143.33,
+      "Q": 143.33,
+      "cost": 0.235647,
+      "costBreakdown": {
+        "inference": 0.164458,
+        "compute": 0.001189,
+        "api": 0.04,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001644,
+      "margin": 143.094353,
+      "multiple": 608.240724,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr12.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr12.test.js present (sha256 1fa52d8fbe63)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 19,
+          "bytes": 1117
+        },
+        "after": {
+          "count": 20,
+          "bytes": 1156
+        },
+        "diff": {
+          "added": [
+            "src/cr12.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "b1e920493ecab7da596ef4cf9987550ea692c18310be7577d68ed8159ff57877"
+  },
+  {
+    "seq": 13,
+    "prevHash": "b1e920493ecab7da596ef4cf9987550ea692c18310be7577d68ed8159ff57877",
+    "record": {
+      "id": "u-013",
+      "title": "Review vendor contract V-83",
+      "owner": "legal@acme.test",
+      "kind": "legal",
+      "createdAt": "2026-06-12T10:49:53.923Z",
+      "settledAt": "2026-06-12T10:50:47.873Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 354.55,
+      "Q": 354.55,
+      "cost": 0.441504,
+      "costBreakdown": {
+        "inference": 0.350905,
+        "compute": 0.000599,
+        "api": 0.06,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001245,
+      "margin": 354.108496,
+      "multiple": 803.049673,
+      "checks": [
+        {
+          "id": "clauses-extracted",
+          "description": "the clause set was extracted",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v13.json present (sha256 c880bb3cfac2)"
+        },
+        {
+          "id": "risk-flagged",
+          "description": "risk is assessed",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v13.json matches /\"risk\"/"
+        },
+        {
+          "id": "countersigned",
+          "description": "a human accepted it",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "contracts/v13.json matches /\"countersigned\": true/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 20,
+          "bytes": 1156
+        },
+        "after": {
+          "count": 21,
+          "bytes": 1221
+        },
+        "diff": {
+          "added": [
+            "contracts/v13.json"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "0eeee56ccb780edce702add2ea577ff84217ed567560d0ff26b39a7f131be40d"
+  },
+  {
+    "seq": 14,
+    "prevHash": "0eeee56ccb780edce702add2ea577ff84217ed567560d0ff26b39a7f131be40d",
+    "record": {
+      "id": "u-014",
+      "title": "Resolve support ticket #4114",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-13T12:20:03.031Z",
+      "settledAt": "2026-06-13T12:22:19.632Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 29.89,
+      "Q": 29.89,
+      "cost": 0.163928,
+      "costBreakdown": {
+        "inference": 0.06241,
+        "compute": 0.001518,
+        "api": 0.07,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.005484,
+      "margin": 29.726072,
+      "multiple": 182.336649,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t14.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t14.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t14.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 21,
+          "bytes": 1221
+        },
+        "after": {
+          "count": 22,
+          "bytes": 1298
+        },
+        "diff": {
+          "added": [
+            "tickets/t14.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "07e0210262813dec00410d5e95c85b0262bfc81891599dd0871581f2e4685df2"
+  },
+  {
+    "seq": 15,
+    "prevHash": "07e0210262813dec00410d5e95c85b0262bfc81891599dd0871581f2e4685df2",
+    "record": {
+      "id": "u-015",
+      "title": "Ship change request CR-235",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-14T08:08:51.848Z",
+      "settledAt": "2026-06-14T08:14:08.322Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 115.64,
+      "Q": 115.64,
+      "cost": 0.155761,
+      "costBreakdown": {
+        "inference": 0.082245,
+        "compute": 0.003516,
+        "api": 0.04,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001347,
+      "margin": 115.484239,
+      "multiple": 742.418828,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr15.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr15.test.js present (sha256 c2e04b7a5937)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 23,
+          "bytes": 1370
+        },
+        "after": {
+          "count": 24,
+          "bytes": 1409
+        },
+        "diff": {
+          "added": [
+            "src/cr15.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "09bc74b894b9d19d6f2a0e41845f3dacdf7ab6048f4a343c55b7526c21606847"
+  },
+  {
+    "seq": 16,
+    "prevHash": "09bc74b894b9d19d6f2a0e41845f3dacdf7ab6048f4a343c55b7526c21606847",
+    "record": {
+      "id": "u-016",
+      "title": "Ship change request CR-236",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-15T05:03:27.991Z",
+      "settledAt": "2026-06-15T05:08:25.547Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 92.31,
+      "Q": 92.31,
+      "cost": 0.201239,
+      "costBreakdown": {
+        "inference": 0.157933,
+        "compute": 0.003306,
+        "api": 0.01,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.00218,
+      "margin": 92.108761,
+      "multiple": 458.70903,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr16.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr16.test.js present (sha256 3cd45f904449)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 25,
+          "bytes": 1481
+        },
+        "after": {
+          "count": 26,
+          "bytes": 1520
+        },
+        "diff": {
+          "added": [
+            "src/cr16.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "7ed56d69ac467e1fb2e174d8ab9aa90a5db795b99240bef7a81d39ba454ef541"
+  },
+  {
+    "seq": 17,
+    "prevHash": "7ed56d69ac467e1fb2e174d8ab9aa90a5db795b99240bef7a81d39ba454ef541",
+    "record": {
+      "id": "u-017",
+      "title": "Review vendor contract V-87",
+      "owner": "legal@acme.test",
+      "kind": "legal",
+      "createdAt": "2026-06-16T02:35:21.900Z",
+      "settledAt": "2026-06-16T02:41:31.621Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 533.94,
+      "Q": 533.94,
+      "cost": 0.391521,
+      "costBreakdown": {
+        "inference": 0.337413,
+        "compute": 0.004108,
+        "api": 0.02,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.000733,
+      "margin": 533.548479,
+      "multiple": 1363.757322,
+      "checks": [
+        {
+          "id": "clauses-extracted",
+          "description": "the clause set was extracted",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v17.json present (sha256 c880bb3cfac2)"
+        },
+        {
+          "id": "risk-flagged",
+          "description": "risk is assessed",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v17.json matches /\"risk\"/"
+        },
+        {
+          "id": "countersigned",
+          "description": "a human accepted it",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "contracts/v17.json matches /\"countersigned\": true/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 26,
+          "bytes": 1520
+        },
+        "after": {
+          "count": 27,
+          "bytes": 1585
+        },
+        "diff": {
+          "added": [
+            "contracts/v17.json"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "1406b5d31112fa30fe514a91ba7d70658593d568e4672666884b751447493d33"
+  },
+  {
+    "seq": 18,
+    "prevHash": "1406b5d31112fa30fe514a91ba7d70658593d568e4672666884b751447493d33",
+    "record": {
+      "id": "u-018",
+      "title": "Ship change request CR-238",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-16T18:56:53.905Z",
+      "settledAt": "2026-06-16T19:03:33.817Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 169.29,
+      "Q": 169.29,
+      "cost": 0.249424,
+      "costBreakdown": {
+        "inference": 0.17498,
+        "compute": 0.004443,
+        "api": 0.04,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001473,
+      "margin": 169.040576,
+      "multiple": 678.72387,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr18.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr18.test.js present (sha256 2b6fc8582a72)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 28,
+          "bytes": 1657
+        },
+        "after": {
+          "count": 29,
+          "bytes": 1696
+        },
+        "diff": {
+          "added": [
+            "src/cr18.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "e4e3a0794a40f001c33d11bb4c81d26535d5d3d7bf8804ba011d70cf6a5c984d"
+  },
+  {
+    "seq": 19,
+    "prevHash": "e4e3a0794a40f001c33d11bb4c81d26535d5d3d7bf8804ba011d70cf6a5c984d",
+    "record": {
+      "id": "u-019",
+      "title": "Resolve support ticket #4119",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-17T16:59:02.639Z",
+      "settledAt": "2026-06-17T17:01:51.441Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 13.38,
+      "Q": 13.38,
+      "cost": 0.124993,
+      "costBreakdown": {
+        "inference": 0.083118,
+        "compute": 0.001876,
+        "api": 0.01,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.009342,
+      "margin": 13.255007,
+      "multiple": 107.045707,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t19.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t19.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t19.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 29,
+          "bytes": 1696
+        },
+        "after": {
+          "count": 30,
+          "bytes": 1773
+        },
+        "diff": {
+          "added": [
+            "tickets/t19.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "68c8a19409bdf8bb7b0798261ceb4ae42b52d0e848582abc01d2150dcc917bcc"
+  },
+  {
+    "seq": 20,
+    "prevHash": "68c8a19409bdf8bb7b0798261ceb4ae42b52d0e848582abc01d2150dcc917bcc",
+    "record": {
+      "id": "u-020",
+      "title": "Resolve support ticket #4120",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-18T10:52:41.449Z",
+      "settledAt": "2026-06-18T10:58:18.154Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 21.04,
+      "Q": 21.04,
+      "cost": 0.108758,
+      "costBreakdown": {
+        "inference": 0.055017,
+        "compute": 0.003741,
+        "api": 0.02,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.005169,
+      "margin": 20.931242,
+      "multiple": 193.457617,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t20.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t20.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t20.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 30,
+          "bytes": 1773
+        },
+        "after": {
+          "count": 31,
+          "bytes": 1850
+        },
+        "diff": {
+          "added": [
+            "tickets/t20.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "3caf2954db1a845db85873ae3054f335f0f83535acb0330a89924ca38885a03c"
+  },
+  {
+    "seq": 21,
+    "prevHash": "3caf2954db1a845db85873ae3054f335f0f83535acb0330a89924ca38885a03c",
+    "record": {
+      "id": "u-021",
+      "title": "Resolve support ticket #4121",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-19T05:42:05.797Z",
+      "settledAt": "2026-06-19T05:42:58.626Z",
+      "V": 0.8,
+      "weightSum": 1,
+      "passedWeight": 0.8,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": false,
+      "potential": 12.15,
+      "Q": 9.72,
+      "cost": 36.147165,
+      "costBreakdown": {
+        "inference": 0.076579,
+        "compute": 0.000587,
+        "api": 0.04,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 36
+      },
+      "costPerQuirq": 3.718844,
+      "margin": -26.427165,
+      "multiple": 0.268901,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t21.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t21.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": false,
+          "evidence": "tickets/t21.md does not match /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 31,
+          "bytes": 1850
+        },
+        "after": {
+          "count": 32,
+          "bytes": 1907
+        },
+        "diff": {
+          "added": [
+            "tickets/t21.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "9d3db24d133029b03a907335593deff8d527e513cbed512711def6897a391c28"
+  },
+  {
+    "seq": 22,
+    "prevHash": "9d3db24d133029b03a907335593deff8d527e513cbed512711def6897a391c28",
+    "record": {
+      "id": "u-022",
+      "title": "Ship change request CR-242",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-20T08:01:44.713Z",
+      "settledAt": "2026-06-20T08:05:17.518Z",
+      "V": 0.7,
+      "weightSum": 1,
+      "passedWeight": 0.7,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": false,
+      "potential": 146.46,
+      "Q": 0,
+      "cost": 67.729481,
+      "costBreakdown": {
+        "inference": 0.167117,
+        "compute": 0.002365,
+        "api": 0.03,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 67.5
+      },
+      "costPerQuirq": null,
+      "margin": -67.729481,
+      "multiple": 0,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr22.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr22.test.js present (sha256 a67217283ffd)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": false,
+          "evidence": "verification surface MUTATED: test/cr22.test.js"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 33,
+          "bytes": 1979
+        },
+        "after": {
+          "count": 34,
+          "bytes": 1957
+        },
+        "diff": {
+          "added": [
+            "src/cr22.js"
+          ],
+          "modified": [
+            "test/cr22.test.js"
+          ],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "ab8f1fcc5bdb86942d3a9641b4766b68f5b4bc5596d5d49307989a0a39a5f973"
+  },
+  {
+    "seq": 23,
+    "prevHash": "ab8f1fcc5bdb86942d3a9641b4766b68f5b4bc5596d5d49307989a0a39a5f973",
+    "record": {
+      "id": "u-023",
+      "title": "Ship change request CR-243",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-20T23:11:31.347Z",
+      "settledAt": "2026-06-20T23:12:59.769Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 151.47,
+      "Q": 151.47,
+      "cost": 0.214416,
+      "costBreakdown": {
+        "inference": 0.153433,
+        "compute": 0.000982,
+        "api": 0.03,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001416,
+      "margin": 151.255584,
+      "multiple": 706.431414,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr23.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr23.test.js present (sha256 5a62affb5d72)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 35,
+          "bytes": 2029
+        },
+        "after": {
+          "count": 36,
+          "bytes": 2068
+        },
+        "diff": {
+          "added": [
+            "src/cr23.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "07b8a47a7bdae632c1e45b05fbfed7b9a5068445d620bc07c1d1518d586870a8"
+  },
+  {
+    "seq": 24,
+    "prevHash": "07b8a47a7bdae632c1e45b05fbfed7b9a5068445d620bc07c1d1518d586870a8",
+    "record": {
+      "id": "u-024",
+      "title": "Review vendor contract V-94",
+      "owner": "legal@acme.test",
+      "kind": "legal",
+      "createdAt": "2026-06-21T23:55:15.191Z",
+      "settledAt": "2026-06-22T00:01:30.799Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 603.52,
+      "Q": 603.52,
+      "cost": 0.338684,
+      "costBreakdown": {
+        "inference": 0.25451,
+        "compute": 0.004173,
+        "api": 0.05,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.000561,
+      "margin": 603.181316,
+      "multiple": 1781.95645,
+      "checks": [
+        {
+          "id": "clauses-extracted",
+          "description": "the clause set was extracted",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v24.json present (sha256 c880bb3cfac2)"
+        },
+        {
+          "id": "risk-flagged",
+          "description": "risk is assessed",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v24.json matches /\"risk\"/"
+        },
+        {
+          "id": "countersigned",
+          "description": "a human accepted it",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "contracts/v24.json matches /\"countersigned\": true/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 36,
+          "bytes": 2068
+        },
+        "after": {
+          "count": 37,
+          "bytes": 2133
+        },
+        "diff": {
+          "added": [
+            "contracts/v24.json"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "6a854e5649d48ad5e0aac97c97c79efef38b18ee1753cb3dd73d2153994b1ebf"
+  },
+  {
+    "seq": 25,
+    "prevHash": "6a854e5649d48ad5e0aac97c97c79efef38b18ee1753cb3dd73d2153994b1ebf",
+    "record": {
+      "id": "u-025",
+      "title": "Resolve support ticket #4125",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-22T19:49:29.273Z",
+      "settledAt": "2026-06-22T19:51:44.904Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 29.3,
+      "Q": 29.3,
+      "cost": 0.137922,
+      "costBreakdown": {
+        "inference": 0.076415,
+        "compute": 0.001507,
+        "api": 0.03,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.004707,
+      "margin": 29.162078,
+      "multiple": 212.439278,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t25.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t25.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t25.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 37,
+          "bytes": 2133
+        },
+        "after": {
+          "count": 38,
+          "bytes": 2210
+        },
+        "diff": {
+          "added": [
+            "tickets/t25.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "be89f7caf330b4998f91ff760c2d549e4e66fe00612643ce80fc8c94cbed1970"
+  },
+  {
+    "seq": 26,
+    "prevHash": "be89f7caf330b4998f91ff760c2d549e4e66fe00612643ce80fc8c94cbed1970",
+    "record": {
+      "id": "u-026",
+      "title": "Review vendor contract V-96",
+      "owner": "legal@acme.test",
+      "kind": "legal",
+      "createdAt": "2026-06-23T17:34:24.984Z",
+      "settledAt": "2026-06-23T17:40:34.291Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 308.45,
+      "Q": 308.45,
+      "cost": 0.552391,
+      "costBreakdown": {
+        "inference": 0.468287,
+        "compute": 0.004103,
+        "api": 0.05,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001791,
+      "margin": 307.897609,
+      "multiple": 558.390792,
+      "checks": [
+        {
+          "id": "clauses-extracted",
+          "description": "the clause set was extracted",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v26.json present (sha256 c880bb3cfac2)"
+        },
+        {
+          "id": "risk-flagged",
+          "description": "risk is assessed",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v26.json matches /\"risk\"/"
+        },
+        {
+          "id": "countersigned",
+          "description": "a human accepted it",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "contracts/v26.json matches /\"countersigned\": true/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 38,
+          "bytes": 2210
+        },
+        "after": {
+          "count": 39,
+          "bytes": 2275
+        },
+        "diff": {
+          "added": [
+            "contracts/v26.json"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "b1ea3ebce883ae14525d3dd1e1c6020b319f631670a679e670624189445e771b"
+  },
+  {
+    "seq": 27,
+    "prevHash": "b1ea3ebce883ae14525d3dd1e1c6020b319f631670a679e670624189445e771b",
+    "record": {
+      "id": "u-027",
+      "title": "Resolve support ticket #4127",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-24T08:43:44.333Z",
+      "settledAt": "2026-06-24T08:48:45.313Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 24.06,
+      "Q": 24.06,
+      "cost": 0.172813,
+      "costBreakdown": {
+        "inference": 0.069469,
+        "compute": 0.003344,
+        "api": 0.07,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.007183,
+      "margin": 23.887187,
+      "multiple": 139.225451,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t27.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t27.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t27.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 39,
+          "bytes": 2275
+        },
+        "after": {
+          "count": 40,
+          "bytes": 2352
+        },
+        "diff": {
+          "added": [
+            "tickets/t27.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "9a6e04c1450d8b269f341ec85bd0fa3370be609445ca3a849ac77b2c18d0ddf5"
+  },
+  {
+    "seq": 28,
+    "prevHash": "9a6e04c1450d8b269f341ec85bd0fa3370be609445ca3a849ac77b2c18d0ddf5",
+    "record": {
+      "id": "u-028",
+      "title": "Resolve support ticket #4128",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-25T09:46:31.856Z",
+      "settledAt": "2026-06-25T09:48:18.850Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 20.7,
+      "Q": 20.7,
+      "cost": 0.18591,
+      "costBreakdown": {
+        "inference": 0.094722,
+        "compute": 0.001189,
+        "api": 0.06,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.008981,
+      "margin": 20.51409,
+      "multiple": 111.344003,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t28.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t28.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t28.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 40,
+          "bytes": 2352
+        },
+        "after": {
+          "count": 41,
+          "bytes": 2429
+        },
+        "diff": {
+          "added": [
+            "tickets/t28.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "afaa999fbfb562ad7ab3a5ab319982572f9ab871aefca41996584be6f856cabf"
+  },
+  {
+    "seq": 29,
+    "prevHash": "afaa999fbfb562ad7ab3a5ab319982572f9ab871aefca41996584be6f856cabf",
+    "record": {
+      "id": "u-029",
+      "title": "Resolve support ticket #4129",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-26T07:37:58.984Z",
+      "settledAt": "2026-06-26T07:43:30.429Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": true,
+      "potential": 33.88,
+      "Q": 33.88,
+      "cost": 0.136087,
+      "costBreakdown": {
+        "inference": 0.062404,
+        "compute": 0.003683,
+        "api": 0.04,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.004017,
+      "margin": 33.743913,
+      "multiple": 248.958426,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t29.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t29.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": true,
+          "evidence": "tickets/t29.md matches /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 41,
+          "bytes": 2429
+        },
+        "after": {
+          "count": 42,
+          "bytes": 2506
+        },
+        "diff": {
+          "added": [
+            "tickets/t29.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "c3bd120f8d3bc553ef1f92c2695c070c310ab122972ca2a4185471b72766e04f"
+  },
+  {
+    "seq": 30,
+    "prevHash": "c3bd120f8d3bc553ef1f92c2695c070c310ab122972ca2a4185471b72766e04f",
+    "record": {
+      "id": "u-030",
+      "title": "Resolve support ticket #4130",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-27T03:58:52.840Z",
+      "settledAt": "2026-06-27T04:02:01.134Z",
+      "V": 0.8,
+      "weightSum": 1,
+      "passedWeight": 0.8,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": false,
+      "potential": 33.09,
+      "Q": 26.472,
+      "cost": 69.163429,
+      "costBreakdown": {
+        "inference": 0.071337,
+        "compute": 0.002092,
+        "api": 0.06,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 69
+      },
+      "costPerQuirq": 2.612701,
+      "margin": -42.691429,
+      "multiple": 0.382746,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t30.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t30.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": false,
+          "evidence": "tickets/t30.md does not match /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 42,
+          "bytes": 2506
+        },
+        "after": {
+          "count": 43,
+          "bytes": 2563
+        },
+        "diff": {
+          "added": [
+            "tickets/t30.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "af51879faa423327e582eab2841ef0b9aebf9bd55f9e88a806be50a61ffcb91b"
+  },
+  {
+    "seq": 31,
+    "prevHash": "af51879faa423327e582eab2841ef0b9aebf9bd55f9e88a806be50a61ffcb91b",
+    "record": {
+      "id": "u-031",
+      "title": "Ship change request CR-251",
+      "owner": "platform@acme.test",
+      "kind": "engineering",
+      "createdAt": "2026-06-27T18:48:07.532Z",
+      "settledAt": "2026-06-27T18:51:23.359Z",
+      "V": 1,
+      "weightSum": 1,
+      "passedWeight": 1,
+      "tau": 1,
+      "settlement": "atomic",
+      "done": true,
+      "potential": 123.18,
+      "Q": 123.18,
+      "cost": 0.213483,
+      "costBreakdown": {
+        "inference": 0.171307,
+        "compute": 0.002176,
+        "api": 0.01,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 0
+      },
+      "costPerQuirq": 0.001733,
+      "margin": 122.966517,
+      "multiple": 577.001814,
+      "checks": [
+        {
+          "id": "implemented",
+          "description": "the change exists and exports something",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "src/cr31.js matches /export/"
+        },
+        {
+          "id": "covered-by-test",
+          "description": "a test covers it",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "test/cr31.test.js present (sha256 d4209b0097db)"
+        },
+        {
+          "id": "surface-intact",
+          "description": "the worker did not edit its own test",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "verification surface byte-identical (1 guarded)"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 44,
+          "bytes": 2635
+        },
+        "after": {
+          "count": 45,
+          "bytes": 2674
+        },
+        "diff": {
+          "added": [
+            "src/cr31.js"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "e2aeb42f01a4639fb04136eabf73d6d3e72e3c5f232b4883ccebf8dfdbcaa073"
+  },
+  {
+    "seq": 32,
+    "prevHash": "e2aeb42f01a4639fb04136eabf73d6d3e72e3c5f232b4883ccebf8dfdbcaa073",
+    "record": {
+      "id": "u-032",
+      "title": "Review vendor contract V-102",
+      "owner": "legal@acme.test",
+      "kind": "legal",
+      "createdAt": "2026-06-28T14:10:41.102Z",
+      "settledAt": "2026-06-28T14:16:17.562Z",
+      "V": 0.8,
+      "weightSum": 1,
+      "passedWeight": 0.8,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": false,
+      "potential": 627.37,
+      "Q": 501.896,
+      "cost": 66.525148,
+      "costBreakdown": {
+        "inference": 0.47141,
+        "compute": 0.003738,
+        "api": 0.02,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 66
+      },
+      "costPerQuirq": 0.132548,
+      "margin": 435.370852,
+      "multiple": 7.544455,
+      "checks": [
+        {
+          "id": "clauses-extracted",
+          "description": "the clause set was extracted",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v32.json present (sha256 3bb083300988)"
+        },
+        {
+          "id": "risk-flagged",
+          "description": "risk is assessed",
+          "weight": 0.4,
+          "passed": true,
+          "evidence": "contracts/v32.json matches /\"risk\"/"
+        },
+        {
+          "id": "countersigned",
+          "description": "a human accepted it",
+          "weight": 0.2,
+          "passed": false,
+          "evidence": "contracts/v32.json does not match /\"countersigned\": true/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 45,
+          "bytes": 2674
+        },
+        "after": {
+          "count": 46,
+          "bytes": 2740
+        },
+        "diff": {
+          "added": [
+            "contracts/v32.json"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "d50630383a9436e40cae927dd26e46be125466424aa2439e0d2c7781e3a94f71"
+  },
+  {
+    "seq": 33,
+    "prevHash": "d50630383a9436e40cae927dd26e46be125466424aa2439e0d2c7781e3a94f71",
+    "record": {
+      "id": "u-033",
+      "title": "Resolve support ticket #4133",
+      "owner": "support@acme.test",
+      "kind": "support",
+      "createdAt": "2026-06-29T14:38:59.277Z",
+      "settledAt": "2026-06-29T14:42:26.361Z",
+      "V": 0.8,
+      "weightSum": 1,
+      "passedWeight": 0.8,
+      "tau": 1,
+      "settlement": "divisible",
+      "done": false,
+      "potential": 20.52,
+      "Q": 16.416,
+      "cost": 46.606057,
+      "costBreakdown": {
+        "inference": 0.063756,
+        "compute": 0.002301,
+        "api": 0.01,
+        "storage": 0,
+        "environment": 0.03,
+        "intervention": 46.5
+      },
+      "costPerQuirq": 2.839063,
+      "margin": -30.190057,
+      "multiple": 0.352229,
+      "checks": [
+        {
+          "id": "ticket-closed",
+          "description": "the ticket is closed in the system of record",
+          "weight": 0.5,
+          "passed": true,
+          "evidence": "tickets/t33.md matches /status: closed/"
+        },
+        {
+          "id": "reply-sent",
+          "description": "the customer got an answer",
+          "weight": 0.3,
+          "passed": true,
+          "evidence": "tickets/t33.md matches /reply:/"
+        },
+        {
+          "id": "kb-linked",
+          "description": "a knowledge-base article is linked",
+          "weight": 0.2,
+          "passed": false,
+          "evidence": "tickets/t33.md does not match /kb:/"
+        }
+      ],
+      "snapshots": {
+        "before": {
+          "count": 46,
+          "bytes": 2740
+        },
+        "after": {
+          "count": 47,
+          "bytes": 2797
+        },
+        "diff": {
+          "added": [
+            "tickets/t33.md"
+          ],
+          "modified": [],
+          "removed": []
+        },
+        "provenance": {
+          "compute": "measured",
+          "inference": "declared"
+        }
+      }
+    },
+    "hash": "3c4e2af90984db34c3a5f899bdfef6eb440805e7f222ae7becf3a6785af1a1bd"
+  }
+]

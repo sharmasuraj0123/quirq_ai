@@ -137,24 +137,14 @@
   },
   "recording": {
     "journey": "lightspeed",
-    "startedAt": 1784987653288,
+    "startedAt": 1784992298061,
     "events": [
       {
-        "at": 1784987653288,
+        "at": 1784992298061,
         "kind": "start",
         "node": "root",
         "path": [
           "root"
-        ]
-      },
-      {
-        "at": 1784987657507,
-        "kind": "choose",
-        "label": "The handoffs",
-        "node": "handoffs",
-        "path": [
-          "root",
-          "handoffs"
         ]
       }
     ]

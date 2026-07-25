@@ -298,14 +298,42 @@
   },
   "recording": {
     "journey": "default",
-    "startedAt": 1784987650193,
+    "startedAt": 1784995200260,
     "events": [
       {
-        "at": 1784987650193,
+        "at": 1784995200260,
         "kind": "start",
         "node": "root",
         "path": [
           "root"
+        ]
+      },
+      {
+        "at": 1784995206330,
+        "kind": "replay",
+        "node": "scale-proof",
+        "path": [
+          "root",
+          "scale",
+          "scale-proof"
+        ]
+      },
+      {
+        "at": 1784995210814,
+        "kind": "loop",
+        "node": "root",
+        "path": [
+          "root"
+        ]
+      },
+      {
+        "at": 1784995211623,
+        "kind": "choose",
+        "label": "The scale",
+        "node": "scale",
+        "path": [
+          "root",
+          "scale"
         ]
       }
     ]
