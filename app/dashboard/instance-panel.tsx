@@ -14,6 +14,8 @@ import {
 } from "react";
 import {
   DEFAULT_ENDPOINT,
+  INSTANCE_ENDPOINT_STORAGE_KEY,
+  INSTANCE_RECONNECT_STORAGE_KEY,
   formatAgo,
   formatBytes,
   healthOf,
@@ -206,8 +208,6 @@ const yesNo = (value: boolean) => (value ? "yes" : "no");
 
 const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
 
-const STORAGE_KEY = "quirq.instance.endpoint";
-
 /* ------------------------------------------------------------------ *
  * The connection, held above the beats
  * ------------------------------------------------------------------ */
@@ -251,18 +251,7 @@ export function InstanceProvider({ children }: { children: ReactNode }) {
   const [now, setNow] = useState(() => Date.now());
 
   const probe = useRef(0);
-
-  // Read after mount only. localStorage does not exist on the server, so
-  // seeding the input during render would make the first client paint disagree
-  // with the server HTML on a page whose whole claim is determinism.
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved) setEndpoint(saved);
-    } catch {
-      // Storage can be denied outright. The panel still works; it just forgets.
-    }
-  }, []);
+  const restored = useRef(false);
 
   // The payload is a snapshot, but how old that snapshot is keeps changing.
   // Only ticks while something is on screen to age.
@@ -298,12 +287,40 @@ export function InstanceProvider({ children }: { children: ReactNode }) {
     // would greet the next visit with a failure the reader has to undo.
     if (result.state === "connected") {
       try {
-        window.localStorage.setItem(STORAGE_KEY, trimmed);
+        window.localStorage.setItem(INSTANCE_ENDPOINT_STORAGE_KEY, trimmed);
       } catch {
         // Storage can be denied outright. Nothing here is worth failing over.
       }
     }
   }, []);
+
+  // Restore after mount only: storage and the one-shot handoff do not exist on
+  // the server. A successful homepage probe leaves both; the dashboard consumes
+  // the reconnect flag once so the user does not repeat an action they just
+  // completed. Direct dashboard visits still remain explicit and idle.
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+
+    let saved: string | null = null;
+    let shouldReconnect = false;
+    try {
+      saved = window.localStorage.getItem(INSTANCE_ENDPOINT_STORAGE_KEY);
+    } catch {
+      // Storage can be denied. The default endpoint remains usable.
+    }
+    try {
+      shouldReconnect =
+        window.sessionStorage.getItem(INSTANCE_RECONNECT_STORAGE_KEY) === "1";
+      window.sessionStorage.removeItem(INSTANCE_RECONNECT_STORAGE_KEY);
+    } catch {
+      // A blocked handoff degrades to the existing explicit Connect button.
+    }
+
+    const target = saved || DEFAULT_ENDPOINT;
+    if (saved) setEndpoint(saved);
+    if (shouldReconnect) void connect(target);
+  }, [connect]);
 
   const disconnect = useCallback(() => {
     probe.current += 1;

@@ -10,6 +10,9 @@ const LINKS = [
   // The nav has no room for Beats at any breakpoint, so this is its only
   // route in. It is a dev deep-dive, which is why it lost the seat.
   { href: "/beats", label: "Beats", newTab: false },
+  // Same reasoning: the journey loader is a tool, and the footer is where the
+  // tools live.
+  { href: "/journey/load", label: "Loader", newTab: false },
   { href: "/llm.txt", label: "llm.txt", newTab: true },
   { href: "https://xo.builders", label: "xo.builders", newTab: true },
   { href: "mailto:suraj@xo.builders", label: "Contact", newTab: false },

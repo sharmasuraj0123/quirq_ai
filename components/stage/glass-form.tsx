@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { createRibbonGeometry } from "./ribbon-geometry";
+import { OutcomeGraph } from "./outcome-graph";
 import { KEYFRAMES, damp, getTrack, sampleKeyframes, type Keyframe } from "./choreography";
 import { LIGHT } from "@/lib/lighting";
 import { stage } from "@/lib/stage-store";
@@ -118,6 +119,7 @@ export function GlassForm({ quality }: { quality: StageQuality }) {
           backsideEnvMapIntensity={LIGHT.backsideEnvMapIntensity}
         />
       </mesh>
+      <OutcomeGraph />
     </group>
   );
 }

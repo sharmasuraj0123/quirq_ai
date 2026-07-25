@@ -17,6 +17,8 @@ export const stage = {
   pointerY: 0,
   /** True when the visitor asked for less motion. */
   reduced: false,
+  /** Homepage collection beat opts the persistent ribbon into outcome vertices. */
+  showQuirqGraph: false,
   /** Set once the first frame has rendered, so we can fade the stage in. */
   ready: false,
 };

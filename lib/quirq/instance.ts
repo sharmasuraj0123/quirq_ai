@@ -131,6 +131,9 @@ export type Connection =
   | { state: "failed"; endpoint: string; reason: string };
 
 export const DEFAULT_ENDPOINT = "http://localhost:5003";
+export const INSTANCE_ENDPOINT_STORAGE_KEY = "quirq.instance.endpoint";
+/** One-shot: onboarding sets it, the dashboard consumes and removes it. */
+export const INSTANCE_RECONNECT_STORAGE_KEY = "quirq.instance.reconnect";
 
 /**
  * Ask the same-origin proxy to reach an instance.

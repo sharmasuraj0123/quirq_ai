@@ -165,10 +165,10 @@
   },
   "recording": {
     "journey": "sample-5",
-    "startedAt": 1784992283785,
+    "startedAt": 1785004700449,
     "events": [
       {
-        "at": 1784992283785,
+        "at": 1785004700449,
         "kind": "start",
         "node": "root",
         "path": [
@@ -176,7 +176,7 @@
         ]
       },
       {
-        "at": 1784992284840,
+        "at": 1785004702931,
         "kind": "choose",
         "label": "The four keys",
         "node": "shape",

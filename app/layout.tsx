@@ -73,7 +73,7 @@ export default function RootLayout({
             rather than left as dead controls; the install command itself
             remains selectable and the page content remains fully readable. */}
         <noscript>
-          <style>{`main *, nav, nav * { opacity: 1 !important; transform: none !important; filter: none !important; } .openin-toggle, .copy-command { display: none !important; }`}</style>
+          <style>{`main *, nav, nav * { opacity: 1 !important; transform: none !important; filter: none !important; } .openin-toggle, .copy-command, .menu-toggle { display: none !important; }`}</style>
         </noscript>
       </head>
       <body>

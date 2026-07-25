@@ -448,6 +448,65 @@ The current validator enforces the structural subset in `validateDefinition`. A 
 - Shared URL paths are validated against actual graph edges.
 - Invalid definitions and paths are refused with a note rather than crashing.
 
+### Derived journeys
+
+A journey document does not have to be authored by hand. `lib/research-journey.ts`
+derives one from a research note: the note's `h2` headings become chapters, and
+each chapter becomes a beat with a two-line title, a compact lede, and at most
+one detail structure taken from what the chapter contains.
+
+**Shape follows length.** Six sections or fewer derive a *scroll* document:
+beats in order, no prompts, no choices, `rules: { start }` and nothing else.
+That is the same shape `app/how-it-works/story.ts` ships by hand, expressed as
+JSON. Only a note longer than six sections earns a graph, with entry points at
+the opening and an exit at every chapter. Branching a four-section note would
+only ask the reader to choose what to miss, and a document nobody forks should
+not carry the vocabulary of forking.
+
+Rules for any derivation of this kind:
+
+- **Derive, never write.** Every line of copy in the output already exists in
+  the source. A generated document has no standing to make a claim of its own.
+- **Say what was cut.** A beat that condenses a longer list or table says so in
+  its caption. Silent truncation reads as the whole thing.
+- **Validate in the builder, not at the render.** `buildResearchJourney` throws
+  on an invalid document, so a derivation bug fails the build instead of
+  shipping a route the engine would refuse.
+- **Deterministic ids.** Node ids come from headings, not positions, because
+  shared trail URLs contain them.
+- **One builder, every consumer.** The page and the API call the same function,
+  so `/journey/read/<slug>` and `GET /api/journeys/research-<slug>` cannot
+  disagree.
+- **Derived slugs are not files.** `research-*` is served from the note on
+  every read; the write routes refuse those slugs so `.quirq` never holds a
+  stale copy.
+- **Rotate poses, do not invent narrative.** A derived document cannot read
+  intent, so the pose rotation carries the rhythm and the copy carries the
+  meaning. Document the rotation rather than pretending it is authored.
+
+### The loading engine
+
+`components/journey/engine.tsx` takes one document, however it arrives (a prop,
+a slug fetched from the API, pasted text, an opened file), validates it through
+`loadDefinition`, and shows it. It renders beats, the trail, and the choices,
+and deliberately nothing else: traces, recordings, replay and the `.quirq`
+library belong to the studio at `/journey`. Both sit on the `defs.tsx` contract,
+so a document that walks in one walks in the other.
+
+The document decides which of two readings it gets, and no flag is involved:
+
+- **no node offers a choice** → a scroll page. Every node renders as a beat in
+  document order, and the whole document is the choreography track, so the
+  glass performs it top to bottom. No trail, no prompts.
+- **any node offers a choice** → a walk. One beat per visited node, the trail
+  rewinds, and the chosen path is the track.
+
+Node order in the JSON is therefore load-bearing for a scroll document. Keep
+the opening node first.
+
+Use the engine for any new surface that shows a journey. Do not add a third
+walk implementation, and do not grow this one into a second studio.
+
 ### Journey persistence
 
 - Reads are provided by `app/api/journeys`.
@@ -508,6 +567,37 @@ Rules:
 - Prefer direct server reads over calling this app’s own route handler from a Server Component.
 - Use route handlers when a real HTTP boundary is needed.
 - Do not place `page.tsx` and `route.ts` in the same route segment.
+
+### Listing surfaces for a catalog
+
+A catalog usually needs more than one listing: a front page, numbered pages,
+and one archive per category. Build those as static sibling segments, not as
+query strings, so every listing prerenders and keeps its own indexable URL.
+
+The research route is the canonical example:
+
+```text
+app/research/page.tsx                → front page of the stream
+app/research/page/[page]/page.tsx    → numbered pages, from two upward
+app/research/topic/[topic]/page.tsx  → one archive per topic
+app/research/[slug]/page.tsx         → one record
+```
+
+Rules:
+
+- Resolve first, render second. One resolver in the data module (`resolveIndex`)
+  turns a request into a resolved view or `null`; the routes are thin and
+  `notFound()` on `null`. Unknown categories, page one under a second URL, and
+  pages past the end all fail closed.
+- One view component renders every listing, so the surfaces cannot drift apart.
+- Do not paginate with `searchParams`: it opts the listing into request-time
+  rendering and gives one listing several URLs.
+- A static sibling segment shadows the `[slug]` route, so every listing segment
+  is a reserved record slug. Record them next to the data (`page`, `topic`).
+- Keep ordinals stable. A record's number is its position in the source
+  collection, not its position on the page being rendered.
+- Label controls by position, not by date, unless the collection is genuinely
+  ordered by date.
 
 ## The story renderer contract
 
@@ -976,6 +1066,11 @@ Use these before inventing a pattern:
 | Branching generated page | `app/journey`, `.quirq/journeys/default.json` |
 | Live track override | `app/editor/editor.tsx` |
 | Static generated route | `app/research/[slug]/page.tsx` |
+| Paginated, filtered listing | `app/research/page.tsx`, `app/research/page/[page]`, `app/research/topic/[topic]`, `components/research/index-view.tsx` |
+| Journey derived from content | `lib/research-journey.ts`, `app/journey/read/[slug]/page.tsx` |
+| Walking any journey document | `components/journey/engine.tsx`, `app/journey/load/page.tsx` |
+| Catalog resolver and pagination rules | `lib/research.ts` (`resolveIndex`) |
+| Framed content image | `components/research/banner.tsx` |
 | Generic renderer contract | `components/story/types.ts`, `components/story/story-beat.tsx` |
 | Beat registration | `components/ui/primitives.tsx`, `lib/beat-registry.ts` |
 | Scroll mapping | `components/scroll-runtime.tsx` |

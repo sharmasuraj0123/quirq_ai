@@ -1,10 +1,10 @@
 import { StagePage } from "@/components/stage-page";
 import { Hero } from "@/components/beats/hero";
-import { Consumption } from "@/components/beats/consumption";
+import { BusinessImpact } from "@/components/beats/business-impact";
 import { Delivery } from "@/components/beats/delivery";
-import { Ledger } from "@/components/beats/ledger";
+import { QuirqCollection } from "@/components/beats/quirq-collection";
 import { Ecosystem } from "@/components/beats/ecosystem";
-import { Calculator } from "@/components/beats/calculator";
+import { Onboarding } from "@/components/beats/onboarding";
 import { Invite } from "@/components/beats/invite";
 
 export default function Page() {
@@ -13,13 +13,13 @@ export default function Page() {
       <Hero />
       {/* Credibility shelf, straight after the fold. Deliberately not a beat. */}
       <Ecosystem />
-      <Consumption />
+      <BusinessImpact />
       <Delivery />
       {/* Also not a beat: the track has exactly five keyframes and the five
-          beats above and below already spend them. The calculator occupies
-          scroll between beat 2 and beat 3 while the glass keeps gliding. */}
-      <Calculator />
-      <Ledger />
+          beats above and below already spend them. Onboarding occupies the
+          glide between beat 2 and beat 3 without adding a sixth pose. */}
+      <Onboarding />
+      <QuirqCollection />
       <Invite />
     </StagePage>
   );

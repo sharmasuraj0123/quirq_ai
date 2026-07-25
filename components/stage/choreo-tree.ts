@@ -122,7 +122,7 @@ export const CHOREOGRAPHY: ChoreoNode = {
   children: [
     // 0 · hero: centred behind the wordmark, breathing slowly. Pure BASE.
     { id: "hero" },
-    // 1 · the meter you already have: colour drained out, glass gone murky.
+    // 1 · business impact: the glass moves aside to reveal the shared work loop.
     {
       id: "consumption",
       keyframe: {
@@ -142,7 +142,7 @@ export const CHOREOGRAPHY: ChoreoNode = {
         burst: 0.19,
       },
     },
-    // 2 · the meter that was missing: full spectrum floods back.
+    // 2 · work to business outcome: full spectrum returns as momentum builds.
     {
       id: "delivery",
       keyframe: {
@@ -162,9 +162,11 @@ export const CHOREOGRAPHY: ChoreoNode = {
         burst: 0.66,
       },
     },
-    // 3 · the ledger: recedes upstage so the numbers own the frame.
+    // 3 · the collection: desktop leaves room for copy while mobile lowers and
+    // enlarges the same ribbon so its outcome vertices own the open middle.
     {
       id: "ledger",
+      when: ({ width }) => width > 820,
       keyframe: {
         x: 3.05,
         y: 1.5,
@@ -180,6 +182,26 @@ export const CHOREOGRAPHY: ChoreoNode = {
         rough: 0.06,
         ior: 1.6,
         burst: 0.42,
+      },
+    },
+    {
+      id: "ledger",
+      when: ({ width }) => width <= 820,
+      keyframe: {
+        x: 0,
+        y: 0.35,
+        z: -2.4,
+        scale: 1,
+        spin: 0.1,
+        tiltX: 1.05,
+        tiltZ: 0.16,
+        chroma: 0.58,
+        thickness: 1.55,
+        distortion: 0.18,
+        aniso: 0.2,
+        rough: 0.06,
+        ior: 1.6,
+        burst: 0.28,
       },
     },
     // 4 · the invitation: returns centre, biggest, fully lit. `x` inherits 0

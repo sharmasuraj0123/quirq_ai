@@ -4,6 +4,7 @@ import {
   validateDefinition,
   type JourneyDefinition,
 } from "@/app/journey/defs";
+import { isDerivedSlug } from "@/lib/research-journey";
 import { crossOrigin, writeAtomic } from "../../guards";
 
 /**
@@ -33,6 +34,13 @@ export async function POST(
   const { slug } = await params;
   if (!/^[a-z0-9-]{1,64}$/.test(slug)) {
     return new Response("Bad slug.", { status: 400 });
+  }
+  // Derived journeys have no file to grow: they are generated from their note
+  // on every read, so a recording written next to one would be orphaned.
+  if (isDerivedSlug(slug)) {
+    return new Response(`${slug} is derived; walks of it are not recorded.`, {
+      status: 409,
+    });
   }
   let body: {
     definition?: { slug?: string };
