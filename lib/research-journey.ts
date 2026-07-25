@@ -4,6 +4,8 @@ import {
   type JourneyNodeSpec,
   type PoseName,
 } from "@/app/journey/defs";
+import type { Figure } from "@/components/story/types";
+import { figureFromChart } from "./chart-figure";
 import { POSTS, getPost, type Block, type Post } from "./research";
 
 /**
@@ -354,6 +356,10 @@ type TextBlock = Extract<Block, { text: string }>;
 type ListBlock = Extract<Block, { kind: "list" }>;
 type TableBlock = Extract<Block, { kind: "table" }>;
 
+/** A chart paragraph: prose that carries a figure's numbers inside it. */
+const isChart = (block: Block): block is TextBlock =>
+  block.kind === "p" && "text" in block && block.text.startsWith("Chart: ");
+
 const firstText = (blocks: Block[], kind: TextBlock["kind"]) =>
   blocks.find(
     (block): block is TextBlock => "text" in block && block.kind === kind,
@@ -394,19 +400,31 @@ function chapterNode(
   const table = firstTable(chapter.blocks);
   const premise = !chapter.heading;
 
+  // The note's own chart, generated from the sentence that carries its
+  // numbers. Where one parses it is the beat's visual and its strongest
+  // detail, so the other structures stand down and say so in the caption.
+  const figure = chapter.blocks.reduce<Figure | null>(
+    (found, block) =>
+      found ?? (isChart(block) ? figureFromChart(block.text) : null),
+    null,
+  );
+
   // The premise reads the note's opening quote first: that is where a note
   // states its thesis, while its first paragraph is often only a byline.
   // Inside a chapter the paragraph leads and the quote is the fallback.
+  // Chart paragraphs are excluded either way: that prose is figure material,
+  // and reading it as a lede would print the chart's numbers twice.
+  const prose = chapter.blocks.filter((block) => !isChart(block));
   const paragraph = premise
-    ? (firstText(chapter.blocks, "quote") ?? firstText(chapter.blocks, "p"))
-    : (firstText(chapter.blocks, "p") ?? firstText(chapter.blocks, "quote"));
+    ? (firstText(prose, "quote") ?? firstText(prose, "p"))
+    : (firstText(prose, "p") ?? firstText(prose, "quote"));
 
   // The content picks the rotation and the position picks the pose in it, so
   // seven code-heavy chapters in a row still move the glass. A derived
   // document cannot read narrative intent, so the rotation carries the rhythm
   // and the copy carries the meaning. Neither rotation opens on `centre`: the
   // opening beat is already there, and a walk that does not move is not one.
-  const dense = Boolean(code || table);
+  const dense = Boolean(code || table || figure);
   const even = index % 2 === 0;
   const base: PoseName = dense
     ? DENSE_POSES[index % DENSE_POSES.length]
@@ -416,8 +434,8 @@ function chapterNode(
     ? stripNumber(chapter.heading)
     : (paragraph?.text ?? post.title);
 
-  const rows = list ? list.items.slice(0, 4).map(asRow) : undefined;
-  const panelRows = !list && table
+  const rows = !figure && list ? list.items.slice(0, 4).map(asRow) : undefined;
+  const panelRows = !figure && !list && table
     ? table.rows.slice(0, 4).map((row) => ({
         title: row[0] ?? "",
         note: table.header
@@ -429,8 +447,10 @@ function chapterNode(
 
   // Anything trimmed is said out loud rather than silently dropped.
   const trimmed: string[] = [];
-  if (list && list.items.length > 4) trimmed.push(`${list.items.length} points`);
-  if (panelRows && table && table.rows.length > 4) {
+  if (list && (figure || list.items.length > 4)) {
+    trimmed.push(`${list.items.length} points`);
+  }
+  if (table && (figure || (panelRows && table.rows.length > 4))) {
     trimmed.push(`${table.rows.length} rows`);
   }
 
@@ -444,6 +464,7 @@ function chapterNode(
       }`,
       title: titleFor(source, post.tag),
       ...(paragraph ? { lede: compact(paragraph.text) } : {}),
+      ...(figure ? { figure } : {}),
       ...(rows ? { rows } : {}),
       ...(panelRows ? { panelRows } : {}),
       ...(!rows && !panelRows && code ? { code: code.text } : {}),

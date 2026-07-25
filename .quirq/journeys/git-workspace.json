@@ -1,0 +1,281 @@
+{
+  "slug": "git-workspace",
+  "name": "This repository, walked",
+  "rules": {
+    "start": "open"
+  },
+  "nodes": {
+    "open": {
+      "short": "the repo",
+      "pose": {
+        "base": "centre"
+      },
+      "beat": {
+        "layout": "center",
+        "marker": "generated · from git log",
+        "title": [
+          "A repository",
+          "is a dataset."
+        ],
+        "glass": 1,
+        "lede": "10 commits read straight out of git log, shaped into one journey document. The same beats, the same figure specs, and the same validator a research note goes through: only the reader changed.",
+        "caption": "2026-05-28 to 2026-07-25 · 5 subsystems · 5 colour groups"
+      }
+    },
+    "field": {
+      "short": "the field",
+      "pose": {
+        "base": "recede"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "01 · one mark per commit",
+        "title": [
+          "Every commit,",
+          "one mark."
+        ],
+        "lede": "Position is time and subsystem, weight is how much changed, colour is the subject's scope. No aggregation hides an individual commit.",
+        "figure": {
+          "kind": "marks",
+          "xLabel": "authored time",
+          "yLabel": "subsystem",
+          "groups": [
+            {
+              "label": "quirq",
+              "tone": "value"
+            },
+            {
+              "label": "seed",
+              "tone": "value"
+            },
+            {
+              "label": "space",
+              "tone": "value"
+            },
+            {
+              "label": "thought-05",
+              "tone": "value"
+            },
+            {
+              "label": "xo-atlas",
+              "tone": "value"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1779969577000,
+              "y": 1,
+              "size": 875,
+              "group": "seed",
+              "label": "2e57cb5 seed: observer scaffold + primitive udp signal pair (thoughts 01..04) (875 lines, 17 files)"
+            },
+            {
+              "x": 1779969640000,
+              "y": 1,
+              "size": 420,
+              "group": "thought-05",
+              "label": "2166af3 thought-05: static overview dashboard (420 lines, 5 files)"
+            },
+            {
+              "x": 1783869743000,
+              "y": 3,
+              "size": 3729,
+              "group": "xo-atlas",
+              "label": "97c256f xo-atlas: knowledge graph of the workspace, v1 + v2 with version-switcher shell (3729 lines, 11 files)"
+            },
+            {
+              "x": 1783870437000,
+              "y": 3,
+              "size": 338,
+              "group": "space",
+              "label": "e2d1bc0 space: rename from XO Atlas, re-root control, integration README (338 lines, 5 files)"
+            },
+            {
+              "x": 1783870697000,
+              "y": 3,
+              "size": 6,
+              "group": "space",
+              "label": "ef00062 space: rename shell output to space-shell.html (6 lines, 3 files)"
+            },
+            {
+              "x": 1783877789000,
+              "y": 3,
+              "size": 3980,
+              "group": "space",
+              "label": "0a0168d space: local-first v3 served by xo-cowork-api (3980 lines, 8 files)"
+            },
+            {
+              "x": 1784934273000,
+              "y": 2,
+              "size": 5129,
+              "group": "quirq",
+              "label": "3dea803 quirq: landing page rebuilt in Next.js around one glass form (5129 lines, 39 files)"
+            },
+            {
+              "x": 1784937225000,
+              "y": 4,
+              "size": 5,
+              "group": "quirq",
+              "label": "cd564a8 quirq: move the landing app under quirq/ (5 lines, 40 files)"
+            },
+            {
+              "x": 1784994680000,
+              "y": 0,
+              "size": 15699,
+              "group": "quirq",
+              "label": "0cde3c5 quirq: the quirq kit, the first-mint demo, and a live dashboard (15699 lines, 79 files)"
+            },
+            {
+              "x": 1784994698000,
+              "y": 0,
+              "size": 9675,
+              "group": "quirq",
+              "label": "e646964 quirq: journey system, story-driven pages, and the journeys API (9675 lines, 76 files)"
+            }
+          ],
+          "caption": "Every commit is one mark: 10 commits across 5 subsystems, from 2026-05-28 to 2026-07-25. Weight is churn, colour is the subject's scope, and the label carries the short hash."
+        }
+      }
+    },
+    "rhythm": {
+      "short": "the rhythm",
+      "pose": {
+        "base": "drained"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "02 · density",
+        "title": [
+          "Density is",
+          "the story."
+        ],
+        "lede": "Commits per week: the bursts, the quiet stretches, and the crunch before a landing, in the shape the histogram already knows how to show.",
+        "figure": {
+          "kind": "bars",
+          "unit": "commits per week",
+          "categories": [
+            "2026-05-25",
+            "2026-07-06",
+            "2026-07-20"
+          ],
+          "series": [
+            {
+              "label": "commits",
+              "tone": "cost",
+              "values": [
+                2,
+                4,
+                4
+              ]
+            }
+          ],
+          "caption": "The same history read as rhythm rather than position. Volume is a consumption measure, so it stays monochrome."
+        }
+      }
+    },
+    "lanes": {
+      "short": "the lanes",
+      "pose": {
+        "base": "recede"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "03 · where it landed",
+        "title": [
+          "Churn has",
+          "an address."
+        ],
+        "lede": "The same commits summed by top-level path, so a monorepo says which subsystem actually absorbed the work.",
+        "figure": {
+          "kind": "bars",
+          "unit": "lines changed",
+          "categories": [
+            "quirq",
+            "reports",
+            "web",
+            "xo-atlas",
+            "{web => quirq"
+          ],
+          "series": [
+            {
+              "label": "churn",
+              "tone": "cost",
+              "values": [
+                25374,
+                1295,
+                5129,
+                8053,
+                5
+              ]
+            }
+          ],
+          "caption": "Where the work landed, by top-level path."
+        }
+      }
+    },
+    "hashes": {
+      "short": "the hashes",
+      "pose": {
+        "base": "flooded"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "04 · the record",
+        "title": [
+          "The hash is",
+          "the receipt."
+        ],
+        "lede": "Under every mark is an identifier that resolves to an exact tree. The visual is a way in, not a replacement for the record.",
+        "panelRows": [
+          {
+            "title": "e646964 · quirq: journey system, story-driven pages, and the journeys API",
+            "note": "2026-07-25 · suraj · 76 files · +9259 -416"
+          },
+          {
+            "title": "0cde3c5 · quirq: the quirq kit, the first-mint demo, and a live dashboard",
+            "note": "2026-07-25 · suraj · 79 files · +15213 -486"
+          },
+          {
+            "title": "cd564a8 · quirq: move the landing app under quirq/",
+            "note": "2026-07-25 · suraj · 40 files · +4 -1"
+          },
+          {
+            "title": "3dea803 · quirq: landing page rebuilt in Next.js around one glass form",
+            "note": "2026-07-25 · suraj · 39 files · +5129 -0"
+          },
+          {
+            "title": "0a0168d · space: local-first v3 served by xo-cowork-api",
+            "note": "2026-07-12 · suraj · 8 files · +3679 -301"
+          }
+        ],
+        "caption": "The five most recent commits in range."
+      }
+    },
+    "close": {
+      "short": "the end",
+      "pose": {
+        "base": "finale"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Any data,",
+          "the same walk."
+        ],
+        "glass": 1,
+        "lede": "Research notes and repositories both arrive as one JourneyDefinition. Point the builder at another source and the engine will walk that too, with no change to the renderer.",
+        "links": [
+          {
+            "href": "/journey/load",
+            "label": "Load another document"
+          },
+          {
+            "href": "/research",
+            "label": "The research notes",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  }
+}

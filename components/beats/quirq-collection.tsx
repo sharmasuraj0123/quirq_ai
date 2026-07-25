@@ -66,7 +66,7 @@ function SignalGlyph({
       <span
         aria-hidden
         className={cn(
-          "block h-3.5 w-3.5 rotate-45 bg-white/85 shadow-[0_0_10px_rgba(255,255,255,0.36)]",
+          "block h-[18px] w-[18px] rotate-45 bg-white/85 shadow-[0_0_12px_rgba(255,255,255,0.42)]",
           className,
         )}
       />
@@ -78,7 +78,7 @@ function SignalGlyph({
       <span
         aria-hidden
         className={cn(
-          "block h-3.5 w-3.5 rounded-full border-2 border-white/70 bg-transparent",
+          "block h-[18px] w-[18px] rounded-full border-2 border-white/75 bg-transparent",
           className,
         )}
       />
@@ -89,7 +89,7 @@ function SignalGlyph({
     <span
       aria-hidden
       className={cn(
-        "block h-3.5 w-3.5 rotate-45 border border-white/75 bg-black/60",
+        "block h-[18px] w-[18px] rotate-45 border-[1.5px] border-white/80 bg-black/60",
         className,
       )}
     />
@@ -127,33 +127,39 @@ export function QuirqCollection() {
           </div>
         </div>
 
-      <Rise
-        delay={0.3}
-        className="relative mt-7 sm:mt-8"
-      >
-        <div className="flex items-center gap-3">
-          <p className="font-mono text-[9.5px] font-medium tracking-[0.11em] text-white/82 uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
-            Each vertex is one environment-checked outcome
-          </p>
-          <span className="h-px max-w-20 flex-1 bg-linear-to-r from-white/45 to-transparent" />
-        </div>
-        <div className="mt-3.5 flex flex-wrap gap-x-6 gap-y-3">
-          {SIGNALS.map((signal) => (
-            <div
-              key={signal.kind}
-              className="relative flex items-center gap-2.5"
-            >
-              <SignalGlyph kind={signal.kind} />
-              <span className="text-[10.5px] font-medium text-ink">
-                {signal.label}
-              </span>
-              <span className="font-mono text-[8.5px] tracking-[0.08em] text-white/48 uppercase">
-                {signal.detail}
-              </span>
-            </div>
-          ))}
-        </div>
-      </Rise>
+        <Rise
+          delay={0.3}
+          className="relative mt-8 max-w-[740px] sm:mt-10"
+        >
+          <div className="flex items-center gap-4">
+            <p className="font-mono text-[10px] leading-[1.45] font-semibold tracking-[0.11em] text-white/90 uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:text-[12px]">
+              Each vertex is one environment-checked outcome
+            </p>
+            <span className="h-px min-w-8 flex-1 bg-linear-to-r from-white/55 to-transparent" />
+          </div>
+
+          <ul
+            aria-label="Outcome vertex legend"
+            className="mt-5 grid gap-x-8 gap-y-4 drop-shadow-[0_2px_7px_rgba(0,0,0,1)] sm:grid-cols-3 sm:gap-y-0"
+          >
+            {SIGNALS.map((signal) => (
+              <li
+                key={signal.kind}
+                className="relative flex min-w-0 items-center gap-3.5"
+              >
+                <SignalGlyph kind={signal.kind} />
+                <span className="min-w-0">
+                  <span className="block text-[13px] font-semibold text-white/95 sm:text-[14px]">
+                    {signal.label}
+                  </span>
+                  <span className="mt-1 block font-mono text-[9.5px] font-medium tracking-[0.1em] text-white/78 uppercase sm:text-[10px]">
+                    {signal.detail}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Rise>
 
         <div
           aria-hidden

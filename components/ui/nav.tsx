@@ -13,19 +13,17 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * Every route in the bar, in rank order, and the width at which each one earns
  * a seat.
  *
- * The bar's breakpoint budget is fully spent, so a new route means re-ranking
- * rather than appending: eight links do not fit at 1280. Below its own
- * breakpoint a link is not dropped, it is reached through the drawer, which
- * always lists all of them. On phones the closed-loop CTA gets the whole
- * action side of the bar and the drawer carries the navigation.
+ * Demo and Journey remain fully routable, but stay out of primary navigation
+ * while they are supporting experiences rather than top-level destinations.
+ * Below its own breakpoint a listed route is reached through the drawer. On
+ * phones the closed-loop CTA gets the whole action side of the bar and the
+ * drawer carries the navigation.
  *
  * Beats stays in the footer: it is a dev deep-dive and it was the cheapest
  * seat to give up.
  */
 const ROUTES = [
-  { href: "/demo", label: "Demo", from: "sm" },
   { href: "/dashboard", label: "Dashboard", from: "sm" },
-  { href: "/journey", label: "Journey", from: "sm" },
   { href: "/what-is-quirq", label: "What is quirq", from: "lg" },
   { href: "/how-it-works", label: "How it works", from: "xl" },
   { href: "/research", label: "Research", from: "xl" },

@@ -1,0 +1,260 @@
+{
+  "slug": "git-history",
+  "name": "This repository, walked",
+  "rules": {
+    "start": "open"
+  },
+  "nodes": {
+    "open": {
+      "short": "the repo",
+      "pose": {
+        "base": "centre"
+      },
+      "beat": {
+        "layout": "center",
+        "marker": "generated · from git log",
+        "title": [
+          "A repository",
+          "is a dataset."
+        ],
+        "glass": 1,
+        "lede": "9 commits read straight out of git log, shaped into one journey document. The same beats, the same figure specs, and the same validator a research note goes through: only the reader changed.",
+        "caption": "2026-07-25 to 2026-07-26 · 3 subsystems · 3 colour groups"
+      }
+    },
+    "field": {
+      "short": "the field",
+      "pose": {
+        "base": "recede"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "01 · one mark per commit",
+        "title": [
+          "Every commit,",
+          "one mark."
+        ],
+        "lede": "Position is time and subsystem, weight is how much changed, colour is the subsystem. No aggregation hides an individual commit.",
+        "figure": {
+          "kind": "marks",
+          "xLabel": "authored time",
+          "yLabel": "subsystem",
+          "groups": [
+            {
+              "label": "app",
+              "tone": "value"
+            },
+            {
+              "label": "components",
+              "tone": "value"
+            },
+            {
+              "label": "root",
+              "tone": "value"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1784937523000,
+              "y": 1,
+              "size": 5194,
+              "group": "components",
+              "label": "0db779e Initial Commit (5194 lines, 40 files)"
+            },
+            {
+              "x": 1784949824000,
+              "y": 1,
+              "size": 3248,
+              "group": "components",
+              "label": "b5bdebd Added Dynamic Content Generation (3248 lines, 37 files)"
+            },
+            {
+              "x": 1784950648000,
+              "y": 1,
+              "size": 949,
+              "group": "components",
+              "label": "fc31492 New animations (949 lines, 17 files)"
+            },
+            {
+              "x": 1784992010000,
+              "y": 0,
+              "size": 5254,
+              "group": "app",
+              "label": "d3678e7 Added Editor (5254 lines, 40 files)"
+            },
+            {
+              "x": 1784993933000,
+              "y": 2,
+              "size": 1068,
+              "group": "root",
+              "label": "49c938f Updated README (1068 lines, 1 file)"
+            },
+            {
+              "x": 1784995422000,
+              "y": 0,
+              "size": 12593,
+              "group": "app",
+              "label": "06c50d2 Merged the worktree (12593 lines, 57 files)"
+            },
+            {
+              "x": 1784996071000,
+              "y": 2,
+              "size": 983,
+              "group": "root",
+              "label": "d042e2e Merged the worktree (983 lines, 1 file)"
+            },
+            {
+              "x": 1784997912000,
+              "y": 1,
+              "size": 233,
+              "group": "components",
+              "label": "345de95 Good animation of landing page (233 lines, 4 files)"
+            },
+            {
+              "x": 1785008527000,
+              "y": 1,
+              "size": 6721,
+              "group": "components",
+              "label": "3848f85 Expanded the Quirq site experience (6721 lines, 54 files)"
+            }
+          ],
+          "caption": "Every commit is one mark: 9 commits across 3 subsystems, from 2026-07-25 to 2026-07-26. Weight is churn, colour is the subsystem, and the label carries the short hash."
+        }
+      }
+    },
+    "rhythm": {
+      "short": "the rhythm",
+      "pose": {
+        "base": "drained"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "02 · density",
+        "title": [
+          "Density is",
+          "the story."
+        ],
+        "lede": "Commits per week: the bursts, the quiet stretches, and the crunch before a landing, in the shape the histogram already knows how to show.",
+        "figure": {
+          "kind": "bars",
+          "unit": "commits per day",
+          "categories": [
+            "2026-07-24",
+            "2026-07-25"
+          ],
+          "series": [
+            {
+              "label": "commits",
+              "tone": "cost",
+              "values": [
+                1,
+                8
+              ]
+            }
+          ],
+          "caption": "The same history read as rhythm rather than position. Volume is a consumption measure, so it stays monochrome."
+        }
+      }
+    },
+    "lanes": {
+      "short": "the lanes",
+      "pose": {
+        "base": "recede"
+      },
+      "beat": {
+        "layout": "left",
+        "marker": "03 · where it landed",
+        "title": [
+          "Churn has",
+          "an address."
+        ],
+        "lede": "The same commits summed by top-level path, so a monorepo says which subsystem actually absorbed the work.",
+        "figure": {
+          "kind": "bars",
+          "unit": "lines changed",
+          "categories": [
+            "app",
+            "components",
+            "root"
+          ],
+          "series": [
+            {
+              "label": "churn",
+              "tone": "cost",
+              "values": [
+                17847,
+                16345,
+                2051
+              ]
+            }
+          ],
+          "caption": "Where the work landed, by top-level path."
+        }
+      }
+    },
+    "hashes": {
+      "short": "the hashes",
+      "pose": {
+        "base": "flooded"
+      },
+      "beat": {
+        "layout": "right",
+        "marker": "04 · the record",
+        "title": [
+          "The hash is",
+          "the receipt."
+        ],
+        "lede": "Under every mark is an identifier that resolves to an exact tree. The visual is a way in, not a replacement for the record.",
+        "panelRows": [
+          {
+            "title": "3848f85 · Expanded the Quirq site experience",
+            "note": "2026-07-26 · sharmasuraj0123 · 54 files · +5788 -933"
+          },
+          {
+            "title": "345de95 · Good animation of landing page",
+            "note": "2026-07-25 · sharmasuraj0123 · 4 files · +65 -168"
+          },
+          {
+            "title": "d042e2e · Merged the worktree",
+            "note": "2026-07-25 · sharmasuraj0123 · 1 file · +983 -0"
+          },
+          {
+            "title": "06c50d2 · Merged the worktree",
+            "note": "2026-07-25 · sharmasuraj0123 · 57 files · +12319 -274"
+          },
+          {
+            "title": "49c938f · Updated README",
+            "note": "2026-07-25 · sharmasuraj0123 · 1 file · +955 -113"
+          }
+        ],
+        "caption": "The five most recent commits in range."
+      }
+    },
+    "close": {
+      "short": "the end",
+      "pose": {
+        "base": "finale"
+      },
+      "beat": {
+        "layout": "center",
+        "title": [
+          "Any data,",
+          "the same walk."
+        ],
+        "glass": 1,
+        "lede": "Research notes and repositories both arrive as one JourneyDefinition. Point the builder at another source and the engine will walk that too, with no change to the renderer.",
+        "links": [
+          {
+            "href": "/journey/load",
+            "label": "Load another document"
+          },
+          {
+            "href": "/research",
+            "label": "The research notes",
+            "tone": "ghost"
+          }
+        ]
+      }
+    }
+  }
+}

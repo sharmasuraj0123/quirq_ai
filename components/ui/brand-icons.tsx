@@ -74,6 +74,45 @@ export function CursorIcon(props: IconProps) {
   );
 }
 
+/** Apple hardware, representing agents running on local Mac minis. */
+export function AppleIcon(props: IconProps) {
+  return (
+    <Glyph {...props}>
+      <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.32.07 2.24.74 3.02.79 1.17-.24 2.29-.93 3.54-.84 1.5.12 2.63.71 3.38 1.8-3.09 1.85-2.36 5.92.48 7.06-.57 1.5-1.31 2.99-2.42 4.17M12.03 7.25C11.88 5.02 13.69 3.18 15.77 3c.29 2.58-2.34 4.5-3.74 4.25" />
+    </Glyph>
+  );
+}
+
+/** A connected-device hub representing agents embedded in IoT hardware. */
+export function IotDevicesIcon(props: IconProps) {
+  return (
+    <Glyph {...props}>
+      <rect
+        x="8"
+        y="8"
+        width="8"
+        height="8"
+        rx="2"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <circle cx="12" cy="12" r="1.6" />
+      <path
+        d="M8 10H5.5A2.5 2.5 0 0 1 3 7.5V6M16 10h2.5A2.5 2.5 0 0 0 21 7.5V6M8 14H5.5A2.5 2.5 0 0 0 3 16.5V18M16 14h2.5a2.5 2.5 0 0 1 2.5 2.5V18"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="3" cy="5" r="1.5" />
+      <circle cx="21" cy="5" r="1.5" />
+      <circle cx="3" cy="19" r="1.5" />
+      <circle cx="21" cy="19" r="1.5" />
+    </Glyph>
+  );
+}
+
 /** OpenClaw. Source: quirq/icons/openclaw.svg */
 export function OpenclawIcon(props: IconProps) {
   return (
@@ -157,22 +196,13 @@ export function GithubIcon(props: IconProps) {
   );
 }
 
-/**
- * The home page lattice. Exactly twelve, because 12 divides by the 2 / 4 / 6
- * column counts, so the grid is a perfect rectangle at every breakpoint with
- * no ragged final row. Changing the length means changing the columns too.
- */
-export const BRANDS = [
+/** Agents shown on the home page connection rail. */
+export const AGENTS = [
   { name: "Claude Code", Icon: ClaudeCodeIcon },
   { name: "Codex", Icon: CodexIcon },
   { name: "Cursor", Icon: CursorIcon },
   { name: "OpenClaw", Icon: OpenclawIcon },
-  { name: "Devin", Icon: DevinIcon },
-  { name: "Manus", Icon: ManusIcon },
+  { name: "Local agents", Icon: AppleIcon },
+  { name: "IoT devices", Icon: IotDevicesIcon },
   { name: "Hermes", Icon: HermesIcon },
-  { name: "n8n", Icon: NeightnIcon },
-  { name: "Anthropic", Icon: AnthropicIcon },
-  { name: "OpenAI", Icon: OpenaiIcon },
-  { name: "MCP", Icon: McpIcon },
-  { name: "GitHub", Icon: GithubIcon },
 ] as const;

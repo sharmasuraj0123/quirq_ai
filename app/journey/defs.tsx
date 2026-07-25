@@ -88,6 +88,74 @@ export function resolvePose(pose: PoseSpec): Keyframe {
   return { ...KEYFRAMES[POSE_INDEX[pose.base] ?? 0], ...pose.tweaks };
 }
 
+/**
+ * Figures arrive inside beat data, which means they arrive from JSON files and
+ * from pasted documents. A figure the renderer cannot read is refused here,
+ * before anything draws half of it.
+ */
+export function validateFigure(figure: unknown): string | null {
+  if (figure === undefined || figure === null) return null;
+  if (typeof figure !== "object") return "figure must be an object";
+  const kind = (figure as { kind?: unknown }).kind;
+
+  if (kind === "bars") {
+    const spec = figure as { categories?: unknown; series?: unknown };
+    if (!Array.isArray(spec.categories) || spec.categories.length === 0) {
+      return "bars figure needs categories";
+    }
+    if (!Array.isArray(spec.series) || spec.series.length === 0) {
+      return "bars figure needs at least one series";
+    }
+    for (const entry of spec.series) {
+      if (!entry || typeof entry !== "object") return "bars series must be objects";
+      const series = entry as { label?: unknown; values?: unknown };
+      if (typeof series.label !== "string" || !series.label) {
+        return "every bars series needs a label";
+      }
+      if (
+        !Array.isArray(series.values) ||
+        series.values.length !== spec.categories.length
+      ) {
+        return `series ${series.label} must carry one value per category`;
+      }
+      if (
+        series.values.some(
+          (value) => typeof value !== "number" || !Number.isFinite(value),
+        )
+      ) {
+        return `series ${series.label} has a value that is not a finite number`;
+      }
+    }
+    return null;
+  }
+
+  if (kind === "marks") {
+    const spec = figure as { marks?: unknown; xLabel?: unknown; yLabel?: unknown };
+    if (typeof spec.xLabel !== "string" || typeof spec.yLabel !== "string") {
+      return "marks figure needs xLabel and yLabel";
+    }
+    if (!Array.isArray(spec.marks) || spec.marks.length === 0) {
+      return "marks figure needs marks";
+    }
+    for (const mark of spec.marks) {
+      const point = mark as { x?: unknown; y?: unknown };
+      if (
+        !mark ||
+        typeof mark !== "object" ||
+        typeof point.x !== "number" ||
+        typeof point.y !== "number" ||
+        !Number.isFinite(point.x) ||
+        !Number.isFinite(point.y)
+      ) {
+        return "every mark needs finite numeric x and y";
+      }
+    }
+    return null;
+  }
+
+  return `unknown figure kind ${JSON.stringify(kind)}`;
+}
+
 /** Structural validation: the rules a definition must obey to be loadable. */
 export function validateDefinition(def: JourneyDefinition): string | null {
   if (!def || typeof def !== "object") return "not an object";
@@ -102,6 +170,8 @@ export function validateDefinition(def: JourneyDefinition): string | null {
     if (!node.pose?.base || !(node.pose.base in POSE_INDEX)) {
       return `node ${id}: unknown pose`;
     }
+    const badFigure = validateFigure(node.beat.figure);
+    if (badFigure) return `node ${id}: ${badFigure}`;
     for (const choice of node.choices ?? []) {
       if (!def.nodes[choice.to]) return `node ${id}: choice to unknown ${choice.to}`;
     }

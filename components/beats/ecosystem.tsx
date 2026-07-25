@@ -3,79 +3,86 @@
 import { motion } from "motion/react";
 import { Rise, TextScrim } from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
-import { BRANDS } from "@/components/ui/brand-icons";
+import { AGENTS } from "@/components/ui/brand-icons";
 
 /**
- * What quirq runs on, taken from the seed deck's architecture slide.
+ * The agent connection shelf directly under the hero.
  *
- * Marks rather than names: a row of logos is read at a glance, where twelve
- * wordmarks have to be read one at a time. They are integrations and supported
- * runtimes, deliberately NOT presented as customers, because there are none to
- * name yet.
- *
- * The list lives in components/ui/brand-icons.tsx as BRANDS, and it stays at
- * twelve: 12 divides exactly by the 2 / 4 / 6 column counts below, so the
- * lattice is always a perfect rectangle with no ragged final row. Each mark
- * keeps its name as an accessible label, so the section reads the same to a
- * screen reader as it did when it was text.
- */
-
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-/**
- * The shelf directly under the hero.
- *
- * A fixed lattice rather than a marquee: every cell is the same size, the
- * hairlines line up on both axes, and nothing is ever caught mid-slide or
- * clipped by an edge. The motion is a single stagger across the grid, so the
- * geometry never moves once it has landed.
+ * Only agent marks belong here. Providers, protocols and infrastructure may
+ * still be supported elsewhere, but mixing them into this row dilutes the
+ * promise: connect the workers already active across the team's machines and
+ * observe their outcomes together.
  *
  * Not a beat: it carries no `data-beat`, so the scroll runtime ignores it and
  * the glass simply keeps travelling from the hero keyframe toward beat 1.
  */
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 export function Ecosystem() {
   return (
     <section
       id="ecosystem"
-      aria-label="Runtimes, models and clouds quirq runs on"
-      className="relative py-16 sm:py-20"
+      aria-label="Agents quirq connects and observes"
+      className="relative py-20 sm:py-24"
     >
-      {/* No full-width band here any more: each text line carries its own
-          eclipse pool (TextScrim), and the lattice cells are near-black
-          themselves, so the glass stays visible between the elements instead
-          of being sliced by a horizontal gradient. */}
       <div className="mx-auto w-full max-w-[1180px] px-5 sm:px-8 lg:px-11">
-        <Rise className="relative mx-auto w-fit">
+        <Rise className="relative mx-auto flex max-w-[760px] flex-col items-center text-center">
           <TextScrim />
-          <p className="label over-stage mb-9 text-center">Runs on what you already run</p>
+          <p className="label over-stage">Your whole agent fleet, in view</p>
+          <h2 className="over-stage mt-4 text-[clamp(28px,4vw,46px)] leading-[1.04] font-medium tracking-[-0.045em] text-ink">
+            Connect every agent.{" "}
+            <GlassText className="whitespace-nowrap">
+              Observe every outcome.
+            </GlassText>
+          </h2>
+          <p className="over-stage mt-5 max-w-[640px] text-[13px] leading-6 text-dim sm:text-[14px]">
+            Across laptops, workstations, and cloud machines, quirq gathers the
+            work already happening into one clear, shared view.
+          </p>
         </Rise>
 
-        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-hair-soft bg-white/6 md:grid-cols-4 lg:grid-cols-6">
-          {BRANDS.map((brand, i) => (
-            <motion.div
-              key={brand.name}
-              className="group flex h-[68px] items-center justify-center bg-black/85 px-3 backdrop-blur-xl transition-colors duration-300 hover:bg-white/[0.04] sm:h-[76px]"
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: i * 0.045, ease: EASE }}
-            >
-              {/* The mark carries the name, so it is labelled rather than
-                  decorative: this section reads the same to a screen reader as
-                  it did when it was twelve words. */}
-              <brand.Icon
-                title={brand.name}
-                className="h-[26px] w-[26px] text-dim transition-colors duration-300 group-hover:text-ink sm:h-[28px] sm:w-[28px]"
-              />
-            </motion.div>
-          ))}
+        <div className="relative mt-12 sm:mt-14">
+          <span
+            aria-hidden
+            className="absolute top-8 right-[7%] left-[7%] hidden h-px bg-linear-to-r from-transparent via-white/20 to-transparent lg:block"
+          />
+
+          <ul className="relative flex flex-wrap justify-center gap-x-3 gap-y-7 sm:gap-x-4 lg:flex-nowrap lg:justify-between lg:gap-x-3">
+            {AGENTS.map((agent, i) => (
+              <motion.li
+                key={agent.name}
+                className="group flex w-[calc(50%-0.375rem)] flex-col items-center gap-3 sm:w-[calc(25%-0.75rem)] lg:w-full"
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.7, delay: i * 0.055, ease: EASE }}
+              >
+                <span className="relative flex h-16 w-16 items-center justify-center rounded-full border border-white/16 bg-black/75 shadow-[0_12px_36px_rgba(0,0,0,0.62)] backdrop-blur-xl transition-all duration-300 group-hover:border-white/30 group-hover:bg-black/60">
+                  <agent.Icon className="h-7 w-7 text-white/72 transition-colors duration-300 group-hover:text-ink" />
+                  <span
+                    aria-hidden
+                    className="absolute -bottom-1 h-2 w-2 rounded-full border border-black bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.65)]"
+                  />
+                </span>
+                <span className="font-mono text-[9px] tracking-[0.12em] text-white/72 uppercase drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] transition-colors duration-300 group-hover:text-white/90">
+                  {agent.name}
+                </span>
+              </motion.li>
+            ))}
+          </ul>
         </div>
 
-        <Rise delay={0.12} className="relative mx-auto mt-9 w-fit">
+        <Rise
+          delay={0.12}
+          className="relative mx-auto mt-11 w-full max-w-[620px]"
+        >
           <GlassPool>
-            <p className="over-stage text-center font-mono text-[10.5px] tracking-[0.14em] text-faint uppercase">
-              One command · any model · any cloud · any hardware ·{" "}
-              <GlassText className="whitespace-nowrap">one ledger</GlassText>
+            <p className="over-stage px-5 text-center font-mono text-[9px] leading-5 tracking-[0.12em] text-faint uppercase sm:text-[10.5px] sm:tracking-[0.14em]">
+              One command · every device · every agent ·{" "}
+              <GlassText className="whitespace-nowrap">
+                one shared view
+              </GlassText>
             </p>
           </GlassPool>
         </Rise>

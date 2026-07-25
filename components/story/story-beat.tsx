@@ -2,6 +2,7 @@
 
 import { ActionLink, Beat, Marker, Reveal, Rise, TextScrim, cn } from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
+import { FigureView } from "./figure";
 import type { BeatData } from "./types";
 
 /**
@@ -58,6 +59,12 @@ export function StoryBeat({ data }: { data: BeatData }) {
               >
                 {data.lede}
               </p>
+            </Rise>
+          )}
+
+          {data.figure && (
+            <Rise delay={0.28}>
+              <FigureView figure={data.figure} />
             </Rise>
           )}
 

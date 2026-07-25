@@ -13,6 +13,8 @@ import {
 } from "@/lib/research";
 import { PostBanner } from "@/components/research/banner";
 import { PostCard } from "@/components/research/card";
+import { FigureView } from "@/components/story/figure";
+import { figureFromChart } from "@/lib/chart-figure";
 import { Rise } from "@/components/ui/primitives";
 
 export function generateStaticParams() {
@@ -72,12 +74,18 @@ function BodyBlock({ block }: { block: Block }) {
           {block.text}
         </h3>
       );
-    case "p":
+    case "p": {
+      // A chart paragraph carries its numbers in the sentence, so where the
+      // figure generator can read them the note shows the chart instead of
+      // describing it. Where it cannot, the sentence stands unchanged.
+      const figure = figureFromChart(block.text);
+      if (figure) return <FigureView figure={figure} />;
       return (
         <p className="mt-5 text-[15.5px] leading-[1.8] text-ink/70">
           {block.text}
         </p>
       );
+    }
     case "quote":
       return (
         <blockquote className="relative mt-7 pl-5 text-[16.5px] leading-[1.7] text-ink/90">

@@ -298,10 +298,10 @@
   },
   "recording": {
     "journey": "default",
-    "startedAt": 1785008251938,
+    "startedAt": 1785010006238,
     "events": [
       {
-        "at": 1785008251938,
+        "at": 1785010006238,
         "kind": "start",
         "node": "root",
         "path": [
