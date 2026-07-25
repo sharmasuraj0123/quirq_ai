@@ -14,14 +14,12 @@ import {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-export const MAIL = "mailto:suraj@xo.builders?subject=quirq%20early%20access";
-
 /**
- * The context handoff. Every agent target receives the same prompt: read the
- * machine-readable whitepaper, then apply it to the visitor's own agents.
+ * The context handoff. Every target receives the same closed-loop engineering
+ * brief, so the CTA moves from positioning to a concrete setup conversation.
  */
 const PROMPT = encodeURIComponent(
-  "Read https://quirq.ai/llm.txt. It is the whitepaper for quirq, a unit of verified agent work: tokens meter what agents consume, quirqs meter what they deliver. Explain the mint rule and the quirq calculus, then sketch how my own agents could mint quirqs for the work they ship.",
+  "Help me close the loop on agentic engineering with quirq. Read https://quirq.ai/llm.txt, then inspect my current project and identify the shortest feedback loop from an agent action to an environment snapshot, a verified outcome, and a ledger result. Explain the mint rule briefly, then give me a concrete setup plan with the exact commands and files needed for this project.",
 );
 
 type Target = {
@@ -79,9 +77,9 @@ const GAP = 10;
 type Anchor = { top: number; left: number };
 
 /**
- * The early-access CTA as a split button: the label keeps the funnel (mailto),
- * the chevron opens the agent handoff menu. Same control in two sizes; the
- * menu is identical so both entry points teach the same gesture.
+ * The closed-loop CTA opens an agent handoff menu. The whole pill is one
+ * disclosure button, so there is no false primary action and no email detour.
+ * The same control appears in the nav, hero, and final invite.
  *
  * The menu renders through a portal at a fixed position. The hero lives in a
  * section that clips its overflow (the text scrims bleed past the page edge),
@@ -175,18 +173,31 @@ export function OpenIn({
           className="absolute -inset-px -z-10 rounded-full opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-70"
           style={{ background: "var(--spectrum)" }}
         />
-        <div className="inline-flex items-stretch overflow-hidden rounded-full bg-ink text-void">
-          <a
-            href={MAIL}
+        <button
+          ref={trigger}
+          type="button"
+          aria-expanded={open}
+          aria-controls={menuId}
+          aria-label="Close the loop with your agent"
+          onClick={() => setAnchor(open ? null : place())}
+          className={cn(
+            "openin-toggle focus-on-ink inline-flex items-stretch overflow-hidden rounded-full bg-ink font-mono text-void uppercase transition-opacity hover:opacity-85",
+            hero
+              ? "py-3.5 pl-6 text-[11.5px] tracking-[0.14em]"
+              : "py-2 pl-4 text-[10.5px] tracking-[0.14em]",
+          )}
+        >
+          <span
             className={cn(
-              "focus-on-ink inline-flex items-center font-mono uppercase transition-opacity hover:opacity-85",
-              hero
-                ? "gap-2.5 py-3.5 pl-6 pr-4 text-[11.5px] tracking-[0.14em]"
-                : "py-2 pl-4 pr-2.5 text-[10.5px] tracking-[0.14em]",
+              "inline-flex items-center",
+              hero ? "gap-2.5 pr-4" : "gap-2 pr-2.5",
             )}
           >
-            {/* The marks carry the affordance; the words only confirm it. */}
-            <span aria-hidden className={cn("flex items-center", hero ? "gap-1.5" : "gap-1")}>
+            {/* The marks carry the agent affordance; the label carries intent. */}
+            <span
+              aria-hidden
+              className={cn("flex items-center", hero ? "gap-1.5" : "gap-1")}
+            >
               {LEAD.map((target) => (
                 <target.Icon
                   key={target.name}
@@ -194,32 +205,23 @@ export function OpenIn({
                 />
               ))}
             </span>
-            <span className={hero ? "ml-0.5" : "ml-px"}>Open in</span>
-          </a>
-          {/* The divider lives inside the button so there is no dead sliver
-            between the two segments; every pixel right of the label toggles.
-            `openin-toggle` lets the noscript override hide it: without JS the
-            disclosure can never open, so the chevron would be a dead control. */}
-          <button
-            ref={trigger}
-            type="button"
-            aria-expanded={open}
-            aria-controls={menuId}
-            aria-label="Open quirq in an agent"
-            onClick={() => setAnchor(open ? null : place())}
+            <span>Close the loop</span>
+          </span>
+
+          <span
+            aria-hidden
             className={cn(
-              "openin-toggle focus-on-ink inline-flex items-center justify-center gap-0 transition-opacity hover:opacity-85",
-              hero ? "pr-4.5" : "pr-3",
+              "w-px self-stretch bg-void/20",
+              hero ? "my-[-4px]" : "my-[-2px]",
+            )}
+          />
+          <span
+            aria-hidden
+            className={cn(
+              "inline-flex items-center justify-center",
+              hero ? "w-11" : "w-9",
             )}
           >
-            <span
-              aria-hidden
-              className={cn(
-                "w-px self-stretch bg-void/20",
-                hero ? "my-2.5" : "my-2",
-              )}
-            />
-            <span aria-hidden className={hero ? "w-3" : "w-2"} />
             <motion.svg
               width={hero ? 12 : 10}
               height={hero ? 12 : 10}
@@ -237,8 +239,8 @@ export function OpenIn({
                 strokeLinejoin="round"
               />
             </motion.svg>
-          </button>
-        </div>
+          </span>
+        </button>
       </motion.div>
 
       {typeof document !== "undefined" &&
@@ -268,7 +270,7 @@ export function OpenIn({
                 className="fixed z-[70] overflow-hidden rounded-2xl border border-hair bg-black/85 shadow-[0_30px_90px_rgba(0,0,0,0.7)] backdrop-blur-xl"
               >
                 <p className="border-b border-hair-soft px-4 pb-2.5 pt-3 font-mono text-[9.5px] tracking-[0.22em] text-faint uppercase">
-                  Hand quirq to your agent
+                  Choose your agent
                 </p>
                 <div className="py-1.5">
                   {TARGETS.map((target) => (
@@ -283,7 +285,7 @@ export function OpenIn({
                       <target.Icon className="h-[17px] w-[17px] shrink-0 text-dim transition-colors group-hover:text-ink" />
                       <span className="flex-1">
                         <span className="block text-[13.5px] font-medium text-ink">
-                          Open in {target.name}
+                          Close the loop in {target.name}
                         </span>
                         <span className="block font-mono text-[9.5px] tracking-[0.08em] text-faint">
                           {target.note}

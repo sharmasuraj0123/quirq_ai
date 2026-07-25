@@ -69,10 +69,11 @@ export default function RootLayout({
       <head>
         {/* Entrance animations start from opacity:0. Without JS those inline
             styles would never be cleared, so the page would render blank. */}
-        {/* The chevron disclosure can never open without JS, so it is hidden
-            rather than left as a dead control; the mailto label still works. */}
+        {/* The agent disclosure and copy button need JS, so they are hidden
+            rather than left as dead controls; the install command itself
+            remains selectable and the page content remains fully readable. */}
         <noscript>
-          <style>{`main *, nav, nav * { opacity: 1 !important; transform: none !important; filter: none !important; } .openin-toggle { display: none !important; }`}</style>
+          <style>{`main *, nav, nav * { opacity: 1 !important; transform: none !important; filter: none !important; } .openin-toggle, .copy-command { display: none !important; }`}</style>
         </noscript>
       </head>
       <body>

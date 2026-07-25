@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "motion/react";
 import { Mark, Reveal, Rise } from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
+import { LoopCta } from "@/components/ui/loop-cta";
 import { registerBeat } from "@/lib/beat-registry";
-
-const MAIL = "mailto:suraj@xo.builders?subject=quirq%20early%20access";
 
 export function Invite() {
   // This section keeps its own layout (the footer rides inside it), so it
@@ -28,51 +26,22 @@ export function Invite() {
         <div className="relative mx-auto w-full max-w-[1180px] px-5 text-center sm:px-8 lg:px-11">
           <GlassPool scrimClassName="mx-auto max-w-3xl">
           <h2 className="display over-stage mx-auto max-w-[16ch]">
-            <Reveal delay={0.05}>Put a meter on</Reveal>
+            <Reveal delay={0.05}>Close the loop</Reveal>
             <Reveal delay={0.13}>
-              <GlassText>the other side.</GlassText>
+              <GlassText>on every run.</GlassText>
             </Reveal>
           </h2>
 
           <Rise delay={0.24}>
             <p className="lede over-stage mx-auto mt-7 text-center">
-              Early access is open for teams running agents in production.
+              Tighten the engineering loop between an agent&apos;s action and a
+              verified outcome. One command installs the environment; every
+              run comes back with proof.
             </p>
           </Rise>
 
-          <Rise delay={0.34}>
-            <motion.a
-              href={MAIL}
-              whileHover={{ y: -3 }}
-              transition={{ type: "spring", stiffness: 320, damping: 22 }}
-              className="group focus-on-ink relative mt-11 inline-flex items-center gap-4 rounded-full bg-ink px-8 py-5 text-void sm:px-10"
-            >
-              {/* Spectrum bloom that lights up under the button on hover. */}
-              <span
-                aria-hidden
-                className="absolute -inset-px -z-10 rounded-full opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-70"
-                style={{ background: "var(--spectrum)" }}
-              />
-              <span className="font-mono text-[13px] tracking-[0.06em] sm:text-[15px]">
-                suraj@xo.builders
-              </span>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 12 12"
-                fill="none"
-                aria-hidden
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              >
-                <path
-                  d="M2 10L10 2M10 2H4M10 2V8"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </motion.a>
+          <Rise delay={0.34} className="mt-10">
+            <LoopCta />
           </Rise>
           </GlassPool>
         </div>
