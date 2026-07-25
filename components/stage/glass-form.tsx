@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { createRibbonGeometry } from "./ribbon-geometry";
-import { KEYFRAMES, damp, sampleKeyframes, type Keyframe } from "./choreography";
+import { KEYFRAMES, damp, getTrack, sampleKeyframes, type Keyframe } from "./choreography";
 import { LIGHT } from "@/lib/lighting";
 import { stage } from "@/lib/stage-store";
 
@@ -42,7 +42,7 @@ export function GlassForm({ quality }: { quality: StageQuality }) {
     if (!g) return;
     // A backgrounded tab hands back one enormous delta; clamp or the form lurches.
     const dt = Math.min(delta, 0.05);
-    const k = sampleKeyframes(stage.beat, target.current);
+    const k = sampleKeyframes(getTrack(), stage.beat, target.current);
     const l = live.current;
 
     // Narrow viewports collapse the horizontal choreography toward centre,

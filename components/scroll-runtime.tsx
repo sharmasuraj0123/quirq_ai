@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { stage } from "@/lib/stage-store";
+import { beatEntries, onBeatsChange } from "@/lib/beat-registry";
+import { refreshTrack } from "@/components/stage/choreography";
 
 /**
  * Owns smooth scrolling and turns raw scroll into a fractional beat index.
@@ -21,16 +23,26 @@ export default function ScrollRuntime() {
     let centres: number[] = [];
 
     const measure = () => {
-      const sections = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-beat]"),
-      ).sort(
-        (a, b) => Number(a.dataset.beat ?? 0) - Number(b.dataset.beat ?? 0),
-      );
+      // Phase 2: registered sections first; the data-beat query remains as
+      // the fallback for pages composed without the Beat primitive.
+      const registered = beatEntries();
+      const sections = registered.length
+        ? registered.map((entry) => entry.el)
+        : Array.from(
+            document.querySelectorAll<HTMLElement>("[data-beat]"),
+          ).sort(
+            (a, b) => Number(a.dataset.beat ?? 0) - Number(b.dataset.beat ?? 0),
+          );
       centres = sections.map((el) => {
         const box = el.getBoundingClientRect();
         return box.top + window.scrollY + box.height / 2;
       });
     };
+
+    // Phase 4: the track resolves against the live context before anything
+    // is measured, and again on resize; with no active branch predicates
+    // this reproduces the same values it always had.
+    refreshTrack({ width: window.innerWidth });
 
     /** Map a scroll offset onto the fractional beat index. */
     const toBeat = (scroll: number) => {
@@ -78,17 +90,24 @@ export default function ScrollRuntime() {
           document.documentElement.scrollHeight - window.innerHeight,
         );
       const onResize = () => {
+        refreshTrack({ width: window.innerWidth });
         measure();
         onScroll();
       };
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onResize);
+      // Sections registering or leaving (a dynamic middle) re-measure too.
+      const offBeats = onBeatsChange(() => {
+        measure();
+        onScroll();
+      });
       // Section heights shift once the webfonts swap in.
       document.fonts?.ready.then(onResize).catch(() => {});
       return () => {
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onResize);
+        offBeats();
         clear();
       };
     }
@@ -113,11 +132,16 @@ export default function ScrollRuntime() {
       document.documentElement.scrollHeight - window.innerHeight,
     );
 
-    // Dev-only handle. Lenis owns the scroll position, so calling
+    // Dev-only handles. Lenis owns the scroll position, so calling
     // window.scrollTo from a console or a test fights it; this exposes the
     // instance so tooling can drive the page the same way the wheel does.
+    // __golden captures the scroll-to-beat mapping for refactor gating.
     if (process.env.NODE_ENV !== "production") {
       (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+      import("@/lib/golden").then(({ captureGolden }) => {
+        (window as unknown as { __golden?: typeof captureGolden }).__golden =
+          captureGolden;
+      });
     }
 
     let frame = requestAnimationFrame(function loop(time: number) {
@@ -126,10 +150,21 @@ export default function ScrollRuntime() {
     });
 
     const onResize = () => {
+      refreshTrack({ width: window.innerWidth });
       measure();
       lenis.resize();
     };
     window.addEventListener("resize", onResize);
+
+    // Sections registering or leaving (a dynamic middle) re-measure and
+    // re-write, so the rule and the 3D pick the change up immediately.
+    const offBeats = onBeatsChange(() => {
+      measure();
+      write(
+        window.scrollY,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+    });
 
     // Fonts change section heights after they swap in; re-measure once settled.
     document.fonts?.ready.then(measure).catch(() => {});
@@ -160,6 +195,7 @@ export default function ScrollRuntime() {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("pointermove", onPointer);
       document.removeEventListener("click", onClick);
+      offBeats();
       lenis.destroy();
       clear();
     };

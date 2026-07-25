@@ -3,7 +3,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { KEYFRAMES, damp, sampleKeyframes } from "./choreography";
+import { KEYFRAMES, damp, getTrack, sampleKeyframes } from "./choreography";
 import { LIGHT, glsl } from "@/lib/lighting";
 import { stage } from "@/lib/stage-store";
 
@@ -89,7 +89,7 @@ export function LightBurst() {
     const m = material.current;
     if (!m) return;
     const dt = Math.min(delta, 0.05);
-    const k = sampleKeyframes(stage.beat, frame.current);
+    const k = sampleKeyframes(getTrack(), stage.beat, frame.current);
     const lambda = stage.reduced ? 400 : 3.2;
 
     live.current = damp(live.current, k.burst * LIGHT.burstGain, lambda, dt);

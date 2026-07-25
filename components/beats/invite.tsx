@@ -1,14 +1,25 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { Mark, Reveal, Rise } from "@/components/ui/primitives";
 import { GlassPool, GlassText } from "@/components/ui/glass";
+import { registerBeat } from "@/lib/beat-registry";
 
 const MAIL = "mailto:suraj@xo.builders?subject=quirq%20early%20access";
 
 export function Invite() {
+  // This section keeps its own layout (the footer rides inside it), so it
+  // does not use the Beat primitive; it registers with the runtime directly.
+  const el = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!el.current) return;
+    return registerBeat({ id: "invite", index: 4, el: el.current });
+  }, []);
+
   return (
     <section
+      ref={el}
       id="invite"
       data-beat={4}
       className="relative flex min-h-svh flex-col overflow-hidden"

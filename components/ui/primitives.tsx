@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useInView } from "motion/react";
 import { LIGHT } from "@/lib/lighting";
+import { registerBeat } from "@/lib/beat-registry";
 
 export const cn = (...parts: Array<string | false | null | undefined>) =>
   parts.filter(Boolean).join(" ");
@@ -25,8 +26,18 @@ export function Beat({
   children: ReactNode;
   className?: string;
 }) {
+  const el = useRef<HTMLElement>(null);
+  // Phase 2: the section announces itself to the registry; the runtime
+  // measures registered sections and re-measures when the set changes. The
+  // data-beat attribute stays as the transition-era fallback.
+  useEffect(() => {
+    if (!el.current) return;
+    return registerBeat({ id, index, el: el.current });
+  }, [id, index]);
+
   return (
     <section
+      ref={el}
       id={id}
       data-beat={index}
       className={cn(
