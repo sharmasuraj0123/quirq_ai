@@ -174,9 +174,12 @@ function Bars({
 
             {series.map((it, s) => {
               const value = it.values[i];
-              const width = Number.isFinite(value)
-                ? Math.max(1.5, (Math.max(0, value) / ceiling) * 100)
+              // A floor keeps a small value visible, but zero gets no bar at
+              // all: a sliver where the note measured nothing is a lie.
+              const share = Number.isFinite(value)
+                ? (Math.max(0, value) / ceiling) * 100
                 : 0;
+              const width = share > 0 ? Math.max(1.5, share) : 0;
               return (
                 <div
                   key={it.label}

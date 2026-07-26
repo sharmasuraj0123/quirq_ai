@@ -484,6 +484,72 @@ Rules for any derivation of this kind:
   intent, so the pose rotation carries the rhythm and the copy carries the
   meaning. Document the rotation rather than pretending it is authored.
 
+### Figures
+
+`Figure` in `components/story/types.ts` is a closed union of measured visuals,
+carried in beat data and therefore in journey JSON like any other field.
+`components/story/figure.tsx` renders it; `validateFigure` in
+`app/journey/defs.tsx` refuses a shape the renderer cannot read, so a bad
+figure in a pasted document is a printed reason and never a half-drawn chart.
+
+Two kinds, two jobs:
+
+- `bars` compares a few series over named categories. Built from the DOM, not
+  SVG, so labels stay real text at the site's scale, reflow on a phone, and
+  survive with no JavaScript.
+- `marks` plots one record per mark with optional weight and group. This is the
+  shape a commit field, a run field, or any per-record dataset takes.
+
+Rules:
+
+- **Colour is value.** A series or group measuring delivered outcome takes the
+  spectrum; anything counting consumption (tokens, calls, files, minutes) stays
+  monochrome. Monochrome is the default when the unit does not say.
+- **Percentages scale to 100**, not to the tallest bar present.
+- **Zero draws nothing.** A minimum-width sliver where the source measured zero
+  is a false reading.
+- **Keep the numbers in the DOM.** Every figure carries a `sr-only` summary
+  with the same values the visual shows.
+- **Never import from a `"use client"` module here.** `figure.tsx` renders
+  inside server components; calling a client export such as `cn` from the
+  server throws at render time.
+
+### Generating figures from content
+
+`lib/chart-figure.ts` reads a research note's chart paragraph and returns a
+figure spec: the notes carry their numbers in the same sentence that describes
+the chart, so the visual is generated from the note rather than drawn beside
+it. Both readings use it, the article and the derived journey.
+
+It fails closed, and that is the whole discipline: a paragraph describing a
+stack diagram or a scatter whose points were never listed returns null and the
+prose stands unchanged. Never invent a datum to complete a picture. Of the
+notes' chart paragraphs today, the ones whose grammar is a labelled series
+parse; the rest stay prose.
+
+### Data as a journey
+
+`scripts/build-git-journey.mjs` is the general case: it reads `git log` and
+writes a journey document into `.quirq/journeys`, which the API then serves and
+the engine walks with no special casing. One mark per commit, time across,
+subsystem up the lanes, churn as weight, and the short hash in the mark's
+label.
+
+```bash
+pnpm git-journey                                    # this app's own history
+node scripts/build-git-journey.mjs --repo=../.. --slug=git-workspace
+```
+
+When adding another data source, follow the same shape: read the source, emit a
+`JourneyDefinition` with figure specs, validate it, and stop. The renderer, the
+engine, and the validator are already there, and a source-specific page is a
+sign the mapping belongs in a builder instead.
+
+Encode what the data actually varies by rather than what would look best: the
+git builder colours by scope prefix, then by author, then by subsystem,
+whichever is the first that has more than one value, and its caption names the
+dimension it landed on.
+
 ### The loading engine
 
 `components/journey/engine.tsx` takes one document, however it arrives (a prop,
@@ -1068,6 +1134,9 @@ Use these before inventing a pattern:
 | Static generated route | `app/research/[slug]/page.tsx` |
 | Paginated, filtered listing | `app/research/page.tsx`, `app/research/page/[page]`, `app/research/topic/[topic]`, `components/research/index-view.tsx` |
 | Journey derived from content | `lib/research-journey.ts`, `app/journey/read/[slug]/page.tsx` |
+| Measured visual as data | `components/story/figure.tsx`, `components/story/types.ts` |
+| Figure generated from prose | `lib/chart-figure.ts` |
+| Any dataset as a journey | `scripts/build-git-journey.mjs` |
 | Walking any journey document | `components/journey/engine.tsx`, `app/journey/load/page.tsx` |
 | Catalog resolver and pagination rules | `lib/research.ts` (`resolveIndex`) |
 | Framed content image | `components/research/banner.tsx` |
