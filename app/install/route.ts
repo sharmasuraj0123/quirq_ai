@@ -1,29 +1,85 @@
 /**
- * Placeholder installer behind `curl -fsSL quirq.ai/install | sh`.
+ * Bootstrapper behind `curl -fsSL quirq.ai/install | sh`.
  *
- * It deliberately performs no installation yet. Keeping the response as a
- * valid, side-effect-free POSIX shell script lets the public command work now
- * while leaving one obvious constant to replace with the real installer.
+ * The small POSIX wrapper owns checkout safety. The cloned repository's
+ * installer remains the source of truth for Docker setup, persistent mounts,
+ * container replacement, health checks, and the final application URL.
  */
 export const dynamic = "force-static";
 
-const INSTALL_SCRIPT = String.raw`#!/bin/sh
-# quirq placeholder installer
-set -eu
-
-cat <<'QUIRQ_BANNER'
-   ____   _   _   ___   ____    ____
-  / __ \ | | | | |_ _| |  _ \  / __ \
- | |  | || | | |  | |  | |_) || |  | |
- | |__| || |_| |  | |  |  _ < | |__| |
-  \___\_\ \___/  |___| |_| \_\ \___\_\
-QUIRQ_BANNER
-
-printf '\n'
-printf '%s\n' 'quirq installer placeholder'
-printf '%s\n' 'The install endpoint is live. No files were changed.'
-printf '%s\n' 'The real installer will replace this placeholder soon.'
-`;
+export const INSTALL_SCRIPT =
+  [
+    "#!/bin/sh",
+    "# Clone xo-space, then hand installation and startup to its supported installer.",
+    "set -eu",
+    "",
+    "REPO_URL='https://github.com/quirq-ai/xo-space.git'",
+    "REPO_BRANCH='main'",
+    "",
+    "fail() {",
+    "  printf '\\nquirq: %s\\n' \"$*\" >&2",
+    "  exit 1",
+    "}",
+    "",
+    "require_command() {",
+    '  command -v "$1" >/dev/null 2>&1 || fail "$2"',
+    "}",
+    "",
+    "cat <<'QUIRQ_BANNER'",
+    "   ____   _   _   ___   ____    ____",
+    "  / __ \\ | | | | |_ _| |  _ \\  / __ \\",
+    " | |  | || | | |  | |  | |_) || |  | |",
+    " | |__| || |_| |  | |  |  _ < | |__| |",
+    "  \\___\\_\\ \\___/  |___| |_| \\_\\ \\___\\_\\",
+    "QUIRQ_BANNER",
+    "",
+    '[ -n "${HOME:-}" ] || fail "HOME must be set."',
+    'INSTALL_DIR="${QUIRQ_INSTALL_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/quirq/xo-space}"',
+    'case "$INSTALL_DIR" in',
+    "  /*) ;;",
+    '  *) fail "QUIRQ_INSTALL_DIR must be an absolute path: $INSTALL_DIR" ;;',
+    "esac",
+    '[ "$INSTALL_DIR" != "/" ] || fail "QUIRQ_INSTALL_DIR cannot be the filesystem root."',
+    "",
+    'require_command git "Git is required to download Quirq."',
+    'require_command bash "Bash is required to run the xo-space installer."',
+    "",
+    'if [ ! -e "$INSTALL_DIR" ]; then',
+    '  PARENT_DIR="${INSTALL_DIR%/*}"',
+    '  [ -n "$PARENT_DIR" ] || PARENT_DIR="/"',
+    '  mkdir -p "$PARENT_DIR"',
+    "  printf '\\nCloning Quirq into %s...\\n' \"$INSTALL_DIR\"",
+    '  git clone --depth 1 --branch "$REPO_BRANCH" "$REPO_URL" "$INSTALL_DIR"',
+    "else",
+    '  [ -d "$INSTALL_DIR" ] || fail "Install path exists and is not a directory: $INSTALL_DIR"',
+    '  [ -e "$INSTALL_DIR/.git" ] || fail "Install path is not a Git checkout: $INSTALL_DIR"',
+    "",
+    '  ORIGIN_URL="$(git -C "$INSTALL_DIR" remote get-url origin 2>/dev/null || true)"',
+    '  case "$ORIGIN_URL" in',
+    '    "$REPO_URL"|https://github.com/quirq-ai/xo-space|git@github.com:quirq-ai/xo-space.git|ssh://git@github.com/quirq-ai/xo-space.git) ;;',
+    '    *) fail "Install path belongs to a different repository: ${ORIGIN_URL:-unknown}" ;;',
+    "  esac",
+    "",
+    '  CURRENT_BRANCH="$(git -C "$INSTALL_DIR" branch --show-current)"',
+    '  [ "$CURRENT_BRANCH" = "$REPO_BRANCH" ] || fail "Checkout must be on $REPO_BRANCH, not ${CURRENT_BRANCH:-detached}."',
+    '  [ -z "$(git -C "$INSTALL_DIR" status --porcelain)" ] ||',
+    '    fail "Checkout has local changes. Commit or remove them before updating: $INSTALL_DIR"',
+    "",
+    "  printf '\\nUpdating the existing Quirq checkout...\\n'",
+    '  git -C "$INSTALL_DIR" pull --ff-only origin "$REPO_BRANCH"',
+    "fi",
+    "",
+    '[ -f "$INSTALL_DIR/install.sh" ] || fail "The xo-space checkout has no install.sh."',
+    "",
+    "# Keep the installer's source-build fallback on the same branch we cloned.",
+    ': "${QUIRQ_SOURCE_REF:=main}"',
+    "export QUIRQ_SOURCE_REF",
+    "",
+    "printf '\\nInstalling and starting Quirq...\\n'",
+    "printf 'The dashboard will be available at http://localhost:5003/space/\\n\\n'",
+    'cd "$INSTALL_DIR"',
+    "exec bash ./install.sh",
+  ].join("\n") + "\n";
 
 export function GET() {
   return new Response(INSTALL_SCRIPT, {
