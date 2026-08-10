@@ -176,6 +176,45 @@ export const ESSAYS: Essay[] = [
   },
 
   {
+    slug: "the-advantage-was-never-the-model",
+    source: { slug: "harvey-case-study", title: "Case Study: The Harvey Harness" },
+    body: [
+      { kind: "quote", text: "Everyone assumes the leader in a domain has the better model. Read Harvey's own technical disclosures and the answer is duller and far more useful: it has the better room to put a model in." },
+      { kind: "p", text: "Our own studies made this argument on small tasks with our own runs, which is a fair objection to them. Harvey makes it at enterprise scale, in a domain where a wrong answer is a disbarment event and a leak ends the firm. That is about as unforgiving a test of the claim as exists." },
+      { kind: "p", text: "The headline number is the routing. Harvey reports that automatically routing work across models, rather than sending everything to the frontier, cuts inference cost by three to five times against a frontier-only baseline. Not by using a cheaper model. By knowing which questions need the expensive one." },
+      { kind: "h2", text: "Not a wrapper, an operating system" },
+      { kind: "p", text: "The dismissive reading of any applied-AI company is that it is a thin shell over someone else's model. The disclosed architecture does not look like that. It looks like an operating system: layers that decide what the model sees, which model sees it, what it is allowed to touch, and what happens to the answer before a human reads it." },
+      { kind: "p", text: "Every one of those layers exists to remove a specific weakness, and none of them is a better model. The frontier model already has the legal reasoning. What it cannot supply is the firm's own conventions, its permissions, its record of what happened, and a routing decision made with the bill in mind." },
+      { kind: "h2", text: "The same finding, two scales" },
+      { kind: "p", text: "This is where it meets our own smallest result. Relevance, Not Volume found that a coding agent already has the engineering judgement, and that the only thing context can add is the narrow set of facts the model cannot derive on its own. Harvey's whole design agrees, and treats the frontier model exactly that way: as a capable component that needs a system around it rather than a system in itself." },
+      { kind: "h2", text: "What this is, and is not" },
+      { kind: "p", text: "It is a reconstruction from public disclosures, not a measurement we ran. The note is careful to separate what Harvey documents from what we infer, and this piece inherits that boundary: nothing here is a number we produced, and the three-to-five-times figure is Harvey's own report of its own system." },
+      { kind: "p", text: "That is still worth having. It is the strongest available evidence that the environment thesis holds somewhere with real money and real liability on it, which is the one place our own harness cannot go." },
+      { kind: "p", text: "The layer-by-layer reconstruction, the documented-versus-inferred split and what transfers to other domains are in the research note." },
+    ],
+  },
+
+  {
+    slug: "the-benchmark-that-did-not-finish",
+    source: {
+      slug: "coding-model-eval-harness",
+      title: "Fable 5 vs Opus 4.8: A Coding-Agent Evaluation",
+    },
+    body: [
+      { kind: "quote", text: "This is a model comparison that never reached a verdict, published anyway. The interesting part was never which model won. It was what it takes to build a comparison whose answer would have meant anything." },
+      { kind: "p", text: "The setup was a head-to-head between Claude Fable 5 and Claude Opus 4.8 on real engineering work, run through a reproducible harness. The hard part, as the note puts it, was never running the models. It was removing the four things that quietly make most model comparisons wrong." },
+      { kind: "p", text: "The unit the harness settles on is worth stealing whatever you are measuring: a task is a base commit, a prompt, and a gate, where the gate is a test that is red before the work and green after it. No judgement about whether the code looks good. A state change you can check." },
+      { kind: "h2", text: "Then it was cut short" },
+      { kind: "p", text: "Of ten planned tasks, four ran. On 12 June 2026 Claude Fable 5 was suspended under a US export-control directive, and the harder long-horizon tasks, the ones built specifically to separate the two models, never ran at all." },
+      { kind: "p", text: "So the result is thin and the note says so plainly. Both models passed every gate, which means pass/fail did not separate them. Fable led modestly on tool calls and tokens. Four tasks, one codebase, five runs each: directional, not decided. At these sizes Opus was the cheaper model per task, since Fable carries a higher per-token price." },
+      { kind: "h2", text: "Why publish it" },
+      { kind: "p", text: "Because the deliverable was the rigor of the measurement, not the verdict, and that part survived intact. The runs are saved, the harness is reusable, and the next comparison starts from a method rather than from scratch." },
+      { kind: "p", text: "There is a quieter lesson in the timing. The strongest hypothesis, that Fable suited long-running low-supervision work where staying coherent over a long horizon matters more than any single edit, is exactly the one the unrun tasks were built to test. An evaluation programme that only publishes finished results would have published nothing here, and the honest record of what was not learned is worth more than silence." },
+      { kind: "p", text: "The four failure modes the harness removes, the per-task numbers and the limits are in the research note." },
+    ],
+  },
+
+  {
     slug: "point-and-call",
     source: { slug: "relevance-not-volume", title: "Relevance, Not Volume" },
     body: [

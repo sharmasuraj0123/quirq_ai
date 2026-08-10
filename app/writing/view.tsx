@@ -262,15 +262,18 @@ export function WritingView() {
       </header>
 
       {showNews && (
-        <section className={styles.featured} aria-labelledby="featured-heading">
+        // The lead carries the paper, so the whole plate is the link to it.
+        <Link
+          href={FEATURED.href}
+          className={styles.featured}
+          aria-labelledby="featured-heading"
+        >
           <div className={styles.art}>
             <img src={src(FEATURED.img)} alt="" />
           </div>
           <div>
             <div className={styles.kicker}>
               <span className={styles.dot} aria-hidden />
-              News
-              <span className={styles.ln} aria-hidden />
               {FEATURED.kicker}
             </div>
             <h2 id="featured-heading">{FEATURED.title}</h2>
@@ -282,7 +285,7 @@ export function WritingView() {
               <Go />
             </div>
           </div>
-        </section>
+        </Link>
       )}
 
       {showNews && (

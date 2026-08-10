@@ -1,33 +1,28 @@
 /*
- * The Writings page, ported from quirq-package/site/quirq-research-writings-mock.html.
+ * The Writings page.
  *
- * Scoped to this route as a CSS module so it cannot reach any other page: the
- * mock is a whole design system in one file, and only the rules the Writings
- * page actually uses are carried across. Custom properties are --w-* so they
- * cannot collide with the site tokens in app/globals.css.
+ * Originally ported from quirq-package/site/quirq-research-writings-mock.html,
+ * which carried its own palette: a #0a0a0b ground, panelled #131316 cards, a
+ * teal #56b3a5 accent and its own grey ramp. That made Writings look like a
+ * different product from Research, which shows the same kind of thing.
  *
- * The mock's own nav and footer are dropped: the site already has both, and
- * bringing them would have meant changing shared chrome.
+ * It now draws entirely from the site tokens in app/globals.css and copies
+ * Research's shapes: the pure-black ground, the ink/dim/faint ramp, hairline
+ * rules at 10% of ink, the spectrum as the only accent, pill chips, and
+ * borderless cards whose only frame is the banner itself.
+ *
+ * Still a module, still scoped to this route: the rules below are Research's
+ * idiom expressed for this page's markup, not a shared component. Where the
+ * two pages need the same thing, they take it from globals.css.
  */
 
 .page {
-  --w-bg: #0a0a0b;
-  --w-bg2: #0f0f11;
-  --w-panel: #131316;
-  --w-line: rgba(255, 255, 255, 0.08);
-  --w-txt: #f2f2f0;
-  --w-dim: #9b9b98;
-  --w-faint: #5f5f5c;
-  --w-accent: #56b3a5;
-  --w-mono: var(--font-jetbrains), "SF Mono", ui-monospace, Menlo, monospace;
-  --w-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
   /* Tracks .shell in components/ui/nav.module.css: the nav is fixed. */
   --w-nav: 74px;
 
-  background: var(--w-bg);
-  color: var(--w-txt);
-  font-family: var(--w-sans);
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -37,6 +32,7 @@
     --w-nav: clamp(60px, 5.139vw, 74px);
   }
 }
+
 @media (max-width: 699px) {
   .page {
     --w-nav: 70px;
@@ -48,10 +44,23 @@
   padding: 0;
 }
 
+/* Research's measure and gutters, to the pixel. */
 .wrap {
-  max-width: 1180px;
+  width: min(100%, 1180px);
   margin: 0 auto;
-  padding: 0 40px;
+  padding-inline: 20px;
+}
+
+@media (min-width: 640px) {
+  .wrap {
+    padding-inline: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .wrap {
+    padding-inline: 44px;
+  }
 }
 
 /* ---------- header ---------- */
@@ -60,63 +69,19 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 30px;
-  padding: calc(var(--w-nav) + 64px) 0 22px;
   flex-wrap: wrap;
+  padding: calc(var(--w-nav) + 64px) 0 22px;
 }
+
+/* `.display-sm` from globals.css, matching the Research masthead. */
 .header h1 {
-  font-size: clamp(34px, 4vw, 50px);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-  font-weight: 650;
+  font-size: clamp(29px, 4.6vw, 56px);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  font-weight: 600;
 }
 
 /* ---------- tabs ---------- */
-.tabs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.tab {
-  font-family: var(--w-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--w-dim);
-  border: 1px solid var(--w-line);
-  border-radius: 3px;
-  padding: 10px 18px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.04);
-  transition: 0.18s;
-}
-.tab:hover {
-  color: var(--w-txt);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-.tabOn {
-  background: var(--w-accent);
-  color: #08110f;
-  border-color: var(--w-accent);
-}
-.tabOn:hover {
-  color: #08110f;
-  border-color: var(--w-accent);
-}
-.tabCount {
-  opacity: 0.55;
-  margin-left: 7px;
-}
-/* The changelog chip is a signpost, not a control. */
-/* Holds the tablist and the docs signpost on one line, with the tabs' own
-   gap, so the two read as one rail even though only the tabs filter. */
-/* Cards and guide rows are links wherever there is somewhere to go, so they
-   have to shed a link's default underline and blue. */
-.card,
-.rrow {
-  text-decoration: none;
-  color: inherit;
-}
-
 .tabRow {
   display: flex;
   align-items: center;
@@ -124,8 +89,60 @@
   flex-wrap: wrap;
 }
 
-/* Quieter than a tab because it leaves the site, but it is a real link now,
-   so it takes a pointer and lifts to full strength on hover. */
+.tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/*
+ * The Research topic chip, exactly: a full pill, hairline border, mono in the
+ * site's tracking, and the count carried inside it. The mock's 3px-radius
+ * rectangles were the single loudest inconsistency between the two pages.
+ */
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-hair);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-dim);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 300ms ease,
+    border-color 300ms ease;
+}
+
+.tab:hover {
+  border-color: rgba(244, 243, 240, 0.3);
+  color: var(--color-ink);
+}
+
+.tabOn,
+.tabOn:hover {
+  border-color: transparent;
+  background: var(--color-ink);
+  color: var(--color-void);
+}
+
+.tabCount {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  color: var(--color-faint);
+}
+
+.tabOn .tabCount {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* The docs signpost. Quieter than a filter because it leaves this page. */
 .tabMuted {
   opacity: 0.55;
   text-decoration: none;
@@ -136,155 +153,71 @@
 }
 
 /* ---------- featured ---------- */
+/* Research's LeadCard: banner beside the copy, banner given the wider column. */
 .featured {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 56px;
+  gap: 28px;
   align-items: center;
-  padding: 30px 0 52px;
-  border-bottom: 1px solid var(--w-line);
-}
-.art {
-  position: relative;
-  aspect-ratio: 16 / 9.6;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--w-line);
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.8);
-}
-.art img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.kicker {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--w-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--w-dim);
-  margin-bottom: 18px;
-}
-.kicker .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 2px;
-  background: #c3b3f5;
-}
-.kicker .ln {
-  width: 34px;
-  height: 1px;
-  background: var(--w-line);
-}
-.featured h2 {
-  font-size: clamp(30px, 3.4vw, 42px);
-  letter-spacing: -0.03em;
-  line-height: 1.08;
-  font-weight: 650;
-  margin-bottom: 16px;
-}
-.featured p {
-  color: var(--w-dim);
-  font-size: 16.5px;
-  max-width: 46ch;
-  margin-bottom: 22px;
-}
-.meta {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  font-family: var(--w-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
-  color: var(--w-faint);
-  text-transform: uppercase;
-}
-.go {
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--w-line);
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--w-dim);
-  transition: 0.2s;
-}
-.card:hover .go,
-.featured:hover .go {
-  color: var(--w-txt);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translate(2px, -2px);
+  margin-top: 14px;
 }
 
-/* ---------- series headings ---------- */
-.seriesHead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  padding: 56px 0 8px;
-}
-.seriesHead h2 {
-  font-size: 26px;
-  letter-spacing: -0.02em;
-  font-weight: 650;
-}
-.seriesHead .sub {
-  font-family: var(--w-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.15em;
-  color: var(--w-faint);
-  text-transform: uppercase;
-}
-
-/* ---------- card grid ---------- */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
-  padding: 26px 0 30px;
-}
-.card {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--w-line);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--w-bg2);
-  transition: 0.25s;
-  text-align: left;
-  color: inherit;
-  font: inherit;
-}
-.card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-3px);
-  background: var(--w-panel);
-}
-.thumb {
-  position: relative;
-  aspect-ratio: 16 / 9.6;
-  overflow: hidden;
-}
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s;
+@media (min-width: 1024px) {
+  .featured {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 44px;
+  }
 }
 
 /*
- * The typeset stand-in for a partner plate. Same light ground and same weight
- * as the drawn lockups, so a row that mixes the two still reads as one shelf
- * rather than as some cards having failed to load.
+ * The banner frame from components/research/banner.tsx: a hairline box on
+ * black with the spectrum laid along its bottom sill, so a picture reads as a
+ * window rather than a pasted tile.
  */
+.art,
+.thumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--color-hair);
+  border-radius: 16px;
+  background: #000;
+}
+
+.art {
+  aspect-ratio: 16 / 10;
+}
+
+.thumb {
+  aspect-ratio: 16 / 9;
+}
+
+.art img,
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms ease-out;
+}
+
+.art::after,
+.thumb::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--spectrum);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.card:hover .thumb img,
+.featured:hover .art img {
+  transform: scale(1.04);
+}
+
+/* The typeset stand-in for a partner plate, on the light ground the drawn
+   lockups use, so a row that mixes the two still reads as one shelf. */
 .lockup {
   display: grid;
   width: 100%;
@@ -300,190 +233,381 @@
   text-align: center;
   text-wrap: balance;
 }
-.card:hover .thumb img {
-  transform: scale(1.035);
+
+/* The mono meta line above a title: spectrum pip, label, hairline, value. */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
 }
-.cbody {
-  padding: 20px 20px 18px;
+
+.kicker .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--spectrum);
+  flex: none;
+}
+
+.kicker .ln {
+  width: 16px;
+  height: 1px;
+  background: var(--color-hair);
+  flex: none;
+}
+
+.featured h2 {
+  margin-top: 16px !important;
+  font-size: clamp(25px, 3vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.featured p {
+  margin-top: 16px !important;
+  max-width: 52ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-dim);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* Research's circular arrow: a hairline ring that lights on hover. */
+.go {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--color-hair);
+  border-radius: 999px;
+  color: var(--color-dim);
+  font-size: 11px;
+  flex: none;
+  transition:
+    color 300ms ease,
+    border-color 300ms ease,
+    transform 300ms ease;
+}
+
+.featured:hover .go,
+.card:hover .go,
+.rrow:hover .go {
+  border-color: rgba(244, 243, 240, 0.3);
+  color: var(--color-ink);
+  transform: translateX(2px);
+}
+
+/* ---------- series heads ---------- */
+.seriesHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 72px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--color-hair);
+}
+
+.seriesHead h2 {
+  font-size: clamp(21px, 2.4vw, 28px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.seriesHead .sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* ---------- cards ---------- */
+.grid {
+  display: grid;
+  gap: 48px 32px;
+  margin-top: 40px;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/*
+ * Borderless, like Research. The mock panelled every card in a bordered
+ * #0f0f11 box, which is what made a Writings grid read as a different
+ * component from a Research grid. The banner is the only frame.
+ */
+.card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  flex: 1;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
 }
+
+.cbody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 .crow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-family: var(--w-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.15em;
-  color: var(--w-faint);
+  gap: 10px;
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--color-faint);
 }
+
 .crow .tag {
-  color: var(--w-dim);
+  color: var(--color-faint);
 }
+
+/*
+ * Research reads "02 —— UNIT OF WORK": ordinal, hairline, then the tag. The
+ * markup here happens to emit the tag first, so the order is set in CSS
+ * rather than by rewriting the component. A card with no ordinal (partner
+ * news) has nothing to separate, so the rule is suppressed there.
+ */
+.crow > :last-child {
+  order: 1;
+}
+
+.crow::after {
+  content: "";
+  width: 16px;
+  height: 1px;
+  background: var(--color-hair);
+  order: 2;
+}
+
+.crow .tag {
+  order: 3;
+}
+
+.crow:not(:has(> * + *))::after {
+  display: none;
+}
+
 .sample {
-  font-family: var(--w-mono);
-  font-size: 8px;
-  letter-spacing: 0.12em;
-  color: #f5d9a8;
-  border: 1px solid rgba(245, 217, 168, 0.3);
-  border-radius: 2px;
   padding: 2px 8px;
-  text-transform: uppercase;
+  border: 1px solid var(--color-hair);
+  border-radius: 999px;
+  color: var(--color-dim);
+  font-size: 9px;
 }
+
 .card h3 {
-  font-size: 18.5px;
-  letter-spacing: -0.015em;
-  font-weight: 600;
+  margin-top: 12px !important;
+  font-size: 19px;
   line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--color-ink);
 }
-/* Partner headlines run longer, so they set a step smaller. */
+
 .card h3.cardTitleSm {
   font-size: 17.5px;
 }
+
 .desc {
-  font-size: 13.5px;
-  color: var(--w-dim);
-  line-height: 1.55;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  margin-top: 10px;
   overflow: hidden;
-  flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-dim);
 }
+
 .cfoot {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-family: var(--w-mono);
-  font-size: 9.5px;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
   letter-spacing: 0.14em;
-  color: var(--w-faint);
   text-transform: uppercase;
-  padding-top: 4px;
+  color: var(--color-faint);
 }
+
+/* The reading time and its arrow are one object, so they stay on one line. */
+.cfoot > :last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
 .cfoot .go {
   width: 26px;
   height: 26px;
-  margin-left: 8px;
+  font-size: 9px;
 }
 
+/* ---------- more ---------- */
 .moreRow {
-  text-align: center;
-  padding: 0 0 12px;
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
 }
 
-/* ---------- guides list ---------- */
-.rlist {
-  border-top: 1px solid var(--w-line);
-  margin-top: 18px;
+/*
+ * The one button on the page, in the site's ghost-pill shape: the same object
+ * as "The PDF version" on Research.
+ */
+.moreRow button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 1px solid var(--color-hair);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(244, 243, 240, 0.85);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 300ms ease,
+    border-color 300ms ease;
 }
+
+.moreRow button:hover {
+  border-color: rgba(244, 243, 240, 0.3);
+  color: var(--color-ink);
+}
+
+/* ---------- guide rows ---------- */
+.rlist {
+  margin-top: 40px;
+  border-bottom: 1px solid var(--color-hair);
+}
+
 .rrow {
   display: grid;
-  grid-template-columns: 64px 1fr 90px 110px 40px;
-  gap: 22px;
+  grid-template-columns: 48px minmax(0, 1fr) auto auto auto;
   align-items: center;
-  padding: 22px 6px;
-  border-bottom: 1px solid var(--w-line);
-  transition: 0.18s;
-  text-align: left;
+  gap: 20px;
+  padding: 22px 0;
+  border-top: 1px solid var(--color-hair);
   color: inherit;
-  font: inherit;
-  width: 100%;
+  text-decoration: none;
+  transition: background 300ms ease;
 }
+
 .rrow:hover {
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(244, 243, 240, 0.02);
 }
+
 .rrow .num {
-  font-family: var(--w-mono);
-  font-size: 12px;
-  color: var(--w-faint);
-}
-.rrow h3 {
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  display: inline;
-}
-.start {
-  font-family: var(--w-mono);
-  font-size: 8.5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
   letter-spacing: 0.14em;
-  color: #9be3d0;
-  border: 1px solid rgba(155, 227, 208, 0.35);
-  border-radius: 2px;
-  padding: 3px 9px;
-  margin-left: 12px;
-  vertical-align: 2px;
-  text-transform: uppercase;
+  color: var(--color-faint);
 }
+
+/* The chip is a sibling of the heading, not a child, so the heading has to
+   stop being a block for the two to share a line. */
+.rrow h3 {
+  display: inline;
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.start {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--color-hair);
+  border-radius: 999px;
+  color: var(--color-dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .rrow .desc {
-  font-size: 13.5px;
-  color: var(--w-dim);
-  margin-top: 5px;
-  max-width: 72ch;
   display: block;
+  margin-top: 6px;
+  max-width: 68ch;
+  font-size: 13.5px;
+  line-height: 1.6;
   -webkit-line-clamp: none;
 }
-.rmeta {
-  font-family: var(--w-mono);
+
+.rmeta,
+.rrow .rmeta {
+  font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--w-faint);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  text-align: right;
+  color: var(--color-faint);
+  white-space: nowrap;
 }
 
-/* The site footer sits on this page's darker ground, so it needs the rule
-   above it the mock's own sections use. */
-.footBase {
-  margin-top: 90px;
-  border-top: 1px solid var(--w-line);
-}
-
-@media (max-width: 960px) {
-  .featured {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
+@media (max-width: 899px) {
   .rrow {
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    row-gap: 6px;
   }
-  .rrow .rmeta {
+
+  .rrow .rmeta:nth-of-type(2) {
     display: none;
   }
-  .wrap {
-    padding: 0 20px;
-  }
 }
 
-@media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .thumb img,
-  .go,
-  .rrow,
-  .tab {
-    transition: none;
-  }
-  .card:hover {
-    transform: none;
-  }
-  .card:hover .thumb img {
-    transform: none;
-  }
-  .card:hover .go,
-  .featured:hover .go {
-    transform: none;
-  }
+/* ---------- footer base ---------- */
+.footBase {
+  margin-top: 96px;
 }

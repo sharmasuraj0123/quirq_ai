@@ -39,29 +39,23 @@ export const CATEGORIES: { key: Exclude<TabKey, "all">; label: string }[] = [
   { key: "thoughts", label: "Thoughts" },
 ];
 
-/** The lead post, rendered as the featured slot rather than in a grid. */
+/**
+ * The lead slot. It carries the paper, which is the one piece on this site
+ * that is both finished and load-bearing; the slot previously held an
+ * announcement with no article behind it and nowhere to go.
+ */
 export const FEATURED = {
-  kicker: "Latest",
-  title: "Defining Agentic Workforce Environments",
-  desc: "Intro to quirq. The workspace platform grows up into an environment company: new name, same record. Every claim we have published carries over.",
-  date: "Aug 1, 2026",
-  read: "2 min read",
-  img: "featured",
+  kicker: "The paper",
+  title: "AI Token Spend Needs Its Horsepower Moment",
+  desc: "The unit-of-work whitepaper, in short: the mint, the calculus, the ledger, and the environment that owns the ground truth. Readable in full, with every claim tiered against its evidence.",
+  date: "Jul 15, 2026",
+  read: "27 min read",
+  img: "horsepower",
+  href: "/whitepaper",
 };
 
-/** News, minus the featured item which the mock slices off the front. */
-export const NEWS: Card[] = [
-  {
-    num: "03",
-    title: "AI Token Spend Needs Its Horsepower Moment",
-    href: "/whitepaper",
-    desc: "The unit-of-work whitepaper, in short: the mint, the calculus, the ledger, and the environment that owns the ground truth.",
-    date: "Jul 15, 2026",
-    read: "1 min",
-    img: "horsepower",
-    sample: true,
-  },
-];
+/** Editorial news. The lead above is the current one; this is the rest. */
+export const NEWS: Card[] = [];
 
 /**
  * Partnership news, and the journeys behind it.
@@ -94,66 +88,79 @@ export type Partner = {
 export const PARTNERS: Partner[] = [
   {
     title: "Quirq Receives $350k Grant from Google for Startups",
+    href: "https://www.xo.builders/blog/xo-google",
     desc: "Google backs the environment layer: $350k in Google Cloud credits and support to scale quirq environments on GCP.",
     art: "partner-0",
   },
   {
     title: "Quirq Integrates One-Click Google Antigravity",
+    href: "https://www.xo.builders/blog/xo-google",
     desc: "Google's agent-first IDE, deployable inside a quirq environment in one click.",
     art: "partner-1",
   },
   {
     title: "Quirq Receives $200k Grant from Gaia",
+    href: "https://www.xo.builders/blog/xo-gaia",
     desc: "Gaia backs local intelligence on quirq: your-own-LLM launchpad templates for the fleet.",
     art: "partner-2",
   },
   {
     title: "Quirq Enters the NVIDIA Inception Program",
+    href: "https://www.xo.builders/blog/xo-nvidia",
     desc: "Serious compute behind agent workspaces.",
     art: "partner-3",
   },
   {
     title: "Quirq Integrates VS Code and Azure Compatibility",
+    href: "https://www.xo.builders/blog/xo-microsoft",
     desc: "Edit environments in VS Code and deploy them on Azure: the Microsoft stack, supported.",
     art: "partner-4",
   },
   {
     title: "Quirq Partners on the One-Click OKX Agent",
+    href: "https://www.xo.builders/blog/xo-okx",
     desc: "Runtime partner for the OKX Agent Marketplace One-Click Agent.",
     art: "partner-5",
   },
   {
     title: "Quirq Integrates One-Click OpenClaw",
+    href: "https://www.xo.builders/blog/xo-openclaw",
     desc: "The open-source agent framework, deployable inside quirq workspaces in one click.",
     art: "partner-6",
   },
   {
     title: "Quirq Integrates One-Click Hermes Agents",
+    href: "/products#managed",
     desc: "The harness quirq runs agent fleets on, now a one-click deploy.",
     art: "partner-7",
   },
   {
     title: "Quirq Integrates One-Click Nebius",
+    href: "https://www.xo.builders/blog/xo-nebius",
     desc: "Agent fleets on Nebius infrastructure: deployed declaratively, organized around quirqs, not tokens.",
     art: "partner-8",
   },
   {
     title: "Quirq Integrates MagicPath",
+    href: "https://www.xo.builders/blog/xo-magicpath",
     desc: "Two takes on one conviction: humans and agents share a workspace.",
     art: "partner-9",
   },
   {
     title: "Quirq Integrates Claude OAuth",
+    href: "https://www.xo.builders/blog/xo-anthropic",
     desc: "Sign in with Claude: bring your Anthropic subscription to any quirq environment.",
     art: "partner-10",
   },
   {
     title: "Quirq Integrates OpenAI, ChatGPT and Codex OAuth",
+    href: "/products#managed",
     desc: "Bring ChatGPT and Codex to quirq environments with OpenAI sign-in.",
     art: "partner-11",
   },
   {
     title: "Quirq Integrates One-Click OpenRouter",
+    href: "/products#managed",
     desc: "Route any model into a quirq environment through OpenRouter, in one click.",
     art: "partner-12",
   },
@@ -281,6 +288,24 @@ export const THOUGHTS: Card[] = [
     read: "4 min",
     img: "conductor",
   },
+  {
+    num: "09",
+    title: "The Advantage Was Never the Model",
+    slug: "the-advantage-was-never-the-model",
+    desc: "Harvey's edge is the room it puts a model in, not a better model. Routing alone cuts inference cost three to five times. On the Harvey harness.",
+    date: "Jul 18, 2026",
+    read: "4 min",
+    img: "featured",
+  },
+  {
+    num: "10",
+    title: "The Benchmark That Did Not Finish",
+    slug: "the-benchmark-that-did-not-finish",
+    desc: "Four of ten tasks ran before one of the models was suspended. The verdict never arrived; the method survived. On the coding-agent evaluation.",
+    date: "Jun 14, 2026",
+    read: "4 min",
+    img: "cubes",
+  },
 ];
 
 export const FUTURE_OF_WORK: Card[] = [
@@ -293,15 +318,7 @@ export const FUTURE_OF_WORK: Card[] = [
     read: "12 min",
     img: "orchard",
   },
-  {
-    num: "02",
-    title: "We Asked AI: What Claude and GPT Think About the Future of Work",
-    desc: "Perspectives we keep returning to: the house view, a view from Claude, and a view from GPT, on the same future of work.",
-    date: "Jun 11, 2026",
-    read: "3 min",
-    img: "cubes",
-  },
-];
+  ];
 
 /** The guides list: read in order, so it renders as rows rather than cards. */
 export const GUIDES: {
@@ -350,6 +367,7 @@ export const GUIDES: {
   {
     num: "05",
     title: "The environment is the key part",
+    href: "/whitepaper#why-the-budget",
     desc: "The environment owns the ground truth: it is the specification, the scorekeeper, and the only witness that matters.",
     read: "3 min",
     date: "Jul 22, 2026",
@@ -365,6 +383,7 @@ export const GUIDES: {
   {
     num: "07",
     title: "Practitioner playbook",
+    href: "/whitepaper#the-company-dashboard",
     desc: "How to write definitions of done, set budgets, and read the ledger schema: the operator's side of the unit.",
     read: "3 min",
     date: "Jul 22, 2026",
