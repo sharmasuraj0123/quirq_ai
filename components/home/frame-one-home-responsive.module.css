@@ -119,15 +119,27 @@
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
+/*
+ * Label + marquee share one column so the header never sits on top of the
+ * logos. Gap is the single source of vertical rhythm; media queries only
+ * retune sizes, never re-layer the two with absolute tops.
+ */
 .trustedBlock {
+  --trusted-label-gap: 18px;
   position: absolute;
   right: 0;
   bottom: 84.8675px;
   left: 0;
-  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--trusted-label-gap);
+  height: auto;
 }
 
 .trustedLabel {
+  margin: 0;
+  flex: none;
   text-align: center;
   color: rgba(255, 255, 255, 0.2);
   font-size: 14px;
@@ -137,33 +149,58 @@
 }
 
 /*
- * The logos are positioned at coordinates measured in a 1440-wide design, so
- * the box holding them has to BE 1440 wide and be centred, not stretched to
- * the viewport. Stretched, the row stays pinned to the left of a wider screen
- * while the centred "TRUSTED BY" label above it does not, and the two visibly
- * disagree: at 1920 the label sat at 960 and the logo row's centre at 724.
- *
- * Every breakpoint below 1440 already did this. This is the same centring for
- * 1440 and up, without their `scale`, which only exists to shrink the design
- * space onto a narrower screen.
+ * Full-width clipped window for the infinite scroll. Two identical logo-set
+ * passes sit on `.trustedLogosTrack` and translate left on a loop.
  */
 .trustedLogos {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 1440px;
-  max-width: none;
-  height: 100%;
-  translate: -50% 0;
+  --trusted-gap: 72px;
+  position: relative;
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  flex: none;
+}
+
+.trustedLogosTrack {
+  display: flex;
+  align-items: center;
+  gap: var(--trusted-gap);
+  width: max-content;
+  will-change: transform;
+  animation: trusted-loop var(--trusted-duration, 34s) linear infinite;
+}
+
+.trustedLogoSet {
+  display: flex;
+  align-items: center;
+  gap: var(--trusted-gap);
+  flex: none;
+}
+
+/*
+ * One pass plus the inter-pass gap is the repeat period. Shifting by exactly
+ * that distance snaps the second pass into the first pass's place, so the two
+ * are indistinguishable mid-loop.
+ */
+@keyframes trusted-loop {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - var(--trusted-gap) / 2));
+  }
 }
 
 .trustedLogo {
-  position: absolute;
   display: block;
+  object-fit: contain;
+  flex: none;
 }
 
-.trustedLogo img {
-  object-fit: contain;
+@media (prefers-reduced-motion: reduce) {
+  .trustedLogosTrack {
+    animation: none;
+  }
 }
 
 .definition {
@@ -247,6 +284,16 @@
   height: 100%;
   max-width: none;
   object-fit: contain;
+  animation: workflow-visual-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes workflow-visual-in {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .workflowCopy {
@@ -272,6 +319,7 @@
 
 .workflowStep {
   min-height: 78.688px;
+  transition: min-height 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .workflowStep[open] {
@@ -286,6 +334,10 @@
   letter-spacing: 0.1em;
 }
 
+.workflowNumber {
+  transition: color 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .workflowSummary {
   display: grid;
   min-height: 78.688px;
@@ -295,7 +347,10 @@
   padding-top: 10.758px;
   list-style: none;
   cursor: pointer;
-  transition: opacity 180ms ease, background-color 180ms ease;
+  transition:
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 280ms ease,
+    min-height 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .workflowSummary::-webkit-details-marker,
@@ -327,6 +382,12 @@
 
 .workflowPanel {
   padding-left: clamp(62px, 5.98vw, 86px);
+  opacity: 0;
+  transition: opacity 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workflowStep[open] .workflowPanel {
+  opacity: 1;
 }
 
 .workflowPanel p {
@@ -447,15 +508,36 @@
   background: transparent;
 }
 
+/* The dynamic SVG supplies only the animated capacity field. Preserve the
+   original exported card's dark glass ground behind it. */
+.dynamicCard {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  background:
+    radial-gradient(68% 90% at 76% 102%, rgba(255, 255, 255, 0.11), transparent 68%),
+    linear-gradient(180deg, rgba(47, 47, 47, 0.8), rgba(26, 26, 26, 0.8));
+  -webkit-backdrop-filter: blur(5.4px);
+  backdrop-filter: blur(5.4px);
+}
+
 .cardArt {
   z-index: 0;
   object-fit: fill;
 }
 
-.dynamicCard .cardArt {
-  width: calc(100% + var(--column-gap)) !important;
-  height: 100% !important;
-  max-width: none !important;
+.dynamicVisual {
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  width: min(72%, 544px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  object-position: right bottom;
+  pointer-events: none;
+  user-select: none;
 }
 
 .costCard .cardArt {
@@ -497,72 +579,48 @@
   position: absolute;
   top: 36.825%;
   left: 50%;
+  display: block;
   width: 71.76%;
   height: auto;
+  border: 0;
   translate: -50% 0;
-  mix-blend-mode: screen;
+  background: transparent;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
 }
 
 .contextVisual {
   position: absolute;
   top: 31.46%;
   left: 50%;
-  width: 65.52%;
-  height: 59.75%;
-  translate: -50% 0;
-}
-
-.contextVisual span {
-  position: absolute;
   display: block;
-  width: 59.9%;
-  height: 16.66%;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.19);
-}
-
-.contextVisual span:nth-child(1) {
-  top: 0;
-  right: 0;
-}
-
-.contextVisual span:nth-child(2) {
-  top: 18.66%;
-  left: 0;
-  background: rgba(255, 255, 255, 0.86);
-}
-
-.contextVisual span:nth-child(3) {
-  top: 37.33%;
-  right: 0;
-}
-
-.contextVisual span:nth-child(4) {
-  top: 56%;
-  left: 0;
-  background: rgba(255, 255, 255, 0.86);
-}
-
-.contextVisual span:nth-child(5) {
-  top: 74.66%;
-  right: 0;
+  width: 65.52%;
+  height: auto;
+  aspect-ratio: 231 / 278;
+  border: 0;
+  translate: -50% 0;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
 }
 
 .runtimeVisual {
   position: absolute;
   top: 30.72%;
   left: 50%;
+  display: block;
   width: 73.32%;
+  height: auto;
   aspect-ratio: 282 / 311;
+  border: 0;
   translate: -50% 0;
-}
-
-.runtimeVisual > img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  mix-blend-mode: screen;
+  object-fit: contain;
+  background: transparent;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
 }
 
 .runtimeChips {
@@ -591,9 +649,37 @@
   position: absolute;
   top: 33.6%;
   left: 50%;
+  display: block;
   width: 74.1%;
   height: auto;
+  aspect-ratio: 1;
+  border: 0;
   translate: -50% 0;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+/*
+ * The SVGs remain transparent assets. Their motion is intentionally quiet:
+ * each diagram gets one recognisable cadence rather than competing with the
+ * spectrum behind the feature grid.
+ */
+.runtimeMotion {
+  transform-origin: 50% 70%;
+  animation: runtime-drift 6.4s ease-in-out infinite;
+}
+
+@keyframes runtime-drift {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.82; }
+  50% { transform: translateY(-5px) scale(1.018); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runtimeMotion {
+    animation: none;
+  }
 }
 
 .efficiencyPanel {
@@ -711,6 +797,8 @@
   min-height: var(--layer-row-height);
   flex: 0 0 var(--layer-row-height);
   overflow: hidden;
+  /* Gradual expand/collapse only — layout is otherwise unchanged. */
+  transition: flex 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .layerItem[open] {
@@ -731,6 +819,7 @@
   width: var(--layer-rail-width);
   border-radius: 2px;
   background: var(--layer-rail);
+  transition: background 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .layerItem::after {
@@ -745,6 +834,7 @@
   opacity: 0;
   -webkit-backdrop-filter: blur(5.4px);
   backdrop-filter: blur(5.4px);
+  transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .layerItem[open]::after {
@@ -766,6 +856,7 @@
   font-weight: 600;
   list-style: none;
   cursor: pointer;
+  transition: color 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .layerItem:not([open]) .layerSummary:hover {
@@ -778,6 +869,12 @@
   z-index: 2;
   margin-left: calc(var(--layer-rail-width) + var(--layer-gap));
   padding: 28px 23px 14px 22.125px;
+  opacity: 0;
+  transition: opacity 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.layerItem[open] .layerPanel {
+  opacity: 1;
 }
 
 .layerPanel h3 {
@@ -801,6 +898,24 @@
   height: auto;
   grid-column: 2;
   border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workflowStep,
+  .workflowSummary,
+  .workflowNumber,
+  .workflowPanel,
+  .layerItem,
+  .layerItem::before,
+  .layerItem::after,
+  .layerSummary,
+  .layerPanel {
+    transition: none !important;
+  }
+
+  .workflowVisual {
+    animation: none !important;
+  }
 }
 
 .layersCta {
@@ -896,26 +1011,68 @@
   letter-spacing: 0.1em;
 }
 
-.installCard code {
+.installCommand {
   position: absolute;
   top: 133.295px;
   left: 27.626px;
-  display: grid;
-  width: 409.776px;
-  height: 53.006px;
+  right: 14px;
+  display: flex;
   align-items: center;
-  justify-content: start;
+  gap: 6px;
+  height: 53.006px;
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 999px;
   background: #171717;
+  padding-left: 21.388px;
+  padding-right: 6px;
+}
+
+.installCommand code {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
   color: #fff;
   font-family: var(--font-fira, var(--font-jetbrains)), ui-monospace, monospace;
   font-size: 19px;
   line-height: 1.45;
   font-weight: 700;
   letter-spacing: 0;
-  padding-left: 21.388px;
   white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.installCopyBtn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 62px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-family: var(--font-fira, var(--font-jetbrains)), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.installCopyBtn:hover {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.installCopyBtnDone {
+  color: #6ee7b7;
+  border-color: rgba(110, 231, 183, 0.55);
 }
 
 .installLaunchers {
@@ -940,7 +1097,7 @@
   margin-top: 14.445px;
 }
 
-.installLaunchers span {
+.installLauncher {
   display: grid;
   width: 61.747px;
   height: 61.747px;
@@ -949,22 +1106,26 @@
   overflow: hidden;
   border: 1px solid rgba(217, 217, 217, 0.5);
   border-radius: 7.538px;
+  color: rgba(255, 255, 255, 0.72);
+  background: transparent;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.installLaunchers span img {
+.installLauncher:hover,
+.installLauncher:focus-visible {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  outline: none;
+}
+
+.installLauncherIcon {
   display: block;
-  width: 62%;
-  height: 62%;
-  object-fit: contain;
-}
-
-.installLaunchers span:last-child {
-  border-color: transparent;
-}
-
-.installLaunchers span:last-child img {
-  width: 100%;
-  height: 100%;
+  width: 52%;
+  height: 52%;
 }
 
 @media (min-width: 1440px) {
@@ -1015,14 +1176,17 @@
     aspect-ratio: auto;
   }
 
-  .dynamicCard .cardArt {
-    width: 834.3298px !important;
+  .dynamicVisual {
+    right: 0;
+    bottom: 0;
+    width: 544px;
   }
 
   .contextVisual {
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: 157.9px;
+    left: 76.4px;
+    width: 231px;
+    height: 278px;
     translate: none;
   }
 
@@ -1118,15 +1282,8 @@
   }
 
   .trustedLogos {
-    position: absolute;
-    top: 18px;
-    left: 50%;
-    width: 1440px;
-    max-width: none;
-    margin: 0;
-    transform-origin: center top;
-    translate: -50% 0;
-    scale: calc((100vw - 32px) / 1440px);
+    --trusted-gap: 56px;
+    height: 44px;
   }
 
   .definition {
@@ -1239,10 +1396,6 @@
     grid-column: span 2;
   }
 
-  .dynamicCard .cardArt {
-    width: 100% !important;
-  }
-
   .layersContent {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
     column-gap: 16px;
@@ -1326,31 +1479,20 @@
   }
 
   .trustedBlock {
+    --trusted-label-gap: 16px;
     right: 20px;
     bottom: 35px;
     left: 20px;
-    height: 155px;
   }
 
   .trustedLogos {
-    position: static;
-    display: grid;
-    width: 100%;
-    min-width: 0;
-    height: auto;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px 18px;
-    margin-top: 18px;
-    translate: none;
-    scale: none;
+    --trusted-gap: 40px;
+    height: 40px;
   }
 
   .trustedLogo {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    width: 100% !important;
-    height: 27px !important;
+    height: 24px !important;
+    width: auto !important;
   }
 
   .definition {
@@ -1541,8 +1683,8 @@
   }
 
   .trustedBlock {
+    --trusted-label-gap: clamp(12px, 1.25vw, 18px);
     bottom: 5.903vw;
-    height: 6.25vw;
   }
 
   .trustedLabel {
@@ -1551,16 +1693,8 @@
   }
 
   .trustedLogos {
-    position: absolute;
-    top: 1.25vw;
-    left: 50%;
-    width: 1440px;
-    max-width: none;
-    height: 3.333vw;
-    margin: 0;
-    transform-origin: center top;
-    translate: -50% 0;
-    scale: calc((100vw - 32px) / 1440px);
+    --trusted-gap: clamp(40px, 5vw, 72px);
+    height: clamp(36px, 3.333vw, 48px);
   }
 
   .definition {
@@ -1807,12 +1941,20 @@
     font-size: 1.25vw;
   }
 
-  .installCard code {
+  .installCommand {
     top: 9.323vw;
     left: 1.988vw;
-    width: 28.456vw;
+    right: 1.2vw;
     height: 3.681vw;
     font-size: 1.319vw;
+    padding-right: 0.3vw;
+  }
+
+  .installCopyBtn {
+    height: 2.4vw;
+    min-width: 4.5vw;
+    padding: 0 0.8vw;
+    font-size: 0.68vw;
   }
 
   .installLaunchers {
@@ -1831,7 +1973,7 @@
     margin-top: 1.003vw;
   }
 
-  .installLaunchers span {
+  .installLauncher {
     width: 4.288vw;
     height: 4.288vw;
     border-radius: 0.524vw;
@@ -1876,8 +2018,8 @@
   }
 
   .trustedBlock {
+    --trusted-label-gap: 12px;
     bottom: 50px;
-    height: 62px;
   }
 
   .trustedLabel {
@@ -1886,7 +2028,7 @@
   }
 
   .trustedLogos {
-    top: 26px;
+    height: 36px;
   }
 
   .definitionCopy h2,
@@ -1984,7 +2126,7 @@
     font-size: 12px;
   }
 
-  .installCard code {
+  .installCommand {
     font-size: 11px;
   }
 
@@ -2029,8 +2171,8 @@
   }
 
   .trustedBlock {
+    --trusted-label-gap: 14px;
     bottom: 24px;
-    height: 142px;
   }
 
   .definition {
@@ -2118,16 +2260,22 @@
     font-size: 13px;
   }
 
-  .installCard code {
+  .installCommand {
     top: 104px;
     right: 24px;
     left: 24px;
     width: auto;
     height: 48px;
-    overflow-x: auto;
-    justify-content: start;
+    justify-content: flex-start;
     padding-inline: 16px;
     font-size: 12px;
+  }
+
+  .installCopyBtn {
+    height: 32px;
+    min-width: 58px;
+    padding: 0 12px;
+    font-size: 9.5px;
   }
 
   .installLaunchers {
@@ -2147,7 +2295,7 @@
     margin-top: 10px;
   }
 
-  .installLaunchers span {
+  .installLauncher {
     width: 48px;
     height: 48px;
     border-radius: 6px;
@@ -2187,7 +2335,8 @@
   }
 
   .trustedLogos {
-    scale: min(0.9, calc(91vw / 1440px));
+    --trusted-gap: clamp(48px, 5vw, 64px);
+    height: clamp(40px, 3.2vw, 48px);
   }
 
   .definitionCopy h2,
@@ -2314,9 +2463,14 @@
     font-size: clamp(12px, 0.9vw, 13px);
   }
 
-  .installCard code {
+  .installCommand {
     height: clamp(40px, 3vw, 44px);
     font-size: clamp(12px, 0.95vw, 14px);
+  }
+
+  .installCopyBtn {
+    height: clamp(28px, 2vw, 32px);
+    font-size: clamp(9px, 0.62vw, 10.5px);
   }
 
   .installLaunchers > div {
@@ -2324,7 +2478,7 @@
     margin-top: clamp(9px, 0.75vw, 11px);
   }
 
-  .installLaunchers span {
+  .installLauncher {
     width: clamp(42px, 3.45vw, 50px);
     height: clamp(42px, 3.45vw, 50px);
   }

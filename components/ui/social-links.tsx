@@ -4,7 +4,7 @@ export const SOCIAL_LINKS = [
   { label: "X", href: "https://x.com/quirq_ai" },
   { label: "LinkedIn", href: "https://www.linkedin.com/company/quirqai" },
   { label: "GitHub", href: "https://github.com/quirq-ai" },
-  { label: "Instagram", href: "https://github.com/quirq-ai" },
+  { label: "Instagram", href: "https://instagram.com/quirq_ai" },
 ] as const;
 
 type SocialIconProps = {

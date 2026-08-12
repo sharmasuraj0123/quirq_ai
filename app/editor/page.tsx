@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { StagePage } from "@/components/stage-page";
+import { SiteFooter } from "@/components/ui/footer";
 import { Editor } from "./editor";
 
 export const metadata: Metadata = {
@@ -18,6 +19,9 @@ export default function Page() {
   return (
     <StagePage>
       <Editor />
+      <div className="relative">
+        <SiteFooter />
+      </div>
     </StagePage>
   );
 }

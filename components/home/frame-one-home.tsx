@@ -2,13 +2,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/components/ui/footer";
 import { QuirqLogo } from "@/components/ui/quirq-logo";
+import { INSTALL_LAUNCH_TARGETS } from "@/components/ui/agent-launch";
+import {
+  ClaudeCodeIcon,
+  CodexIcon,
+  CursorIcon,
+  OpenCodeIcon,
+} from "@/components/ui/brand-icons";
 import {
   LayersSelector,
   WorkflowSelector,
 } from "./frame-one-home-interactions";
+import { CopyCommand } from "./copy-command";
+import { FeatureSvg } from "./feature-svg";
 import styles from "./frame-one-home-responsive.module.css";
 
 const ASSET_ROOT = "/assets/home-v9";
+
+const LAUNCH_ICONS = {
+  "claude-code": ClaudeCodeIcon,
+  codex: CodexIcon,
+  cursor: CursorIcon,
+  opencode: OpenCodeIcon,
+} as const;
 
 const ECOSYSTEM_LOGOS = [
   {
@@ -80,44 +96,26 @@ const ECOSYSTEM_LOGOS = [
   },
 ] as const;
 
-const LAUNCHER_ICONS = [
-  { name: "Claude", src: "launcher-claude.svg", width: 37, height: 37 },
-  { name: "OpenAI", src: "launcher-openai.svg", width: 39, height: 40 },
-  { name: "Cursor", src: "launcher-cursor.svg", width: 33, height: 38 },
-  { name: "DeepSeek", src: "launcher-deepseek.svg", width: 62, height: 62 },
-] as const;
-
-/**
- * The home page's own footer, which is a different list from the shared one.
- *
- * Four of these pointed at stand-ins from before the pages they name existed:
- * Products went to the dashboard, Writing to research, Documentation to the
- * explainer, and Machine Speed to the engine walkthrough. They now go where
- * their labels say.
- *
- * Privacy Policy and Terms still have no page behind them and currently 404.
- * Left as authored rather than quietly deleted, because the answer is to write
- * those two pages, not to drop the links.
- */
-const FOOTER_COLUMNS = [
-  [
-    { label: "PRODUCTS", href: "/products" },
-    { label: "WRITING", href: "/writing" },
-    { label: "RESEARCH", href: "/research" },
-  ],
-  [
-    { label: "GET STARTED", href: "/products" },
-    { label: "DOCUMENTATION", href: "/docs" },
-    { label: "WHITE PAPER", href: "/whitepaper" },
-  ],
-  [
-    { label: "MACHINE SPEED", href: "/machinespeed" },
-    { label: "PRIVACY POLICY", href: "/privacy" },
-    { label: "TERMS & CONDITIONS", href: "/terms" },
-  ],
-] as const;
-
-const FOOTER_LINKS = FOOTER_COLUMNS.flat();
+/** One pass of the "trusted by" marquee. Rendered twice for a seamless loop. */
+function LogoSet({ ariaHidden = false }: { ariaHidden?: boolean }) {
+  return (
+    <div className={styles.trustedLogoSet} aria-hidden={ariaHidden || undefined}>
+      {ECOSYSTEM_LOGOS.map((logo) => (
+        <Image
+          key={logo.name}
+          src={`${ASSET_ROOT}/${logo.src}`}
+          width={logo.width}
+          height={logo.height}
+          alt={logo.name}
+          title={logo.name}
+          style={{ opacity: "opacity" in logo ? logo.opacity : 1 }}
+          className={styles.trustedLogo}
+          unoptimized={logo.src.endsWith(".svg")}
+        />
+      ))}
+    </div>
+  );
+}
 
 function ExactImage({
   src,
@@ -191,27 +189,10 @@ function Hero() {
       <div className={styles.trustedBlock}>
         <p className={styles.trustedLabel}>TRUSTED BY</p>
         <div className={styles.trustedLogos}>
-          {ECOSYSTEM_LOGOS.map((logo) => (
-            <span
-              key={logo.name}
-              className={styles.trustedLogo}
-              style={{
-                left: logo.x,
-                top: logo.y,
-                width: logo.width,
-                height: logo.height,
-                opacity: 0.5,
-              }}
-            >
-              <Image
-                src={`${ASSET_ROOT}/${logo.src}`}
-                alt={logo.name}
-                fill
-                sizes={`${logo.width}px`}
-                unoptimized={logo.src.endsWith(".svg")}
-              />
-            </span>
-          ))}
+          <div className={styles.trustedLogosTrack}>
+            <LogoSet />
+            <LogoSet ariaHidden />
+          </div>
         </div>
       </div>
     </section>
@@ -265,13 +246,13 @@ function Features() {
 
       <div className={styles.featureGrid}>
         <article className={`${styles.featureCard} ${styles.dynamicCard} ${styles.exportedCard}`}>
-          <Image
-            src={`${ASSET_ROOT}/dynamic-card-art.png`}
-            alt=""
-            fill
-            sizes="(max-width: 699px) calc(100vw - 32px), 58vw"
-            className={styles.cardArt}
-            unoptimized
+          <FeatureSvg
+            src="/assets/dynamic-scaling.svg"
+            alt="A static queue surrounded by expanding capacity fields."
+            width={544}
+            height={357}
+            className={styles.dynamicVisual}
+            decorative
           />
           <div className={styles.cardCopy}>
             <h3>Dynamic Scaling</h3>
@@ -287,8 +268,8 @@ function Features() {
             <h3>Production-ready</h3>
             <p>Deploy direct to AWS, GCP, Azure or any Terraform compatible stack.</p>
           </div>
-          <ExactImage
-            src="production-timeline.png"
+          <FeatureSvg
+            src="/assets/production-ready.svg"
             alt="Deployment timeline from merge through heartbeat."
             width={276}
             height={252}
@@ -301,13 +282,14 @@ function Features() {
             <h3>Context Optimization</h3>
             <p>Our engine interprets your goals and draws from your data.</p>
           </div>
-          <div className={styles.contextVisual} aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
+          <FeatureSvg
+            src="/assets/context-optimization.svg"
+            alt="Staggered context bars"
+            width={231}
+            height={278}
+            className={styles.contextVisual}
+            decorative
+          />
         </article>
 
         <article className={`${styles.featureCard} ${styles.costCard} ${styles.exportedCard}`}>
@@ -333,13 +315,12 @@ function Features() {
             <h3>Universal Runtime</h3>
             <p>Use any model, harness or framework within your environment.</p>
           </div>
-          <ExactImage
-            src="runtime-visual-figma.png"
+          <FeatureSvg
+            src="/assets/universal-runtime.svg"
             alt="Runtime capabilities spanning memory, context, skills, artifacts, documents, Git, integrations, and MCP."
             width={282}
             height={311}
-            className={styles.runtimeVisual}
-            unoptimized
+            className={`${styles.runtimeVisual} ${styles.runtimeMotion}`}
           />
         </article>
 
@@ -348,13 +329,13 @@ function Features() {
             <h3>Security Compliances</h3>
             <p>Our software can be deployed under your existing compliance standards.</p>
           </div>
-          <ExactImage
-            src="security-visual-figma.svg"
-            alt=""
+          <FeatureSvg
+            src="/assets/security-compliance.svg"
+            alt="Security compliance shield"
             width={285}
             height={285}
             className={styles.securityVisual}
-            unoptimized
+            decorative
           />
         </article>
 
@@ -413,34 +394,43 @@ function Install() {
       <div className={styles.installCard}>
         <h2>Get Started</h2>
         <p className={styles.shellLabel}>RUN IN YOUR SHELL</p>
-        <code>curl -fsSL quirq.ai/install | sh</code>
+        <div className={styles.installCommand}>
+          <code>curl -fsSL quirq.ai/install | sh</code>
+          <CopyCommand />
+        </div>
         <div className={styles.installLaunchers}>
           <p>OR LAUNCH FROM</p>
-          <div role="list" aria-label="Supported runtimes">
-            {LAUNCHER_ICONS.map((icon) => (
-              <span key={icon.name} title={icon.name} role="listitem">
-                <ExactImage
-                  src={icon.src}
-                  alt={icon.name}
-                  width={icon.width}
-                  height={icon.height}
-                />
-              </span>
-            ))}
+          <div role="list" aria-label="Launch install prompt in an agent">
+            {INSTALL_LAUNCH_TARGETS.map((target) => {
+              const Icon = LAUNCH_ICONS[target.id];
+              return (
+                <a
+                  key={target.id}
+                  href={target.href}
+                  role="listitem"
+                  target={target.needsApp ? undefined : "_blank"}
+                  rel={
+                    target.needsApp ? undefined : "noopener noreferrer"
+                  }
+                  title={`${target.name}${target.needsApp ? ` · ${target.note}` : ""}`}
+                  aria-label={
+                    target.needsApp
+                      ? `Open install prompt in ${target.name} (${target.note})`
+                      : `Open install prompt in ${target.name}`
+                  }
+                  className={styles.installLauncher}
+                >
+                  <Icon className={styles.installLauncherIcon} />
+                  {!target.needsApp ? (
+                    <span className="sr-only">(opens in a new tab)</span>
+                  ) : null}
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Footer() {
-  return (
-    <SiteFooter
-      links={FOOTER_LINKS}
-      brandSuffix={null}
-      note="COPYRIGHT 2026 • QUIRQ LLC"
-    />
   );
 }
 
@@ -454,8 +444,9 @@ export function FrameOneHome() {
         <Layers />
         <Install />
       </div>
+      {/* Same SiteFooter as /products and every other public route. */}
       <div className="flow-root bg-black">
-        <Footer />
+        <SiteFooter />
       </div>
     </main>
   );

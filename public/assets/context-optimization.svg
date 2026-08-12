@@ -1,0 +1,28 @@
+<svg width="231" height="278" viewBox="0 0 231 278" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Context optimization bars">
+<style>
+  .bar { transform-box: fill-box; transform-origin: center; animation: bar-float 3.6s ease-in-out infinite; }
+  .bar:nth-child(1) { animation-delay: 0s; }
+  .bar:nth-child(2) { animation-delay: 0.35s; }
+  .bar:nth-child(3) { animation-delay: 0.7s; }
+  .bar:nth-child(4) { animation-delay: 1.05s; }
+  .bar:nth-child(5) { animation-delay: 1.4s; }
+  .bar-dim { opacity: 0.2; }
+  .bar-hot { opacity: 1; animation-name: bar-hot; }
+  @keyframes bar-float {
+    0%, 100% { transform: translateX(0); opacity: var(--o, 0.2); }
+    50% { transform: translateX(10px); opacity: calc(var(--o, 0.2) + 0.18); }
+  }
+  @keyframes bar-hot {
+    0%, 100% { transform: translateX(0); opacity: 0.86; filter: brightness(1); }
+    50% { transform: translateX(-12px); opacity: 1; filter: brightness(1.25); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar { animation: none !important; }
+  }
+</style>
+<rect class="bar bar-dim" style="--o:0.2" x="73.7375" width="157.249" height="50.4843" rx="20" fill="#D9D9D9"/>
+<rect class="bar bar-hot" y="56.6702" width="157.249" height="50.4843" rx="20" fill="#D9D9D9"/>
+<rect class="bar bar-dim" style="--o:0.2" x="73.7375" y="113.341" width="157.249" height="50.4843" rx="20" fill="#D9D9D9"/>
+<rect class="bar bar-hot" y="170.011" width="157.249" height="50.4843" rx="20" fill="#D9D9D9"/>
+<rect class="bar bar-dim" style="--o:0.2" x="73.7375" y="226.681" width="157.249" height="50.4843" rx="20" fill="#D9D9D9"/>
+</svg>

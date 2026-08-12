@@ -302,5 +302,5 @@ export const PLANS: Plan[] = [
 export const CONTACT = [
   { label: "hello@quirq.ai", href: "mailto:hello@quirq.ai" },
   { label: "github.com/quirq-ai", href: "https://github.com/quirq-ai" },
-  { label: "Documentation", href: "/docs" },
+  { label: "Documentation", href: "https://docs.quirq.ai" },
 ];

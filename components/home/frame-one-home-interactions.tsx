@@ -111,6 +111,7 @@ export function WorkflowSelector() {
         aria-atomic="true"
       >
         <Image
+          key={activeVisual.src}
           src={activeVisual.src}
           alt={activeVisual.alt}
           width={activeVisual.width}

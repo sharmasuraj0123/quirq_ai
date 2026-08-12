@@ -17,8 +17,8 @@ import {
 } from "./data";
 import styles from "./writing.module.css";
 
-/** The documentation index, which carries the changelog pointer. */
-const DOCS_URL = "/docs";
+/** The public documentation site, which carries the changelog pointer. */
+const DOCS_URL = "https://docs.quirq.ai";
 
 /**
  * The Writings page, ported from the renderWritings() function in
@@ -251,13 +251,16 @@ export function WritingView() {
             ))}
           </div>
 
-          <Link
+          <a
             href={DOCS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`${styles.tab} ${styles.tabMuted}`}
             title="Release notes and the rest of the documentation"
           >
             Changelog → Docs
-          </Link>
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
       </header>
 

@@ -74,6 +74,25 @@ export function CursorIcon(props: IconProps) {
   );
 }
 
+/**
+ * OpenCode. Source: anomalyco/opencode brand square
+ * (packages/console/app/src/asset/brand/opencode-logo-*-square.svg).
+ *
+ * Even-odd frame of the official mark on the 300 square artboard they ship,
+ * flattened to one colour so it can sit beside the other monochrome glyphs.
+ */
+export function OpenCodeIcon(props: IconProps) {
+  return (
+    <Glyph viewBox="0 0 300 300" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M210 60H90V240H210V60ZM270 300H30V0H270V300Z"
+      />
+    </Glyph>
+  );
+}
+
 /** Apple hardware, representing agents running on local Mac minis. */
 export function AppleIcon(props: IconProps) {
   return (

@@ -19,7 +19,7 @@ type FooterLink = {
  */
 const LINKS: readonly FooterLink[] = [
   { href: "/demo", label: "Demo", newTab: false },
-  { href: "/docs", label: "Docs", newTab: false },
+  { href: "https://docs.quirq.ai", label: "Docs", newTab: true },
   { href: "/whitepaper", label: "Whitepaper", newTab: false },
   { href: "/llm.txt", label: "llm.txt", newTab: true },
   { href: "https://xo.builders", label: "xo.builders", newTab: true },
@@ -68,6 +68,9 @@ export function SiteFooter({
               href={link.href}
               target={link.newTab ? "_blank" : undefined}
               rel={link.newTab ? "noopener noreferrer" : undefined}
+              aria-label={
+                link.newTab ? `${link.label} (opens in a new tab)` : undefined
+              }
               className="label px-2 py-2 -mx-2 -my-2 transition-colors hover:text-ink"
             >
               {link.label}
