@@ -10,8 +10,17 @@
  * The one-liner is advertised with `| sh`, so this script stays POSIX. The
  * installer needs Bash — it uses BASH_SOURCE and `set -o pipefail` — so it is
  * handed to `bash` explicitly rather than inherited into `sh`.
+ *
+ * The route is dynamic so the handler runs on every request: each fetch of the
+ * install one-liner is counted in PostHog. Counting is fail-open — a missing
+ * key, a network error, or a slow PostHog never delays or breaks the install,
+ * because serving the script is the job and the metric is not. `no-store` stops
+ * any cache from answering a fetch without the handler running, which would
+ * silently undercount.
  */
-export const dynamic = "force-static";
+import { PostHog } from "posthog-node";
+
+export const dynamic = "force-dynamic";
 
 export const INSTALL_SCRIPT =
   [
@@ -66,12 +75,60 @@ export const INSTALL_SCRIPT =
     'bash "$TMP"',
   ].join("\n") + "\n";
 
-export function GET() {
+// One client per warm runtime. `captureImmediate` sends the event synchronously,
+// so there is no background flush timer to miss and no `shutdown()` to call
+// between requests — the singleton is reused across warm invocations.
+let posthog: PostHog | null = null;
+
+function client(): PostHog | null {
+  const key = process.env.POSTHOG_KEY;
+  if (!key) return null;
+  if (!posthog) {
+    posthog = new PostHog(key, {
+      host: process.env.POSTHOG_HOST ?? "https://us.i.posthog.com",
+    });
+  }
+  return posthog;
+}
+
+async function countInstall(userAgent: string | null): Promise<void> {
+  const ph = client();
+  if (!ph) return;
+  try {
+    await ph.captureImmediate({
+      distinctId: "installer",
+      event: "install_script_fetched",
+      properties: {
+        // The tool that fetched it — `curl/*` for a real `| sh` run, a browser
+        // UA for someone reading it, a crawler UA for a bot. Filter on this in
+        // PostHog to separate installs from reads.
+        user_agent: userAgent ?? "unknown",
+        // An anonymous count: no per-event person profile, and no geolocation
+        // from the (meaningless) server IP.
+        $process_person_profile: false,
+      },
+      disableGeoip: true,
+    });
+  } catch {
+    // Fail open: analytics must never break the installer.
+  }
+}
+
+export async function GET(request: Request) {
+  // Bounded so a slow or hung PostHog cannot stall the install. The script is
+  // served either way; a dropped count is preferable to a delayed install.
+  await Promise.race([
+    countInstall(request.headers.get("user-agent")),
+    new Promise<void>((resolve) => setTimeout(resolve, 1500)),
+  ]);
+
   return new Response(INSTALL_SCRIPT, {
     headers: {
       "Content-Type": "text/x-shellscript; charset=utf-8",
       "Content-Disposition": 'inline; filename="quirq-install.sh"',
-      "Cache-Control": "public, max-age=300, must-revalidate",
+      // Every fetch must reach this handler to be counted; a cached copy would
+      // be served without running it.
+      "Cache-Control": "no-store",
       "X-Content-Type-Options": "nosniff",
     },
   });
