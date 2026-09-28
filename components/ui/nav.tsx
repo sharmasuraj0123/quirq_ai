@@ -134,6 +134,11 @@ export function Nav() {
     };
   }, [open]);
 
+  // MachineSpeed is a sub-brand with its own header and footer, so the site
+  // nav stays out of its way. (After the hooks: the root layout keeps this
+  // component mounted across routes.)
+  if (pathname.startsWith("/machinespeed")) return null;
+
   return (
     <>
       <header className={styles.shell} data-site-nav>

@@ -2,7 +2,7 @@
   "schema": 1,
   "pid": "d59a4366-3834-4f6a-b057-b479f1ddb2ca",
   "name": "web",
-  "owner_user_id": "local",
+  "owner_user_id": "yash",
   "created_at": "2026-07-24T23:05:09Z",
   "classification": {
     "computed_at": "2026-07-24T23:45:35Z",
@@ -62,5 +62,11 @@
         "start"
       ]
     }
-  }
+  },
+  "git": {
+    "remote_url": "https://github.com/sharmasuraj0123/quirq_ai",
+    "default_branch": "main"
+  },
+  "display_name": "quirq-landing-page",
+  "description": ""
 }

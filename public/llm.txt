@@ -31,14 +31,19 @@ at /whitepaper carries the full construction in prose.
   integrations, the research findings argued rather than reported, and the unit
   of work explained in reading order.
 
-- [Enterprise](https://quirq.ai/machinespeed): Machine speed. Agentic workflows
-  built and run on the stack you already own, with every workflow reporting the
-  money it made or saved. The forward-deployed engagement behind a licensed
-  deployment.
+- [Enterprise](https://quirq.ai/machinespeed): MachineSpeed, the
+  forward-deployed engineering service built on quirq. A 45-minute call ends
+  with a live agent in production within 24 hours, working in the apps a team
+  already uses (Gmail, Slack, HubSpot, Salesforce, Jira and others) on any
+  model, under scoped access, approval gates and a record of every run. Agents
+  start on quirq's Secure Cloud and port to the customer's own cloud or on-prem
+  in one click when they are ready.
 
 ## Notes for agents
 
 - The whitepaper is readable in full at https://quirq.ai/whitepaper, and the
   typeset PDF at https://quirq.ai/whitepaper/pdf is the version of record.
 - The documentation index is https://quirq.ai/docs.
+- MachineSpeed's 45-minute fit-check call is booked at
+  https://calendly.com/machinespeed-quirq/fit-check
 - Correspondence: hello@quirq.ai

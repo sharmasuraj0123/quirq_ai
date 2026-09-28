@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
   // those instead of this directory.
   turbopack: { root: import.meta.dirname },
 
+  // Dev only. The Coder workspace proxies ports as <port>--….helloxo.nl, and
+  // without this Next blocks its dev JS for that origin, so the page loads
+  // but never hydrates.
+  allowedDevOrigins: ["*.dev.workspace.helloxo.nl"],
+
   async redirects() {
     return [
       {
