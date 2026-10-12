@@ -10,10 +10,42 @@
  * Server-safe: plain serializable data, no JSX, no browser modules.
  */
 
+/**
+ * One decision as a diagram: an input, a choice question and a tags question
+ * asked of it side by side, the answer that comes back, and the rules around
+ * it. Rendered by components/prose/decision.tsx.
+ */
+export type DecisionBlock = {
+  kind: "decision";
+  title: string;
+  input: { label: string; text: string };
+  /** The line between the input and the two questions. */
+  ask: string;
+  choice: {
+    title: string;
+    hint: string;
+    options: { name: string; note: string; detail: string; selected?: true }[];
+    /** What happens when no option is picked. */
+    otherwise: { name: string; note: string };
+  };
+  tags: {
+    title: string;
+    hint: string;
+    items: { label: string; applies: boolean }[];
+    note: string;
+  };
+  /** Left to right: what was returned, what it set, what ran. */
+  result: { label: string; value: string; detail?: string }[];
+  rules: { title: string; note: string }[];
+  /** Says what is illustrative and what is as measured. */
+  caption: string;
+};
+
 export type Block =
   | { kind: "h2" | "h3" | "p" | "quote" | "code"; text: string }
   | { kind: "list"; items: string[] }
-  | { kind: "table"; header: string[]; rows: string[][] };
+  | { kind: "table"; header: string[]; rows: string[][] }
+  | DecisionBlock;
 
 /**
  * A stable anchor for a heading. Derived from the text rather than from a

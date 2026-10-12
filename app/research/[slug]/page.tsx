@@ -238,17 +238,19 @@ export default async function ResearchPost({
           <BodyBlock key={i} block={block} />
         ))}
 
-        <p className="mt-14 border-t border-hair-soft pt-6 font-mono text-[10.5px] leading-relaxed tracking-[0.08em] text-faint">
-          Adapted from the XO research program · canonical version at{" "}
-          <a
-            href={post.source}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-colors hover:text-dim"
-          >
-            docs.xo.builders
-          </a>
-        </p>
+        {post.source && (
+          <p className="mt-14 border-t border-hair-soft pt-6 font-mono text-[10.5px] leading-relaxed tracking-[0.08em] text-faint">
+            Adapted from the XO research program · canonical version at{" "}
+            <a
+              href={post.source}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 transition-colors hover:text-dim"
+            >
+              docs.xo.builders
+            </a>
+          </p>
+        )}
       </div>
 
       {(previous || next) && (

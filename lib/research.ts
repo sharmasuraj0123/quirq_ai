@@ -47,8 +47,17 @@ export type Post = {
   tag: string;
   topic: Topic;
   banner: Banner;
-  /** Canonical page on docs.xo.builders. */
-  source: string;
+  /**
+   * Canonical page on docs.xo.builders. Absent for a note first published
+   * here, which then makes no claim of a canonical version elsewhere.
+   */
+  source?: string;
+  /**
+   * Leads page one of every listing it appears in, ahead of reading order.
+   * At most one note carries it. It moves the note on the page and nowhere
+   * else: the note keeps its place in POSTS, and so its number.
+   */
+  featured?: true;
   body: Block[];
 };
 
@@ -1203,6 +1212,207 @@ export const POSTS: Post[] = [
       ] },
     ],
   },
+  {
+    slug: "routing-with-levanto-sage",
+    title: "Choosing the right model per task: a study with Levanto Sage",
+    dek: "A two-round study with Levanto on 90 tasks from XO Space's own development. When Sage chose the model and effort level for each request, and unfinished work was retried once on a stronger layer, quirq AI's XO platform completed 84 of 90 tasks against 83 for an all-Opus baseline, for half the total cost.",
+    tag: "partner study",
+    topic: "speed-trials",
+    featured: true,
+    banner: {
+      src: "/research/routing-with-levanto-sage-lockup.jpg",
+      width: 1600,
+      height: 900,
+      alt: "The quirq and Levanto wordmarks side by side, over a lit edge of glass sending four bands of colour to four different heights.",
+    },
+    date: "October 2026",
+    readingMinutes: 20,
+    body: [
+      { kind: "quote", text: "With Levanto, we set out to learn whether quirq AI's XO platform could stop sending every coding request to its most capable and most expensive model without leaving work unfinished. Across 90 tasks drawn from XO Space's own development, letting Levanto Sage choose the model and effort level for each request, and retrying unfinished work once on a stronger layer, completed 84 tasks against 83 for an all-Opus baseline, at a total cost of $34.04 instead of $69.57." },
+      { kind: "p", text: "quirq AI research, with Levanto Sage as the decision engine · study completed 30 September 2026" },
+      { kind: "p", text: "XO Space, part of quirq AI's XO platform, runs coding agents on a person's behalf. In this study the agent was Claude Code. Until now, XO Space ran every request on the strongest configuration available to it, Claude Opus 5.5 at high effort, and left the agent to find its own way around the codebase. That default is safe, and for a great many requests it is more than the work needs." },
+      { kind: "p", text: "We partnered with Levanto to find out whether each request could instead be matched to the configuration it actually requires, reliably enough that the work still gets done. This note describes what we built with Levanto Sage, how we tested it over two rounds, and what the results do and do not show. We report both rounds, because the second only makes sense in light of the first." },
+      { kind: "h2", text: "Why running every request on the strongest model is wasteful" },
+      { kind: "p", text: "The cost of running a coding agent depends on two settings: the model it runs on, and its effort level, which controls how much the model reasons before it acts. We call the pair an intelligence layer. The same agent spends very different amounts on different requests, and two requests from this study, shown here as they were actually routed, illustrate how far apart they can be." },
+      { kind: "table", header: ["", "\"Draft a short LinkedIn post announcing that our app now has dark mode\"", "\"Make XO Space installable and runnable as a Codex plugin\""], rows: [
+        ["Intelligence layer", "Claude Haiku 4.5, low effort", "Claude Opus 5.5, high effort"],
+        ["Agent steps", "1", "51"],
+        ["Tokens written, including reasoning", "424", "54,859"],
+        ["Tokens read", "25,976", "4.0 million"],
+        ["Cost", "$0.005", "$2.92"],
+      ] },
+      { kind: "p", text: "Both requests were completed. Run on Opus 5.5 at high effort instead, the LinkedIn post cost $0.014, nearly three times as much for a comparable draft. Running everything on the strongest layer protects the second kind of request and overpays for the first. Running everything on an inexpensive layer does the reverse, and puts at risk exactly the work that matters most. The useful question is whether a request can be recognised for what it is before the session begins." },
+      { kind: "p", text: "Two further questions follow from that one. Before it changes any code, an agent spends steps finding the files that matter, so pointing it to them at the start might save those steps and help it change the right place. And because any routing decision can be wrong, and people notice when a task has not been done, their answers might be used to correct the next decision for a similar request. We set out to answer four questions in all." },
+      { kind: "list", items: [
+        "How much does routing each request to a layer save, compared with running everything on Opus 5.5 at high effort?",
+        "Do routed requests get completed as often?",
+        "Does it help to also tell the agent which files are likely to matter?",
+        "Can the answers people give afterwards be used to correct routing for later requests?",
+      ] },
+      { kind: "h2", text: "What we built: routing, context targeting and feedback" },
+      { kind: "p", text: "Levanto Sage is an API that answers structured questions about a piece of text. It supports several question types, and this study used two of them. A choice question picks one option from a list and returns a probability for each option. A tags question says which of a set of labels apply, again with a probability for each. Sage bills per decision unit, which is one question on up to about 4,000 tokens of text. Throughout this note we count each unit at the rate of Levanto's Starter plan at the time of the study: $49 for 60,000 units a month, or about $0.00082 per unit." },
+      { kind: "p", text: "With those two question types we built three decisions into XO Space, one before the agent starts, one alongside it, and one after it finishes." },
+      { kind: "list", items: [
+        "Routing: which model and effort level the request runs on.",
+        "Context targeting: which files the agent is pointed to before it begins.",
+        "Feedback: how a person's answer to \"did it complete your task?\" corrects later routing decisions and, in the second round, whether an incomplete task is run again on a stronger layer.",
+      ] },
+      { kind: "h3", text: "Routing: choosing a model and effort level for each request" },
+      { kind: "p", text: "When a person sends the first message of a new session, XO asks Sage two questions about that message at the same time. The first is a choice between four intelligence layers, with a fifth option for requests that fit none of them. The second is a tags question covering three facts: whether the agent will need to write code, search the codebase, or look something up on the web. The first answer decides the layer. The second is recorded and used later for feedback. XO then starts Claude Code on the chosen model and effort level, and the session keeps that layer for every later message, so the agent never changes model partway through a task." },
+      {
+        kind: "decision",
+        title: "How Sage chooses the starting layer",
+        input: { label: "Start with the first message", text: "Add a dark-mode toggle to the settings page." },
+        ask: "XO asks Sage two questions at the same time",
+        choice: {
+          title: "Which setup fits the work?",
+          hint: "Select one",
+          options: [
+            { name: "Light", note: "Questions, explanations and writing; no code changes.", detail: "Haiku 4.5 · low effort" },
+            { name: "Standard", note: "Small, well-defined code changes in one area.", detail: "Sonnet 5.5 · medium effort", selected: true },
+            { name: "Deep", note: "Features, debugging or refactors across the codebase.", detail: "Opus 5.5 · high effort" },
+            { name: "Research", note: "Current information from outside the project.", detail: "Sonnet 5.5 · medium effort" },
+          ],
+          otherwise: { name: "None of these", note: "no layer fits, so the request runs on the Opus default." },
+        },
+        tags: {
+          title: "What will the agent need to do?",
+          hint: "Check each fact",
+          items: [
+            { label: "Write code", applies: true },
+            { label: "Search the codebase", applies: true },
+            { label: "Look up information on the web", applies: false },
+          ],
+          note: "The tags are saved with the session's outcome and group similar requests for later feedback. The choice alone decides the starting layer.",
+        },
+        result: [
+          { label: "Sage returns", value: "Standard" },
+          { label: "XO configures", value: "Sonnet 5.5", detail: "Medium effort" },
+          { label: "Claude Code runs", value: "One session", detail: "The layer stays fixed" },
+        ],
+        rules: [
+          { title: "A model or effort level already chosen?", note: "That choice is honoured and routing is skipped." },
+          { title: "No clear answer, or Sage unavailable?", note: "The request runs on Opus 5.5 at high effort." },
+        ],
+        caption: "Illustrative selections for an example request. The two question types, the routing rules and the second-round model configuration are those used in the study.",
+      },
+      { kind: "table", header: ["Layer", "Model and effort (round two)", "Description given to Sage"], rows: [
+        ["light", "Claude Haiku 4.5, low", "greetings, small talk and short conversational replies; questions, explanations and small lookups, including about well-known concepts; writing or rewriting text such as emails, posts and messages; no code changes"],
+        ["standard", "Claude Sonnet 5.5, medium", "small, well-defined code changes in one area"],
+        ["deep", "Claude Opus 5.5, high", "features, debugging or refactors across several parts of the codebase"],
+        ["research", "Claude Sonnet 5.5, medium", "needs current information from outside the project: latest docs, releases, prices or comparisons; little or no code"],
+      ] },
+      { kind: "p", text: "Each layer is described to Sage in one sentence of plain English, and that description is the entire routing policy. Changing a description changes where requests go, with no change to code. In the first round the standard and research layers used Claude Sonnet 5 rather than Sonnet 5.5, and everything else was the same." },
+      { kind: "p", text: "Two safeguards sit around the decision. If the person or the application has already named a model or an effort level, routing is skipped and their choice is honoured. If Sage answers that none of the layers fits, is unsure, or does not answer at all, the request runs on Opus 5.5 at high effort, exactly as it did before the study. The routing question itself is short enough to show in full, with the option descriptions abbreviated." },
+      { kind: "code", text: "POST /decide\n\n{\"content\": \"<the person's first message>\",\n \"question\": {\"id\": \"profile\", \"kind\": \"choice\",\n   \"instructions\": \"The content is a request given to an AI coding agent\n                    at the very start of a session. Which setup fits the\n                    work it asks for?\",\n   \"options\": [\n     {\"option\": \"light\",    \"description\": \"greetings, questions, explanations, small lookups, writing; no code changes\"},\n     {\"option\": \"standard\", \"description\": \"small, well-defined code changes in one area\"},\n     {\"option\": \"deep\",     \"description\": \"features, debugging or refactors across several parts of the codebase\"},\n     {\"option\": \"research\", \"description\": \"needs current information from outside the project\"},\n     {\"option\": \"unknown\",  \"description\": \"none of the other options fits this request\"}]}}" },
+      { kind: "p", text: "Sage returns the chosen option together with a probability for every option." },
+      { kind: "h3", text: "Context targeting: pointing the agent to the files likely to matter" },
+      { kind: "p", text: "We also built an optional step that gives the agent a starting point in the codebase. Once per project, the project's files are sorted into functional areas. For XO Space that produced 36 areas, with names such as \"chat engine\" and \"Space UI\". Most files are placed by simple path rules at no cost, and Sage places the remainder with a tags question. When a new request arrives, XO ranks files by how well their paths and outlines, meaning the names of the classes and functions they define, match the words of the request. It then gives the agent a short note naming up to five of them. If no file clearly stands out, no note is given. We call this the \"where to look\" note, and the following is a real one from the study." },
+      { kind: "quote", text: "XO Space, from this project's map (a starting point, not a constraint): the request looks like work in web ui and space router root. Files most likely to matter: space_ui/js/core/server-widget.js, routers/space.py, server.py, utils/local_port.py, space_ui/js/core/preview.js." },
+      { kind: "p", text: "In projects that use the note, Sage is asked a third question about each new request: which of the project's areas it will change. That answer is used to group similar requests for the feedback described next." },
+      { kind: "h3", text: "Feedback: using people's answers to correct later routing" },
+      { kind: "p", text: "After every session, XO asks the person one question: \"Did it complete your task?\" The answer is stored with the session, next to the layer it ran on and Sage's tags. Each finished session is then labelled in one of three ways. It was too weak if the answer was No or, where no answer was given, if the session failed or ran unusually long for its layer. It was sufficient if the answer was Yes. It was more than needed if it ran on Opus 5.5 at high effort, required no code changes and finished in two steps or fewer, so that a lighter layer would have done." },
+      { kind: "p", text: "When a new request arrives, XO looks at earlier sessions of the same kind that ran on the layer Sage has just chosen. Requests count as the same kind when they touch the same area of the project, where that area already has five past sessions, or otherwise when Sage's tags agree on whether the request writes code. If there are at least five such sessions and at least 60% of them were too weak, the new request starts one layer higher. If at least 60% were more than needed, it starts one layer lower. Every correction is stored next to Sage's original choice, so the two can always be told apart." },
+      { kind: "p", text: "In the second round we added a more immediate use of the same answer. When a result was judged incomplete, the same task was run once more from the same starting point on the next layer up: light to standard, and standard or research to deep. A task that had already run on Opus 5.5 was not retried, because there is no higher layer to send it to." },
+      { kind: "h2", text: "How the study was run: tasks, setups and judging" },
+      { kind: "p", text: "All tasks were chosen and recorded before any of them were run. There were 90 in total, in three groups." },
+      { kind: "list", items: [
+        "40 code changes from XO Space's own history: the 40 most recent commits that changed between one and six code files, leaving out commits that only touched documentation, tests or build setup. Each was given to the agent as the commit's own one-line description, for example \"fix(server): redirect browser hits at / to the Space UI\".",
+        "20 questions about how XO Space's code works, for example \"how does XO back up a project to GitHub?\".",
+        "30 everyday requests, used in the second round only: explanations, emails and posts, short scripts, and questions that need current information from the web.",
+      ] },
+      { kind: "p", text: "We compared three setups. Each one ran in its own copy of the project with its own stored answers, so the results of one setup could not influence another." },
+      { kind: "table", header: ["Setup", "Intelligence layer", "Where-to-look note"], rows: [
+        ["Opus only", "Every request on Opus 5.5 at high effort", "No"],
+        ["Routed", "Chosen by Sage, with corrections from stored answers switched on", "No"],
+        ["Routed with note", "The same as Routed", "Yes"],
+      ] },
+      { kind: "p", text: "Before each code change, the project was reset to exactly how it stood just before the real commit, as a fresh repository with no history, so that the answer could not be looked up. All three setups started from identical files. Questions and everyday requests ran on XO Space release 1.1.0, which includes all 40 commits. Each round was run in two matched halves, and every result from the first half was judged before the second half began, so the second half ran with the first half's answers already stored. The second round reused the first round's Opus results for the 60 code changes and questions. To check that this was sound, six of them were run on Opus again, and all six received the same judgement as before." },
+      { kind: "p", text: "Every result was judged by two reviewers working independently and answering the same question a person is asked: did it complete the task? For a code change they saw the request, the agent's reply, the exact change it made, and the real commit as a reference for what was wanted, with a different working solution counting as complete. For a question they could check the answer against the code. For an everyday request they judged whether the reply was correct and usable, and whether information that had to be current was current. Reviewers never saw which setup, model or cost had produced a result. When the two disagreed, a third reviewer decided. The first two agreed on 433 of 453 results across both rounds." },
+      { kind: "p", text: "Cost means the agent's cost as reported by Claude Code for each session, plus Levanto's fee. Where a routed task was retried, both attempts are counted. We also report a cost per task, which divides the agent's cost for each routed task by its cost for the same task on Opus and takes the median of those ratios." },
+      { kind: "h2", text: "Round one: lower cost, but far fewer tasks completed" },
+      { kind: "p", text: "The first round used the 60 code changes and questions, with Claude Sonnet 5 in the standard and research layers and no retries." },
+      { kind: "table", header: ["60 tasks", "Opus only", "Routed", "Routed with note"], rows: [
+        ["Total cost, Levanto included", "$64.63", "$27.81", "$29.89"],
+        ["Cost per task, as a share of Opus (median)", "n/a", "0.53", "0.53"],
+        ["Tasks completed", "53", "29", "36"],
+        ["of 40 code changes", "36", "16", "19"],
+        ["of 20 questions", "17", "13", "17"],
+      ] },
+      { kind: "p", text: "Routing reduced the cost by 57%, and it completed 29 of 60 tasks where the all-Opus baseline completed 53. What made the round valuable is that the shortfall was concentrated in one place. Sage sent most small code changes to the standard layer, which was Sonnet 5 at medium effort, and Sonnet 5 completed only 12 of the 33 it was given. Of the 21 it did not complete, 16 ended without a single file changed. All four requests that Sage sent to the deep layer, across both routed setups, were completed." },
+      { kind: "p", text: "The other two decisions showed their value under exactly these conditions. With the where-to-look note, completed tasks rose from 29 to 36 of 60 at the same cost, and the agent changed a file that the real commit had changed on 26 of 40 code changes, against 19 without the note. Stored answers also corrected routing where the evidence was clear. After the first half, three of the six questions about the code that Sage had sent to the light layer had been judged incomplete. In the second half, XO moved each such request up to standard before it started. This happened six times, and five of the six were completed." },
+      { kind: "p", text: "We took two lessons into the second round. The weak point was the model behind the middle layer: the routing choices were sensible, and Sonnet 5 could not complete many of the small code changes sent to it. And correcting routing from people's answers works, but only once enough answers of the same kind have accumulated, which took most of the round. We therefore changed two things. The standard and research layers moved from Sonnet 5 to Sonnet 5.5, and every incomplete result was run once more on the next layer up, without waiting for answers to accumulate." },
+      { kind: "h2", text: "Round two: 84 of 90 tasks completed, at half the cost of Opus" },
+      { kind: "p", text: "The second round used all 90 tasks. On the first attempt, routed sessions completed 73 tasks against 83 for the all-Opus baseline. After one retry on the next layer up, they completed 84." },
+      { kind: "p", text: "Chart: Round two completion score, counted as tasks judged complete out of 90. Completed by setup: Opus only 83; Routed, first attempt 73; Routed, within one retry 84. After one retry on the next layer up, the routed setup finished one task more than the all-Opus baseline." },
+      { kind: "table", header: ["90 tasks", "Opus only", "Routed"], rows: [
+        ["Completed on the first attempt", "83", "73"],
+        ["Completed within one retry", "no retry in this setup", "84"],
+        ["Total cost, retries and Levanto included", "$69.57", "$34.04"],
+        ["Cost per task, as a share of Opus (median)", "n/a", "0.31 (95% range 0.27 to 0.41)"],
+      ] },
+      { kind: "p", text: "With one retry, the routed setup completed one more task than the all-Opus baseline, 84 of 90 against 83. It did so for $34.04 where the baseline cost $69.57, a reduction of $35.53, with both attempts counted for every task that was retried." },
+      { kind: "h3", text: "Completion and cost by type of task" },
+      { kind: "p", text: "Chart: Routed cost as a share of the Opus-only cost in round two, with retries and Levanto's fee included. Share of Opus cost: Code changes 50%; Questions about the code 40%; Everyday requests 48%; All 90 tasks 49%." },
+      { kind: "table", header: ["Type", "Tasks", "Routed, first attempt", "Routed, within one retry", "Opus only", "Routed cost", "Opus cost"], rows: [
+        ["Code changes", "40", "27", "35", "36", "$28.98", "$57.94"],
+        ["Questions about the code", "20", "18", "19", "17", "$2.67", "$6.69"],
+        ["Everyday requests", "30", "28", "30", "30", "$2.38", "$4.94"],
+        ["All", "90", "73", "84", "83", "$34.04", "$69.57"],
+      ] },
+      { kind: "p", text: "Code changes account for most of the spend in either setup, and they still cost half as much when routed. Questions and everyday requests cost less than half, and every one of the 30 everyday requests was completed in both setups." },
+      { kind: "h3", text: "The effect of replacing Sonnet 5 with Sonnet 5.5" },
+      { kind: "p", text: "On the 60 tasks that appeared in both rounds, first-attempt completion in the routed setup rose from 29 to 45, an increase of 27 percentage points with a 95% range of 15 to 38 points. Small code changes on the standard layer went from 12 of 33 completed with Sonnet 5 to 22 of 31 with Sonnet 5.5. The median cost per task fell to 0.67 of its first-round value. Sonnet 5.5 took about as many steps as Sonnet 5 and used fewer tokens per task, a median of about 256,000 against 343,000." },
+      { kind: "h3", text: "How many unfinished tasks the retry recovered" },
+      { kind: "p", text: "In the routed setup, 14 tasks were judged incomplete on a layer that had another above it. Run again one layer up, 11 of the 14 were completed. Those retries cost $12.65, which is included in every total above. Two further incomplete tasks had already run on Opus 5.5 and were not retried." },
+      { kind: "h3", text: "Which layer Sage chose for each request" },
+      { kind: "table", header: ["Layer", "Requests", "Mostly", "Median cost", "Median agent steps", "Completed on the first attempt"], rows: [
+        ["light", "31", "everyday requests, questions", "$0.022", "1", "27"],
+        ["research", "11", "everyday requests needing the web", "$0.101", "3", "11"],
+        ["standard", "36", "code changes", "$0.180", "9", "26"],
+        ["deep", "3", "large code changes", "$2.171", "32", "3"],
+        ["Opus (no clear choice)", "9", "questions, code changes", "$0.337", "7", "6"],
+      ] },
+      { kind: "p", text: "The table covers the routed setup's first attempts. Nine requests received no clear choice from Sage and ran on Opus 5.5 at high effort, as the fallback intends." },
+      { kind: "h3", text: "What Levanto's routing decisions cost" },
+      { kind: "p", text: "The routed setup made 104 routing decisions: 90 first attempts and 14 retries. Each asked Sage the two routing questions described earlier. Together they used 207 decision units, for a total of $0.17, or about 0.16 cents per decision. That is 0.5% of the routed setup's total cost. Set against the $35.53 saved, each dollar spent on routing decisions saved about $210. These fees are calculated at the plan rate in force during the study, and they are historical figures from this evaluation, not a statement of Levanto's current pricing." },
+      { kind: "h2", text: "Context targeting and feedback in round two: no measurable effect" },
+      { kind: "p", text: "In the second round, the where-to-look note made no measurable difference. The setup that used it completed exactly as many tasks within one retry as the setup that did not, 84 of 90, at the same cost per task. Without any note, the routed agent already changed a file that the real commit had changed on 36 of 40 code changes, which left the note very little to add." },
+      { kind: "p", text: "No routing corrections were made from stored answers in the second round either. Sonnet 5.5's incomplete results were few and spread across different kinds of request, so no kind of request reached five sessions with 60% judged incomplete. The retry did the correcting instead, one task at a time. The second round's result therefore came from a capable model in the middle layer and from immediate escalation." },
+      { kind: "h2", text: "Projected cost at 100, 1,000 and 10,000 requests" },
+      { kind: "p", text: "The study measured 90 requests. To see what its measured costs imply at larger volumes, we projected the total cost of a given number of future requests for the routed setup, with retries and Levanto's fee included, and for Opus only. The projection assumes that future requests resemble the study's: the same mix of 40 code changes, 20 questions and 30 everyday requests in every 90, the same models, and the same prices. On that basis a routed request costs $0.38 on average against $0.77 on Opus, an expected saving of $0.39 per request, or 51%." },
+      { kind: "table", header: ["Requests", "Opus only", "Routed", "Saving"], rows: [
+        ["100", "$77 ($44 to $140)", "$38 ($22 to $56)", "$39 ($10 to $100)"],
+        ["1,000", "$773 ($508 to $1,220)", "$378 ($257 to $511)", "$395 ($150 to $831)"],
+        ["10,000", "$7,730 ($5,096 to $11,887)", "$3,782 ($2,609 to $5,055)", "$3,948 ($1,542 to $8,047)"],
+      ] },
+      { kind: "p", text: "Each cell gives the expected cost with its 95% prediction range in brackets. The two cost ranges are computed separately and can come close to one another. Whether routing saves money should be read from the saving column, which pairs each task's two costs, and that range stays above zero at every volume shown." },
+      { kind: "p", text: "The ranges combine two kinds of uncertainty. The first is how precisely 90 tasks measure the average cost of a request, which we estimated by resampling the 90 tasks 4,000 times. The second is the natural variation between individual future requests. The ranges are wide because a few large code changes dominate cost, and a single one can cost as much as a hundred everyday requests." },
+      { kind: "table", header: ["Average cost per request, by type", "Opus only", "Routed", "Saving"], rows: [
+        ["Code change", "$1.449", "$0.725", "$0.724"],
+        ["Question about the code", "$0.334", "$0.134", "$0.200"],
+        ["Everyday request", "$0.165", "$0.079", "$0.086"],
+      ] },
+      { kind: "p", text: "A different mix of requests changes the slope, and this second table allows any mix to be worked out. The projection leaves out any further effect of corrections from people's answers and any future change in model prices. It also counts Levanto's fee per decision unit, whereas the Starter plan is a flat $49 a month for 60,000 units, enough for about 26,000 routed requests. Below that volume the full price of the plan is the real fee. At 1,000 requests a month, paying the full $49 lowers the expected saving from $395 to about $348." },
+      { kind: "h2", text: "What the results mean" },
+      { kind: "p", text: "Routing works when the less expensive layers are capable enough for the work they are given. In the first round the routing decisions were mostly sensible, and the middle layer could not carry out the small code changes sent to it. Replacing that one model in the configuration file raised first-attempt completion on the same tasks from 29 to 45 of 60. The quality of a routing policy cannot be separated from the quality of the layers it routes to." },
+      { kind: "p", text: "A retry one layer up is an inexpensive safety net. Most requests complete on the less expensive layer. The few that do not are run again higher up, so only those requests pay the higher price. In the second round this took completion to 84 of 90 tasks, one more than the all-Opus baseline, while holding total cost at half." },
+      { kind: "p", text: "Savings depend on the mix of requests. Code changes are where most of the spend is, and they cost half as much when routed. Questions and everyday requests cost a smaller share still, so a workload with more of them would save more." },
+      { kind: "p", text: "Pointing the agent at files helps a weaker model and adds little to a strong one. With Sonnet 5, the note added seven completed tasks out of 60. With Sonnet 5.5, it added none." },
+      { kind: "p", text: "Corrections from stored answers need enough answers to act on. They worked in the first round, where the same failure repeated, and had nothing to act on in the second. A retry repairs the task in front of the person, and a correction changes how the next similar request is handled, so we regard the two as complementary." },
+      { kind: "quote", text: "quirq-ai is built entirely by agents. They plan, open the pull requests and run the pipelines; I approve. Their first week produced a dozen repos. At that scale, which model takes which task matters, and that is where Sage comes in. A cheap model that can't finish saves nothing, so Sage picks the starting model and we escalate once if it falls short." },
+      { kind: "p", text: "Suraj, co-founder of quirq AI, quoted in Levanto's case study of this work." },
+      { kind: "h2", text: "Scope of this study" },
+      { kind: "list", items: [
+        "The study used one codebase, XO Space, with about 540 code files, and one agent, Claude Code. Other codebases and other agents may route differently.",
+        "Results were judged by reviewers reading each change against the real commit. The two independent reviewers agreed on 96% of results.",
+        "Every incomplete result was retried in the second round. In daily use a retry follows the person's own answer to whether the task was completed.",
+      ] },
+      { kind: "h2", text: "Our partnership with Levanto" },
+      { kind: "p", text: "We thank the Levanto team for their partnership on this study. Sage gave us a way to express a routing policy as a handful of plain sentences, to change that policy without changing code, and to make each decision for a fraction of a cent." },
+      { kind: "p", text: "Levanto has published its own account of the study as a case study, and a technical report with every request format, rule and result is available separately. All figures in this note come from our own measurement in this study. If you run agents at any volume, we would encourage you to treat our numbers as a method to repeat and not as a promise: classify the request, start on a layer suited to it, keep a stronger attempt in reserve for work that falls short, and measure the outcome on the tasks your own users actually send." },
+    ],
+  },
 ];
 
 export const getPost = (slug: string) =>
@@ -1220,6 +1430,15 @@ export const postsInTopic = (topic: Topic) =>
  * reads as note 05 on the front page, on page two, and inside its archive.
  */
 export const noteNumber = (post: Post) => POSTS.indexOf(post) + 1;
+
+/** The one note given the lead slot, if any. See `Post.featured`. */
+export const FEATURED: Post | null = POSTS.find((post) => post.featured) ?? null;
+
+/** A pool in listing order: the featured note first, the rest as they were. */
+const featuredFirst = (pool: Post[]) =>
+  FEATURED && pool.includes(FEATURED)
+    ? [FEATURED, ...pool.filter((post) => post !== FEATURED)]
+    : pool;
 
 export const totalReadingMinutes = POSTS.reduce(
   (total, post) => total + post.readingMinutes,
@@ -1242,7 +1461,10 @@ export type IndexView = {
   pageCount: number;
   /** Notes in this pool, across all its pages. */
   total: number;
-  /** The feature. Page one of any pool leads with its first note. */
+  /**
+   * The feature. Page one of any pool leads with its featured note, or with
+   * its first note in reading order when the pool holds no featured one.
+   */
   lead: Post | null;
   cards: Post[];
 };
@@ -1257,7 +1479,7 @@ export function resolveIndex({
   const meta = topic === undefined ? null : (getTopic(topic) ?? null);
   if (topic !== undefined && !meta) return null;
 
-  const pool = meta ? postsInTopic(meta.slug) : POSTS;
+  const pool = featuredFirst(meta ? postsInTopic(meta.slug) : POSTS);
 
   // The whole stream paginates. A topic archive is one page by design: an
   // archive is a shelf you scan in one go, and a second URL scheme for it buys

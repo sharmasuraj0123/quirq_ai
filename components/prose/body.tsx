@@ -1,5 +1,6 @@
 import type { Block } from "@/lib/prose";
 import { FigureView } from "@/components/story/figure";
+import { DecisionView } from "./decision";
 import { figureFromChart } from "@/lib/chart-figure";
 
 /**
@@ -110,6 +111,8 @@ export function BodyBlock({ block }: { block: Block }) {
           </table>
         </div>
       );
+    case "decision":
+      return <DecisionView block={block} />;
     case "list":
       return (
         <ul className="mt-5 space-y-2.5">

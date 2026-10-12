@@ -319,7 +319,9 @@ export const readingMinutes = Math.max(
           ? block.items.join(" ")
           : block.kind === "table"
             ? [...block.header, ...block.rows.flat()].join(" ")
-            : block.text;
+            : "text" in block
+              ? block.text
+              : "";
       return words + text.split(/\s+/).length;
     }, WHITEPAPER.abstract.split(/\s+/).length) / 220,
   ),
