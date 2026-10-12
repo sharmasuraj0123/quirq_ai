@@ -111,6 +111,27 @@ export function BodyBlock({ block }: { block: Block }) {
           </table>
         </div>
       );
+    case "video":
+      return (
+        <figure className="mt-7 overflow-hidden rounded-2xl border border-hair bg-black">
+          {/* Controls and no autoplay: the reader starts it. preload is
+              metadata only, so a 15 MB film costs nothing until then. */}
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            width={block.width}
+            height={block.height}
+            aria-label={block.caption}
+            className="block h-auto w-full"
+          >
+            <source src={block.src} type="video/mp4" />
+          </video>
+          <figcaption className="border-t border-hair-soft px-5 py-3 font-mono text-[10px] leading-relaxed tracking-[0.06em] text-faint">
+            {block.caption}
+          </figcaption>
+        </figure>
+      );
     case "decision":
       return <DecisionView block={block} />;
     case "list":
