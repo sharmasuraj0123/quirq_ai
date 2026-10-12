@@ -558,8 +558,8 @@ export function buildResearchJourney(post: Post): JourneyDefinition {
           : ["That is the note,", "in one pass."],
         glass: 1,
         lede: branching
-          ? `This walk is one route through ${post.title}. The full note carries every chapter, the tables, the code, and the source it was adapted from.`
-          : `This is ${post.title} condensed to its beats. The full note carries every paragraph, the tables, the code, and the source it was adapted from.`,
+          ? `This walk is one route through ${post.title}. The full note carries every chapter, the tables, ${post.source ? "the code, and the source it was adapted from" : "and the code"}.`
+          : `This is ${post.title} condensed to its beats. The full note carries every paragraph, the tables, ${post.source ? "the code, and the source it was adapted from" : "and the code"}.`,
         links: [
           { href: `/research/${post.slug}`, label: "Read the full note" },
           { href: "/research", label: "All research", tone: "ghost" },

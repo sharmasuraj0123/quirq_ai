@@ -107,8 +107,9 @@ export function LeadCard({ post }: { post: Post }) {
             style={{ background: "var(--spectrum)" }}
           />
           {/* Not "latest": POSTS is in reading order, not publication order,
-              so the lead is the entry point rather than the newest note. */}
-          <span>Start here</span>
+              so an unfeatured lead is the entry point rather than the newest
+              note. A featured note is led on purpose and says so. */}
+          <span>{post.featured ? "Featured" : "Start here"}</span>
           <span aria-hidden className="h-px w-4 bg-hair" />
           <span className="numeric">{pad(noteNumber(post))}</span>
           <span aria-hidden className="h-px w-4 bg-hair" />

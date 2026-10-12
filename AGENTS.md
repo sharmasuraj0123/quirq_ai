@@ -664,6 +664,9 @@ Rules:
   collection, not its position on the page being rendered.
 - Label controls by position, not by date, unless the collection is genuinely
   ordered by date.
+- Feature by flag, not by position. A record marked `featured` leads page one
+  of every listing it appears in and keeps its place, and so its ordinal, in
+  the source collection. Do not move a record to the front to promote it.
 
 ## The story renderer contract
 
