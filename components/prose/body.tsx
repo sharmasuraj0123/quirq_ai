@@ -2,6 +2,9 @@ import type { Block } from "@/lib/prose";
 import { FigureView } from "@/components/story/figure";
 import { DecisionView } from "./decision";
 import { figureFromChart } from "@/lib/chart-figure";
+import { headingId } from "@/lib/prose";
+import { RichText } from "./rich-text";
+import "katex/dist/katex.min.css";
 
 /**
  * One block of long-form article body. Kinds map 1:1 to the shapes in
@@ -19,13 +22,19 @@ export function BodyBlock({ block }: { block: Block }) {
   switch (block.kind) {
     case "h2":
       return (
-        <h2 className="mt-14 text-[clamp(21px,2.4vw,28px)] font-semibold leading-[1.2] tracking-[-0.02em] text-ink">
+        <h2
+          id={headingId(block.text)}
+          className="prose-h2 mt-14 text-[clamp(21px,2.4vw,28px)] font-semibold leading-[1.2] tracking-[-0.02em] text-ink"
+        >
           {block.text}
         </h2>
       );
     case "h3":
       return (
-        <h3 className="mt-10 text-[17px] font-semibold tracking-[-0.01em] text-ink">
+        <h3
+          id={headingId(block.text)}
+          className="prose-h3 mt-10 text-[17px] font-semibold tracking-[-0.01em] text-ink"
+        >
           {block.text}
         </h3>
       );
@@ -35,21 +44,34 @@ export function BodyBlock({ block }: { block: Block }) {
       // describing it. Where it cannot, the sentence stands unchanged.
       const figure = figureFromChart(block.text);
       if (figure) return <FigureView figure={figure} />;
+      // A chart the generator cannot draw is still a figure in the note's
+      // structure: set it apart as a described figure, not as body text.
+      if (block.text.startsWith("Chart: "))
+        return (
+          <figure className="prose-chartnote mt-7 rounded-xl border border-hair-soft px-5 py-4">
+            <span className="prose-chartnote-label font-mono text-[9.5px] tracking-[0.16em] text-faint uppercase">
+              Figure, described
+            </span>
+            <figcaption className="mt-2 text-[14px] leading-[1.7] text-ink/70">
+              <RichText text={block.text.slice("Chart: ".length)} />
+            </figcaption>
+          </figure>
+        );
       return (
-        <p className="mt-5 text-[15.5px] leading-[1.8] text-ink/70">
-          {block.text}
+        <p className="prose-p mt-5 text-[15.5px] leading-[1.8] text-ink/70">
+          <RichText text={block.text} />
         </p>
       );
     }
     case "quote":
       return (
-        <blockquote className="relative mt-7 pl-5 text-[16.5px] leading-[1.7] text-ink/90">
+        <blockquote className="prose-quote relative mt-7 pl-5 text-[16.5px] leading-[1.7] text-ink/90">
           <span
             aria-hidden
             className="absolute inset-y-1 left-0 w-px"
             style={{ background: "var(--spectrum)" }}
           />
-          {block.text}
+          <RichText text={block.text} />
         </blockquote>
       );
     case "code":
@@ -60,7 +82,7 @@ export function BodyBlock({ block }: { block: Block }) {
           tabIndex={0}
           role="region"
           aria-label="Code"
-          className="mt-6 overflow-x-auto rounded-xl border border-hair-soft bg-white/[0.04] p-4 font-mono text-[12.5px] leading-[1.7] text-ink/80"
+          className="prose-code mt-6 overflow-x-auto rounded-xl border border-hair-soft bg-white/[0.04] p-4 font-mono text-[12.5px] leading-[1.7] text-ink/80"
         >
           {block.text}
         </pre>
@@ -71,7 +93,7 @@ export function BodyBlock({ block }: { block: Block }) {
           tabIndex={0}
           role="region"
           aria-label="Table"
-          className="mt-6 overflow-x-auto rounded-xl border border-hair-soft"
+          className="prose-table mt-6 overflow-x-auto rounded-xl border border-hair-soft"
         >
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead>
@@ -82,7 +104,7 @@ export function BodyBlock({ block }: { block: Block }) {
                     scope="col"
                     className="px-4 py-2.5 font-mono text-[9.5px] font-medium tracking-[0.14em] text-faint uppercase"
                   >
-                    {cell}
+                    <RichText text={cell} />
                   </th>
                 ))}
               </tr>
@@ -102,7 +124,7 @@ export function BodyBlock({ block }: { block: Block }) {
                           : "numeric px-4 py-2.5 font-mono text-[12.5px] text-ink/70 tabular-nums"
                       }
                     >
-                      {cell}
+                      <RichText text={cell} />
                     </td>
                   ))}
                 </tr>
@@ -113,7 +135,7 @@ export function BodyBlock({ block }: { block: Block }) {
       );
     case "video":
       return (
-        <figure className="mt-7 overflow-hidden rounded-2xl border border-hair bg-black">
+        <figure className="prose-video mt-7 overflow-hidden rounded-2xl border border-hair bg-black">
           {/* Controls and no autoplay: the reader starts it. preload is
               metadata only, so a 15 MB film costs nothing until then. */}
           <video
@@ -136,7 +158,7 @@ export function BodyBlock({ block }: { block: Block }) {
       return <DecisionView block={block} />;
     case "list":
       return (
-        <ul className="mt-5 space-y-2.5">
+        <ul className="prose-list mt-5 space-y-2.5">
           {block.items.map((item, i) => (
             <li
               key={i}
@@ -147,7 +169,9 @@ export function BodyBlock({ block }: { block: Block }) {
                 className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-[2px]"
                 style={{ background: "var(--spectrum)" }}
               />
-              <span>{item}</span>
+              <span>
+                <RichText text={item} />
+              </span>
             </li>
           ))}
         </ul>

@@ -356,6 +356,10 @@ type TextBlock = Extract<Block, { text: string }>;
 type ListBlock = Extract<Block, { kind: "list" }>;
 type TableBlock = Extract<Block, { kind: "table" }>;
 
+/** A paragraph that is one display equation and nothing else. */
+const isDisplayMath = (block: Block) =>
+  block.kind === "p" && /^\$\$[\s\S]*\$\$$/.test(block.text.trim());
+
 /** A chart paragraph: prose that carries a figure's numbers inside it. */
 const isChart = (block: Block): block is TextBlock =>
   block.kind === "p" && "text" in block && block.text.startsWith("Chart: ");
@@ -414,7 +418,12 @@ function chapterNode(
   // Inside a chapter the paragraph leads and the quote is the fallback.
   // Chart paragraphs are excluded either way: that prose is figure material,
   // and reading it as a lede would print the chart's numbers twice.
-  const prose = chapter.blocks.filter((block) => !isChart(block));
+  // A paragraph that is only a display equation ($$ … $$) is excluded too:
+  // the stage has no typesetter, and raw TeX is not a lede.
+  const prose = chapter.blocks.filter(
+    (block) =>
+      !isDisplayMath(block) && !isChart(block),
+  );
   const paragraph = premise
     ? (firstText(prose, "quote") ?? firstText(prose, "p"))
     : (firstText(prose, "p") ?? firstText(prose, "quote"));

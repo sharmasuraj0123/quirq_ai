@@ -28,10 +28,12 @@ const classes = (...parts: Array<string | false | undefined>) =>
 /** Spectrum for value, ink for cost, walked deterministically by index. */
 const toneOf = (tone: FigureSeries["tone"], index: number) =>
   tone === "value"
-    ? SPECTRUM[(index * 2) % SPECTRUM.length]
+    ? // A surface may restate the value palette (the research paper does, in
+      // quieter inks); everywhere else the spectrum stands.
+      `var(--figure-value-${index}, ${SPECTRUM[(index * 2) % SPECTRUM.length]})`
     : index === 0
-      ? "rgba(244,243,240,0.85)"
-      : "rgba(244,243,240,0.4)";
+      ? "color-mix(in srgb, var(--color-ink) 85%, transparent)"
+      : "color-mix(in srgb, var(--color-ink) 40%, transparent)";
 
 const numeral = (value: number) =>
   Math.abs(value) >= 1_000_000
@@ -61,7 +63,7 @@ function Frame({
   return (
     /* Opaque enough to read over the brightest pose: a figure on the stage
        competes with the bloom, and a bar at 6% white loses that fight. */
-    <figure className="mt-7 overflow-hidden rounded-2xl border border-hair bg-black/70 backdrop-blur-xl">
+    <figure className="prose-figure mt-7 overflow-hidden rounded-2xl border border-hair bg-black/70 backdrop-blur-xl">
       {legend && (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-hair-soft px-5 py-3">
           {legend}
@@ -183,7 +185,7 @@ function Bars({
               return (
                 <div
                   key={it.label}
-                  className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]"
+                  className="figure-track h-1.5 overflow-hidden rounded-full bg-white/[0.06]"
                 >
                   <div
                     className="h-full rounded-full"
@@ -218,7 +220,7 @@ function Marks({ figure }: { figure: Extract<Figure, { kind: "marks" }> }) {
   const colourOf = (mark: FigureMark) => {
     const at = groups.findIndex((g) => g.label === mark.group);
     return at === -1
-      ? "rgba(244,243,240,0.6)"
+      ? "color-mix(in srgb, var(--color-ink) 60%, transparent)"
       : toneOf(groups[at].tone, at);
   };
 
@@ -271,7 +273,7 @@ function Marks({ figure }: { figure: Extract<Figure, { kind: "marks" }> }) {
           height={VIEW.h - 1}
           rx={12}
           fill="none"
-          stroke="rgba(244,243,240,0.055)"
+          stroke="var(--color-hair-soft)"
         />
         {[0.25, 0.5, 0.75].map((at) => (
           <line
@@ -280,7 +282,7 @@ function Marks({ figure }: { figure: Extract<Figure, { kind: "marks" }> }) {
             x2={VIEW.w - VIEW.pad}
             y1={VIEW.h * at}
             y2={VIEW.h * at}
-            stroke="rgba(244,243,240,0.045)"
+            stroke="var(--color-hair-soft)"
           />
         ))}
 
@@ -292,7 +294,7 @@ function Marks({ figure }: { figure: Extract<Figure, { kind: "marks" }> }) {
               cx={cx}
               cy={cy}
               r={r}
-              fill={colourOf(mark)}
+              style={{ fill: colourOf(mark) }}
               fillOpacity={0.72}
             >
               {mark.label && <title>{mark.label}</title>}
