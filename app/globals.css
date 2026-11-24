@@ -375,3 +375,430 @@ html.lenis body {
     will-change: auto;
   }
 }
+
+/* ============================== paper: the research reading surface ==============================
+   A research note reads on paper: warm off-white, near-black ink, a serif
+   body in a ~68ch column, sans headings, hairline rules, figures framed by
+   space rather than glass. Scoped to .paper, so the stage pages, the
+   whitepaper and the writing pages keep the void.
+
+   The scope re-points the colour tokens, so every Tailwind utility inside
+   (text-ink/70, border-hair, ...) flips to its paper value with no change to
+   the shared prose renderer. The rules below are unlayered on purpose: they
+   must beat those utilities, which live in a layer. */
+.paper {
+  /* Dark, like the rest of quirq, but tuned for long reading: headings in
+     full ink, body a step down (warm, ~13:1 on black) so a page of text
+     does not glare, secondary text still well above AA. */
+  --color-ink: #f4f3f0;
+  --color-dim: #a9a8a2;
+  --color-faint: #8b8a84;
+  --color-hair: rgba(244, 243, 240, 0.12);
+  --color-hair-soft: rgba(244, 243, 240, 0.07);
+  --paper-text: #d8d6d0;
+  --paper: #000000;
+  --paper-raised: rgba(255, 255, 255, 0.035);
+  --paper-sunk: rgba(255, 255, 255, 0.06);
+  --paper-accent: #1d4ed8;
+  --serif: var(--font-serif), "Iowan Old Style", Georgia, serif;
+
+  position: relative;
+  background: transparent; /* the research glow shows through at the top */
+  color: var(--color-ink);
+  color-scheme: dark;
+  min-height: 100svh;
+  padding-bottom: 96px;
+}
+/* No film grain over long-form text: it softens every glyph edge. */
+body:has(.paper) .grain {
+  display: none;
+}
+.paper ::selection {
+  background: rgba(244, 243, 240, 0.92);
+  color: #000;
+}
+.paper :focus-visible {
+  outline-color: var(--color-ink);
+}
+
+/* ---- title block ---- */
+.paper-head {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 128px 24px 0;
+}
+.paper-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-dim);
+  transition: color 0.2s;
+}
+.paper-back:hover { color: var(--color-ink); }
+.paper-eyebrow {
+  margin-top: 44px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-dim);
+}
+.paper-eyebrow a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-hair);
+  text-underline-offset: 4px;
+}
+.paper-eyebrow a:hover { text-decoration-color: currentColor; }
+.paper-eyebrow span:last-child::first-letter { text-transform: uppercase; }
+.paper-title {
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+  color: var(--color-ink);
+}
+.paper-dek {
+  margin-top: 24px;
+  font-family: var(--serif);
+  font-size: clamp(19px, 2vw, 22px);
+  line-height: 1.5;
+  color: var(--color-dim);
+  text-wrap: pretty;
+}
+.paper-meta {
+  margin-top: 32px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-hair);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  font-size: 13.5px;
+  color: var(--color-dim);
+}
+.paper-meta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+.paper-meta-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 640px) {
+  .paper-meta-link { margin-left: 0; }
+}
+
+.paper-hero {
+  display: block;
+  max-width: 1128px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+.paper-hero > span { border-radius: 14px; border: 0; }
+
+/* ---- body grid: contents rail | reading column | balance ---- */
+.paper-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.paper-aside { display: none; }
+@media (min-width: 1200px) {
+  /* Title block sits on the reading column, not centred over the rail. */
+  .paper-head { max-width: 1128px; padding-left: 292px; padding-right: 124px; }
+  .paper-grid {
+    max-width: 1128px;
+    grid-template-columns: 220px minmax(0, 712px) 1fr;
+    column-gap: 48px;
+  }
+  .paper-grid > .paper-body { grid-column: 2; }
+  .paper-aside { display: block; grid-column: 1; }
+}
+.paper-toc {
+  position: sticky;
+  top: 112px;
+  margin-top: 64px;
+  max-height: calc(100svh - 140px);
+  overflow-y: auto;
+}
+.paper-toc-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+.paper-toc ol { margin-top: 14px; border-left: 1px solid var(--color-hair); }
+.paper-toc a {
+  display: block;
+  margin-left: -1px;
+  padding: 6px 0 6px 14px;
+  border-left: 1px solid transparent;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--color-faint);
+  transition: color 0.2s, border-color 0.2s;
+}
+.paper-toc a:hover { color: var(--color-ink); }
+.paper-toc a[aria-current] { color: var(--color-ink); border-left-color: var(--color-ink); }
+
+.paper-body {
+  padding-top: 24px;
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--color-ink);
+  font-feature-settings: "kern", "liga", "onum";
+  hyphens: manual;
+}
+
+/* ---- prose blocks on paper (shared renderer, paper values) ---- */
+.paper .prose-p,
+.paper .prose-list li {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--paper-text);
+  letter-spacing: 0;
+}
+.paper .prose-p { margin-top: 1.1em; text-wrap: pretty; }
+.paper .prose-h2,
+.paper .prose-h3 {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  scroll-margin-top: 104px;
+  text-wrap: balance;
+}
+.paper .prose-h2 {
+  margin-top: 2.6em;
+  font-size: 27px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+.paper .prose-h3 {
+  margin-top: 2em;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.paper .prose-h2 + .prose-p,
+.paper .prose-h3 + .prose-p { margin-top: 0.7em; }
+.paper .prose-quote {
+  margin: 1.8em 0;
+  padding-left: 24px;
+  font-size: 21px;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--color-ink);
+}
+.paper .prose-quote > span[aria-hidden] { width: 2px; background: var(--color-ink) !important; }
+.paper .prose-list { margin-top: 1.1em; }
+.paper .prose-list li > span[aria-hidden] {
+  margin-top: 0.68em;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--color-ink) !important;
+}
+.paper .prose-code {
+  margin: 1.6em 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--paper-sunk);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--paper-text);
+}
+
+/* tables: ruled, sans, numbers aligned; no box */
+.paper .prose-table {
+  margin: 2em 0;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-sans);
+}
+.paper .prose-table table { min-width: 520px; }
+.paper .prose-table thead tr { background: none; border-bottom: 1.5px solid var(--color-ink); }
+.paper .prose-table th {
+  padding: 10px 14px 10px 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-ink);
+  vertical-align: bottom;
+}
+.paper .prose-table tbody tr { border-bottom-color: var(--color-hair); }
+.paper .prose-table tbody tr:last-child { border-bottom: 1px solid var(--color-hair); }
+.paper .prose-table td {
+  padding: 10px 14px 10px 0;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--paper-text);
+  font-variant-numeric: tabular-nums;
+  vertical-align: top;
+}
+.paper .prose-table td:first-child { font-weight: 500; color: var(--color-ink); }
+
+/* figures: white plate, sans caption beneath */
+.paper .prose-figure,
+.paper .prose-chartnote,
+.paper .prose-video {
+  margin: 2.2em 0;
+  background: var(--paper-raised);
+  border: 1px solid var(--color-hair-soft);
+  border-radius: 12px;
+  backdrop-filter: none;
+  font-family: var(--font-sans);
+}
+.paper .prose-figure > div { border-color: var(--color-hair-soft); }
+.paper .prose-figure .figure-track { background: var(--paper-sunk); }
+.paper .prose-figure figcaption,
+.paper .prose-video figcaption {
+  background: transparent;
+  border-top-color: var(--color-hair-soft);
+  padding: 12px 20px 14px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  letter-spacing: 0;
+  color: var(--color-dim);
+}
+.paper .prose-chartnote { background: transparent; }
+.paper .prose-chartnote figcaption { font-size: 15px; color: var(--color-dim); }
+.paper .prose-chartnote-label { letter-spacing: 0.08em; font-family: var(--font-sans); font-weight: 600; }
+
+/* the decision diagram and anything else drawn as dark glass */
+.paper .bg-black\/70,
+.paper .bg-black\/40 { background: var(--paper-raised); backdrop-filter: none; }
+.paper .bg-white\/\[0\.03\],
+.paper .bg-white\/\[0\.04\],
+.paper .bg-white\/\[0\.06\],
+.paper .bg-white\/\[0\.07\] { background: var(--paper-sunk); }
+
+.paper-source {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-hair);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--color-faint);
+}
+.paper-source a { text-decoration: underline; text-underline-offset: 3px; }
+.paper-source a:hover { color: var(--color-ink); }
+
+.paper-foot {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (min-width: 1200px) {
+  .paper-foot { max-width: 1128px; padding-left: 292px; padding-right: 124px; }
+}
+.paper-foot .label { font-family: var(--font-sans); letter-spacing: 0.06em; font-weight: 600; font-size: 12px; color: var(--color-faint); }
+
+/* ---- math ---- */
+.paper .katex { font-size: 1.08em; }
+.math-display {
+  display: block;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+.math-display .katex-display { margin: 0; }
+.math-inline .katex { white-space: nowrap; }
+
+@media (max-width: 640px) {
+  .paper-head { padding-top: 104px; }
+  .paper-eyebrow { margin-top: 32px; }
+  .paper-hero { margin-top: 32px; padding: 0 16px; }
+  .paper-body,
+  .paper .prose-p,
+  .paper .prose-list li { font-size: 18px; }
+  .paper .prose-h2 { font-size: 23px; }
+  .paper .prose-quote { font-size: 19px; }
+}
+/* A display equation wider than the column scrolls; soft edge shadows say
+   so (they ride the scroll via background-attachment: local). */
+.paper .math-display {
+  background:
+    linear-gradient(to right, var(--paper) 30%, transparent) left / 24px 100% no-repeat local,
+    linear-gradient(to left, var(--paper) 30%, transparent) right / 24px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(244, 243, 240, 0.18), transparent) left / 10px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(244, 243, 240, 0.18), transparent) right / 10px 100% no-repeat scroll;
+}
+@media (max-width: 640px) {
+  .paper .math-display .katex { font-size: 0.98em; }
+}
+
+/* Figures on paper: the value palette in quieter inks, labels in sans. */
+.paper {
+  --figure-value-0: #ff8a5c;
+  --figure-value-1: #6ea8ff;
+  --figure-value-2: #5fd39a;
+  --figure-value-3: #c58bff;
+}
+.paper .prose-figure .font-mono {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+.paper .prose-figure .figure-track { height: 8px; }
+.paper .prose-figure > div:not(:last-child) { padding: 18px 22px; }
+/* A single-series figure with no unit leaves its legend row empty. */
+.prose-figure > div:empty { display: none; }
+
+/* Exported figures (a paper's charts): drawn for white paper, so they sit on
+   a light plate inside the dark page, captioned beneath in the figure style. */
+.prose-image { margin: 2.2em 0; }
+.prose-image-plate {
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fbfbf9;
+  padding: 14px 10px;
+}
+.prose-image-caption {
+  margin-top: 12px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-dim);
+}
+.prose-image-caption strong { color: var(--color-ink); font-weight: 600; }
+.prose-list-num { min-width: 1.4em; color: var(--color-dim); font-family: var(--font-sans); font-size: 0.85em; padding-top: 0.2em; }
+.paper .prose-p strong,
+.paper .prose-list strong,
+.paper .prose-table strong { color: var(--color-ink); font-weight: 600; }
+.paper .prose-body code,
+.paper .prose-p code { font-family: var(--font-mono); font-size: 0.85em; background: var(--paper-sunk); padding: 0.1em 0.35em; border-radius: 4px; }
+.paper .prose-table td, .paper .prose-table th { min-width: 6em; }
+
+/* Numbered display equations: KaTeX pins \tag to the right edge, so a formula
+   wider than the column runs under its number. Lay the tag out after the
+   formula instead; a too-wide line then scrolls, number included. */
+.math-display .katex-display > .katex { display: block; }
+.math-display .katex-display > .katex > .katex-html:has(> .katex-tag) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+}
+.math-display .katex-display > .katex > .katex-html > .katex-tag {
+  position: static;
+  margin-left: auto;
+  padding-left: 1.5em;
+}
+.math-display .katex-display > .katex > .katex-html:has(> .katex-tag) > .base:first-child { margin-left: auto; }

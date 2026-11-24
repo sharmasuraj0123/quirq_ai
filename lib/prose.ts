@@ -55,9 +55,25 @@ export type VideoBlock = {
   caption: string;
 };
 
+/**
+ * A drawn figure from outside the site's own chart grammar: a paper's chart
+ * exported as an image. Shown on a light plate, captioned beneath.
+ */
+export type ImageBlock = {
+  kind: "image";
+  /** Under public/. */
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  /** Prose, with the same inline markup and math as a paragraph. */
+  caption?: string;
+};
+
 export type Block =
   | { kind: "h2" | "h3" | "p" | "quote" | "code"; text: string }
-  | { kind: "list"; items: string[] }
+  | { kind: "list"; items: string[]; ordered?: true }
+  | ImageBlock
   | { kind: "table"; header: string[]; rows: string[][] }
   | DecisionBlock
   | VideoBlock;

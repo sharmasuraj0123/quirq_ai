@@ -14,6 +14,19 @@ import { PostBanner } from "@/components/research/banner";
 import { PostCard } from "@/components/research/card";
 import { BodyBlock } from "@/components/prose/body";
 import { Rise } from "@/components/ui/primitives";
+import { ArticleToc } from "@/components/research/toc";
+import { headingId } from "@/lib/prose";
+import { plainText } from "@/components/prose/rich-text";
+import { Source_Serif_4 } from "next/font/google";
+
+/* The reading face: a calm transitional serif for titles and body, set
+   against the site's Inter for headings, labels and figures. */
+const serif = Source_Serif_4({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
 
 export function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
@@ -69,7 +82,7 @@ function NeighbourLink({
     <Link
       href={`/research/${post.slug}`}
       rel={back ? "prev" : "next"}
-      className={`group flex items-center gap-4 rounded-2xl border border-hair bg-black/40 px-5 py-5 transition-colors hover:border-ink/25 ${
+      className={`group flex items-center gap-4 rounded-2xl border border-hair px-5 py-5 transition-colors hover:border-ink/25 ${
         back ? "" : "flex-row-reverse text-right"
       }`}
     >
@@ -115,178 +128,168 @@ export default async function ResearchPost({
   const { previous, next } = neighbours(post);
   const related = relatedPosts(post, 2, [previous, next]);
 
-  return (
-    <article className="mx-auto w-full max-w-[760px] px-5 pt-24 sm:px-8 sm:pt-28">
-      <Rise>
-        <Link
-          href="/research"
-          className="label inline-flex items-center gap-2 transition-colors hover:text-ink"
-        >
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 12 12"
-            fill="none"
-            aria-hidden
-          >
-            <path
-              d="M7.5 2L3.5 6L7.5 10"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Research
-        </Link>
-      </Rise>
+  // The side contents list: the note's own h2s, anchored by the same
+  // headingId the body renderer stamps on each heading.
+  const toc = post.body.flatMap((block) =>
+    block.kind === "h2"
+      ? [{ id: headingId(block.text), text: plainText(block.text) }]
+      : [],
+  );
 
-      <header className="mt-8">
-        {/* Bleeds past the text column at lg so the banner reads as the note's
-            plate rather than a figure inside the prose. */}
-        <Rise className="lg:-mx-14">
+  return (
+    // The paper surface: a light reading page laid over the site's void, so a
+    // long note reads like a printed article rather than copy on a stage.
+    <div className={`paper ${serif.variable}`}>
+      <article className="paper-article">
+        <header className="paper-head">
+          <Rise>
+            <Link href="/research" className="paper-back">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 12 12"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M7.5 2L3.5 6L7.5 10"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Research
+            </Link>
+          </Rise>
+
+          <Rise delay={0.04}>
+            <p className="paper-eyebrow">
+              {topic && (
+                /* The one cross-link out of an article into its shelf. */
+                <Link href={`/research/topic/${topic.slug}`}>
+                  {topic.label}
+                </Link>
+              )}
+              {topic && post.tag && <span aria-hidden> · </span>}
+              {post.tag && <span>{post.tag}</span>}
+            </p>
+          </Rise>
+          <Rise delay={0.08}>
+            <h1 className="paper-title">{post.title}</h1>
+          </Rise>
+          <Rise delay={0.12}>
+            <p className="paper-dek">{post.dek}</p>
+          </Rise>
+
+          <Rise delay={0.16}>
+            <div className="paper-meta">
+              <span className="numeric">
+                Note {String(noteNumber(post)).padStart(2, "0")}
+              </span>
+              {post.date && <span>{post.date}</span>}
+              <span>{post.readingMinutes} min read</span>
+              {/* The other way to read it: a page that mounts the 3D shot. */}
+              <Link
+                href={`/journey/read/${post.slug}`}
+                className="paper-meta-link"
+              >
+                Read it interactively
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M2 6H10M10 6L6.5 2.5M10 6L6.5 9.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </Rise>
+        </header>
+
+        {/* The banner is the note's plate: wider than the text column. */}
+        <Rise delay={0.2} className="paper-hero">
           <PostBanner
             banner={post.banner}
             priority
-            sizes="(min-width: 1024px) 810px, (min-width: 640px) 700px, 92vw"
+            sizes="(min-width: 1180px) 1080px, 94vw"
             className="aspect-[2.4/1] w-full"
           />
         </Rise>
 
-        <Rise delay={0.05}>
-          <p className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-2 font-mono text-[10px] tracking-[0.18em] text-faint uppercase">
-            <span className="numeric">
-              Note {String(noteNumber(post)).padStart(2, "0")}
-            </span>
-            <span aria-hidden>·</span>
-            {topic && (
-              <>
-                {/* The one cross-link out of an article into its shelf. */}
-                <Link
-                  href={`/research/topic/${topic.slug}`}
-                  className="text-dim underline decoration-hair underline-offset-4 transition-colors hover:text-ink"
-                >
-                  {topic.label}
-                </Link>
-                <span aria-hidden>·</span>
-              </>
-            )}
-            <span>
-              {[post.tag, post.date, `${post.readingMinutes} min read`]
-                .filter(Boolean)
-                .join(" · ")}
-            </span>
-          </p>
-        </Rise>
-        <Rise delay={0.1}>
-          <h1 className="mt-5 text-[clamp(30px,4.4vw,50px)] font-semibold leading-[1.05] tracking-[-0.03em]">
-            {post.title}
-          </h1>
-        </Rise>
-        <Rise delay={0.16}>
-          <p className="mt-6 text-[17px] leading-[1.65] text-dim">{post.dek}</p>
-        </Rise>
+        <div className="paper-grid">
+          {toc.length > 2 && (
+            <aside className="paper-aside">
+              <ArticleToc items={toc} />
+            </aside>
+          )}
 
-        {/* The other way to read it. A plain Link, not the stage CTA: this
-            goes to a page that mounts the 3D shot, and the walk is the point,
-            not the button. */}
-        <Rise delay={0.2}>
-          <Link
-            href={`/journey/read/${post.slug}`}
-            className="group mt-8 inline-flex items-center gap-3 rounded-full border border-hair bg-black/40 py-2 pr-5 pl-2 transition-colors hover:border-ink/25"
-          >
-            <span
-              aria-hidden
-              className="h-7 w-7 rounded-full"
-              style={{ background: "var(--spectrum)" }}
-            />
-            <span className="font-mono text-[10.5px] tracking-[0.14em] text-ink uppercase">
-              Read it interactively
-            </span>
-            <span className="hidden font-mono text-[10px] tracking-[0.1em] text-faint sm:inline">
-              pick your path, the glass follows
-            </span>
-            <svg
-              width="11"
-              height="11"
-              viewBox="0 0 12 12"
-              fill="none"
-              aria-hidden
-              className="text-dim transition-transform duration-300 group-hover:translate-x-0.5"
-            >
-              <path
-                d="M2 6H10M10 6L6.5 2.5M10 6L6.5 9.5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </Rise>
-
-        <Rise delay={0.24}>
-          <div className="spectrum-rule mt-9 h-px w-14" />
-        </Rise>
-      </header>
-
-      {/* Not a Rise: whileInView needs a quarter of the element on screen at
+          {/* Not a Rise: whileInView needs a quarter of the element on screen at
           once, which a long article body can never satisfy, so a wrapped body
           would simply stay invisible. Long-form text needs no entrance. */}
-      <div>
-        {post.body.map((block, i) => (
-          <BodyBlock key={i} block={block} />
-        ))}
-
-        {post.source && (
-          <p className="mt-14 border-t border-hair-soft pt-6 font-mono text-[10.5px] leading-relaxed tracking-[0.08em] text-faint">
-            Adapted from the XO research program · canonical version at{" "}
-            <a
-              href={post.source}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 transition-colors hover:text-dim"
-            >
-              docs.xo.builders
-            </a>
-          </p>
-        )}
-      </div>
-
-      {(previous || next) && (
-        <Rise delay={0.05}>
-          <nav
-            aria-label="Notes either side of this one"
-            className="mt-12 grid gap-4 sm:grid-cols-2"
-          >
-            {previous && <NeighbourLink post={previous} direction="previous" />}
-            {/* Column two even when there is no previous note, so `next`
-                always sits on the side its arrow points to. */}
-            {next && (
-              <div className="sm:col-start-2">
-                <NeighbourLink post={next} direction="next" />
-              </div>
-            )}
-          </nav>
-        </Rise>
-      )}
-
-      {related.length > 0 && (
-        <section className="mt-16 border-t border-hair pt-12">
-          <Rise>
-            {/* Not "more in <topic>": the list falls back to the wider
-                program once a topic runs out, so a topic heading would lie. */}
-            <h2 className="label">Keep reading</h2>
-          </Rise>
-          <div className="mt-8 grid gap-x-7 gap-y-12 sm:grid-cols-2">
-            {related.map((it, i) => (
-              <Rise key={it.slug} delay={0.06 + i * 0.06}>
-                <PostCard post={it} />
-              </Rise>
+          <div className="paper-body">
+            {post.body.map((block, i) => (
+              <BodyBlock key={i} block={block} />
             ))}
+
+            {post.source && (
+              <p className="paper-source">
+                Adapted from the XO research program · canonical version at{" "}
+                <a href={post.source} target="_blank" rel="noopener noreferrer">
+                  docs.xo.builders
+                </a>
+              </p>
+            )}
           </div>
-        </section>
-      )}
-    </article>
+        </div>
+
+        <div className="paper-foot">
+          {(previous || next) && (
+            <Rise delay={0.05}>
+              <nav
+                aria-label="Notes either side of this one"
+                className="mt-12 grid gap-4 sm:grid-cols-2"
+              >
+                {previous && (
+                  <NeighbourLink post={previous} direction="previous" />
+                )}
+                {/* Column two even when there is no previous note, so `next`
+                always sits on the side its arrow points to. */}
+                {next && (
+                  <div className="sm:col-start-2">
+                    <NeighbourLink post={next} direction="next" />
+                  </div>
+                )}
+              </nav>
+            </Rise>
+          )}
+
+          {related.length > 0 && (
+            <section className="mt-16 border-t border-hair pt-12">
+              <Rise>
+                {/* Not "more in <topic>": the list falls back to the wider
+                program once a topic runs out, so a topic heading would lie. */}
+                <h2 className="label">Keep reading</h2>
+              </Rise>
+              <div className="mt-8 grid gap-x-7 gap-y-12 sm:grid-cols-2">
+                {related.map((it, i) => (
+                  <Rise key={it.slug} delay={0.06 + i * 0.06}>
+                    <PostCard post={it} />
+                  </Rise>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </article>
+    </div>
   );
 }

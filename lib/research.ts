@@ -18,6 +18,7 @@
  * the many modules that already import `Block` from here keep working.
  */
 import type { Block } from "./prose";
+import { ATTRACTION_BODY, ATTRACTION_WORDS } from "./research-attraction";
 export type { Block };
 
 /** The coarse shelf a note sits on. `tag` stays the fine-grained label. */
@@ -200,30 +201,32 @@ export const POSTS: Post[] = [
       { kind: "quote", text: "Snapshot before, snapshot after, score against weighted checks, mint against the budget, meter everything. Every number an operator needs falls out of one ledger." },
       { kind: "h2", text: "Scoring: how completion is computed" },
       { kind: "p", text: "A unit of work is a triple:" },
-      { kind: "code", text: "u = (S₀, G, B)\n\nS₀  the snapshot of world state when the unit is created\nG   the definition of done: weighted checks {(g₁,w₁), …, (gₙ,wₙ)}\nB   the budget: what reaching the end state is worth, set by the owner" },
+      { kind: "p", text: "$$u = (S_0,\\; G,\\; B)$$" },
+      { kind: "list", items: ["$S_0$, the snapshot of world state when the unit is created;", "$G$, the definition of done: weighted checks $\\{(g_1, w_1), \\dots, (g_n, w_n)\\}$;", "$B$, the budget: what reaching the end state is worth, set by the owner."] },
       { kind: "p", text: "When the agent reports done, the environment captures the after-snapshot S₁ and computes:" },
-      { kind: "code", text: "         Σᵢ wᵢ · gᵢ(S₁)\nV(u) = ─────────────────  ∈ [0, 1]      completion score\n            Σᵢ wᵢ\n\ndone(u) = V(u) ≥ τ                      acceptance, typically τ = 1" },
+      { kind: "p", text: "$$\\begin{aligned} V(u) &= \\frac{\\sum_i w_i \\, g_i(S_1)}{\\sum_i w_i} \\in [0, 1] && \\text{completion score} \\\\[6pt] \\operatorname{done}(u) &= V(u) \\ge \\tau && \\text{acceptance, typically } \\tau = 1 \\end{aligned}$$" },
       { kind: "p", text: "Every check runs against S₁, the state the environment captured, never the agent's account of what it did. The score is a property of the world, not of a report." },
       { kind: "p", text: "Worked: a support ticket carries three checks: status closed (w = 0.5), reply sent (w = 0.3), KB article linked (w = 0.2). The after-snapshot passes the first two: V = 0.8." },
       { kind: "h2", text: "The mint" },
-      { kind: "code", text: "Q(u) = V(u) · B(u)              divisible settlement (pay per delivered share)\nQ(u) = B(u) · [V(u) ≥ τ]        atomic settlement (all or nothing)" },
+      { kind: "p", text: "$$\\begin{aligned} Q(u) &= V(u) \\cdot B(u) && \\text{divisible settlement (pay per delivered share)} \\\\ Q(u) &= B(u) \\cdot [\\,V(u) \\ge \\tau\\,] && \\text{atomic settlement (all or nothing)} \\end{aligned}$$" },
       { kind: "p", text: "The owner declares the regime at creation: atomic when partial completion is worthless (a half-merged change), divisible when it is not (four of five report sections). Quirqs inherit the budget's currency, so quirq totals compare directly to payroll, vendor spend, and revenue." },
       { kind: "h2", text: "The all-in cost of an outcome" },
       { kind: "p", text: "The token bill is one line of the true cost. The environment meters all of them:" },
-      { kind: "code", text: "C_total(u) =  Σ tokensₘ · priceₘ           inference, per model\n           +  t_cpu·r_cpu + t_gpu·r_gpu    metered compute\n           +  Σ calls_j · price_j          external API calls\n           +  storage · r_store            storage\n           +  F / N_units                  environment amortization\n           +  h · r_human                  human intervention time" },
+      { kind: "p", text: "$$\\begin{aligned} C_{\\text{total}}(u) = {} & \\textstyle\\sum_m \\text{tokens}_m \\cdot \\text{price}_m && \\text{inference, per model} \\\\ {}+{} & t_{\\text{cpu}} r_{\\text{cpu}} + t_{\\text{gpu}} r_{\\text{gpu}} && \\text{metered compute} \\\\ {}+{} & \\textstyle\\sum_j \\text{calls}_j \\cdot \\text{price}_j && \\text{external API calls} \\\\ {}+{} & \\text{storage} \\cdot r_{\\text{store}} && \\text{storage} \\\\ {}+{} & F / N_{\\text{units}} && \\text{environment amortization} \\\\ {}+{} & h \\cdot r_{\\text{human}} && \\text{human intervention time} \\end{aligned}$$" },
       { kind: "p", text: "The last term matters most and is most often omitted: a program whose outputs each require twenty minutes of senior review pays its largest cost in a currency the token bill never sees. Under quirq accounting it cannot hide, because interventions are exactly the V < τ events the scoring rule already counts." },
       { kind: "p", text: "Worked: the ticket above, resolved with 38k tokens at $2/M plus 4k at $0.25/M (inference $0.077), 90 CPU-seconds ($0.001), two CRM calls ($0.02), amortization ($0.03), no intervention: C_total = $0.128." },
       { kind: "h2", text: "Unit metrics" },
-      { kind: "code", text: "cost per quirq   c_q = C_total / Q         price of a dollar of verified work\nquirq margin     μ   = Q − C_total         surplus on the unit\nmultiple         x   = Q / C_total         the reciprocal view" },
+      { kind: "p", text: "$$\\begin{aligned} c_q &= C_{\\text{total}} / Q && \\text{cost per quirq: price of a dollar of verified work} \\\\ \\mu &= Q - C_{\\text{total}} && \\text{quirq margin: surplus on the unit} \\\\ x &= Q / C_{\\text{total}} && \\text{multiple: the reciprocal view} \\end{aligned}$$" },
       { kind: "p", text: "Worked: at B = $4.00 and V = 1.0: Q = 4.00, c_q = 0.032, margin $3.87, multiple 31x. Had it settled divisibly at V = 0.8: Q = 3.2 and c_q = 0.040. Incomplete work is automatically more expensive per quirq: the incentive points the right way." },
       { kind: "h2", text: "Portfolio metrics" },
       { kind: "p", text: "Over the units in an accounting window T:" },
-      { kind: "code", text: "QER(T)  =  Σ Q(u) / Σ C_total(u)          quirq efficiency ratio (the headline)\nQV(T)   =  Σ Q(u) / |T|                   quirq velocity (throughput in value)\nIR(T)   =  |{u : V(u) < τ}| / N           intervention rate (the trust signal)" },
+      { kind: "p", text: "$$\\begin{aligned} \\mathrm{QER}(T) &= \\frac{\\sum Q(u)}{\\sum C_{\\text{total}}(u)} && \\text{quirq efficiency ratio (the headline)} \\\\[4pt] \\mathrm{QV}(T) &= \\frac{\\sum Q(u)}{|T|} && \\text{quirq velocity (throughput in value)} \\\\[4pt] \\mathrm{IR}(T) &= \\frac{|\\{u : V(u) < \\tau\\}|}{N} && \\text{intervention rate (the trust signal)} \\end{aligned}$$" },
       { kind: "p", text: "QER is dimensionless and currency-independent: comparable across teams, vendors, and models. It is what \"AI ROI\" should have meant. IR is measured for free by the same machinery, and because failures localize to named checks, it arrives with its diagnosis attached." },
       { kind: "h2", text: "The time axis" },
       { kind: "p", text: "Two dynamics move the trajectory in opposite directions, and both must be read." },
       { kind: "p", text: "Tenure pushes cost per quirq down. Every unit's token bill hides two costs: doing the work, and figuring out what the work is (reading the codebase, rediscovering conventions, inferring what this owner means by done):" },
-      { kind: "code", text: "C(uₜ) = c_exec + k · H(intent | Mₜ)\n\nc_exec   the execution floor (irreducible)\nH(·|Mₜ)  residual intent uncertainty, given environment memory Mₜ\nk        tokens burned per unit of uncertainty resolved" },
+      { kind: "p", text: "$$C(u_t) = c_{\\text{exec}} + k \\cdot H(\\text{intent} \\mid M_t)$$" },
+      { kind: "list", items: ["$c_{\\text{exec}}$, the execution floor (irreducible);", "$H(\\cdot \\mid M_t)$, residual intent uncertainty, given environment memory $M_t$;", "$k$, tokens burned per unit of uncertainty resolved."] },
       { kind: "p", text: "A persistent environment deposits every completed unit into memory (files touched, accepted definitions of done, corrections that survived review), so residual uncertainty and cost fall monotonically toward the floor; a fresh context pays cold start every time. It is what every manager knows about contractors: the tenth job is cheaper than the first because they stop asking questions they know the answers to. The environment is what gives an agent tenure." },
       { kind: "p", text: "Extending the worked micro-benchmark to 50 sequential similar units (cold-start intent cost 2,600 tokens over a 3,000-token floor, decaying as memory accumulates):" },
       { kind: "table", header: ["Tokens per unit", "Unit 1", "Unit 10", "Unit 25", "Unit 50", "Total"], rows: [
@@ -233,11 +236,11 @@ export const POSTS: Post[] = [
       ] },
       { kind: "p", text: "Unit 1 costs the same either way, so the benefit is invisible in a demo and decisive in production, and it is durable because it comes from eliminated uncertainty, not a better model. This inverts procurement logic: the asset is not the agent you rent but the environment you own, because the environment is where the cost curve lives." },
       { kind: "p", text: "Goodhart drift pushes measured value up, falsely. Agents find the shortest path to green. The observable is the audit gap A(T): re-verify a random sample against gold checks held outside the production environment. The honest headline is audit-corrected:" },
-      { kind: "code", text: "QER*(T) = QER(T) · (1 − A(T))       report the trend, not the level" },
+      { kind: "p", text: "$$\\mathrm{QER}^*(T) = \\mathrm{QER}(T) \\cdot \\bigl(1 - A(T)\\bigr) \\qquad \\text{report the trend, not the level}$$" },
       { kind: "p", text: "When QER* rises while IR falls, AI is genuinely compounding in the company. When QER rises but QER* stalls, the checks are being farmed. When both stall while token volume grows, the company has bought an electricity bill." },
       { kind: "h2", text: "The bridge to energy" },
       { kind: "p", text: "Because the cost model retains token counts, physical accounting composes with value accounting:" },
-      { kind: "code", text: "quirqs / kWh        with E ≈ Σ tokens · e_tok\nquirqs / tonne CO₂  via grid carbon intensity" },
+      { kind: "p", text: "$$\\begin{aligned} &\\text{quirqs} / \\text{kWh} && \\text{with } E \\approx \\textstyle\\sum \\text{tokens} \\cdot e_{\\text{tok}} \\\\ &\\text{quirqs} / \\text{tonne CO}_2 && \\text{via grid carbon intensity} \\end{aligned}$$" },
       { kind: "p", text: "Illustrative: a month at 2.1B tokens with e_tok = 1.5 J/token is ~875 kWh; if the month minted 148,000 quirqs, the plant runs at ~169 quirqs/kWh. Not \"we used less AI\" but \"we delivered more verified value per unit of energy.\"" },
     ],
   },
@@ -1218,7 +1221,6 @@ export const POSTS: Post[] = [
     dek: "A two-round study with Levanto on 90 tasks from XO Space's own development. When Sage chose the model and effort level for each request, and unfinished work was retried once on a stronger layer, quirq AI's XO platform completed 84 of 90 tasks against 83 for an all-Opus baseline, for half the total cost.",
     tag: "partner study",
     topic: "speed-trials",
-    featured: true,
     banner: {
       src: "/research/routing-with-levanto-sage-lockup.jpg",
       width: 1600,
@@ -1413,6 +1415,24 @@ export const POSTS: Post[] = [
       { kind: "p", text: "We thank the Levanto team for their partnership on this study. Sage gave us a way to express a routing policy as a handful of plain sentences, to change that policy without changing code, and to make each decision for a fraction of a cent." },
       { kind: "p", text: "Levanto has published its own account of the study as a case study, and a technical report with every request format, rule and result is available separately. All figures in this note come from our own measurement in this study. If you run agents at any volume, we would encourage you to treat our numbers as a method to repeat and not as a promise: classify the request, start on a layer suited to it, keep a stronger attempt in reserve for work that falls short, and measure the outcome on the tasks your own users actually send." },
     ],
+  },
+  {
+    slug: "attraction-shared-field",
+    title:
+      "Attraction: Coordinating Agents and Spaces Through a Shared Field of Information",
+    dek: "Can shared, public information replace a central coordinator in a multi-agent system?",
+    tag: "paper",
+    topic: "proving-grounds",
+    featured: true,
+    banner: {
+      src: "/research/attraction-field.jpg",
+      width: 1600,
+      height: 900,
+      alt: "Streamlines of coloured light curving into three bright points on black.",
+    },
+    date: "November 24, 2026",
+    readingMinutes: Math.round(ATTRACTION_WORDS / 230),
+    body: ATTRACTION_BODY,
   },
 ];
 
