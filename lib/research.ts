@@ -1221,7 +1221,6 @@ export const POSTS: Post[] = [
     dek: "A two-round study with Levanto on 90 tasks from XO Space's own development. When Sage chose the model and effort level for each request, and unfinished work was retried once on a stronger layer, quirq AI's XO platform completed 84 of 90 tasks against 83 for an all-Opus baseline, for half the total cost.",
     tag: "partner study",
     topic: "speed-trials",
-    featured: true,
     banner: {
       src: "/research/routing-with-levanto-sage-lockup.jpg",
       width: 1600,
@@ -1424,6 +1423,7 @@ export const POSTS: Post[] = [
     dek: "Can shared, public information replace a central coordinator in a multi-agent system?",
     tag: "paper",
     topic: "proving-grounds",
+    featured: true,
     banner: {
       src: "/research/attraction-field.jpg",
       width: 1600,
