@@ -387,32 +387,35 @@ html.lenis body {
    the shared prose renderer. The rules below are unlayered on purpose: they
    must beat those utilities, which live in a layer. */
 .paper {
-  --color-ink: #191918;
-  --color-dim: #5c5b56;
-  --color-faint: #73726c; /* 4.7:1 on the paper */
-  --color-hair: rgba(25, 25, 24, 0.12);
-  --color-hair-soft: rgba(25, 25, 24, 0.08);
-  --paper: #f8f7f3;
-  --paper-raised: #ffffff;
-  --paper-sunk: #f0eee8;
+  /* Dark, like the rest of quirq, but tuned for long reading: headings in
+     full ink, body a step down (warm, ~13:1 on black) so a page of text
+     does not glare, secondary text still well above AA. */
+  --color-ink: #f4f3f0;
+  --color-dim: #a9a8a2;
+  --color-faint: #8b8a84;
+  --color-hair: rgba(244, 243, 240, 0.12);
+  --color-hair-soft: rgba(244, 243, 240, 0.07);
+  --paper-text: #d8d6d0;
+  --paper: #000000;
+  --paper-raised: rgba(255, 255, 255, 0.035);
+  --paper-sunk: rgba(255, 255, 255, 0.06);
   --paper-accent: #1d4ed8;
   --serif: var(--font-serif), "Iowan Old Style", Georgia, serif;
 
   position: relative;
-  background: var(--paper);
+  background: transparent; /* the research glow shows through at the top */
   color: var(--color-ink);
-  color-scheme: light;
+  color-scheme: dark;
   min-height: 100svh;
   padding-bottom: 96px;
 }
-body:has(.paper) .grain,
-body:has(.paper) .vignette,
-body:has(.paper) .research-glow {
+/* No film grain over long-form text: it softens every glyph edge. */
+body:has(.paper) .grain {
   display: none;
 }
 .paper ::selection {
-  background: #1d1d1b;
-  color: #fff;
+  background: rgba(244, 243, 240, 0.92);
+  color: #000;
 }
 .paper :focus-visible {
   outline-color: var(--color-ink);
@@ -561,7 +564,7 @@ body:has(.paper) .research-glow {
 .paper .prose-list li {
   font-size: 19px;
   line-height: 1.65;
-  color: #262624;
+  color: var(--paper-text);
   letter-spacing: 0;
 }
 .paper .prose-p { margin-top: 1.1em; text-wrap: pretty; }
@@ -612,7 +615,7 @@ body:has(.paper) .research-glow {
   background: var(--paper-sunk);
   font-size: 14px;
   line-height: 1.65;
-  color: #2a2a28;
+  color: var(--paper-text);
 }
 
 /* tables: ruled, sans, numbers aligned; no box */
@@ -642,7 +645,7 @@ body:has(.paper) .research-glow {
   font-size: 14.5px;
   line-height: 1.45;
   letter-spacing: 0;
-  color: #2a2a28;
+  color: var(--paper-text);
   font-variant-numeric: tabular-nums;
   vertical-align: top;
 }
@@ -663,7 +666,7 @@ body:has(.paper) .research-glow {
 .paper .prose-figure .figure-track { background: var(--paper-sunk); }
 .paper .prose-figure figcaption,
 .paper .prose-video figcaption {
-  background: var(--paper);
+  background: transparent;
   border-top-color: var(--color-hair-soft);
   padding: 12px 20px 14px;
   font-family: var(--font-sans);
@@ -672,7 +675,7 @@ body:has(.paper) .research-glow {
   letter-spacing: 0;
   color: var(--color-dim);
 }
-.paper .prose-chartnote { background: var(--paper); }
+.paper .prose-chartnote { background: transparent; }
 .paper .prose-chartnote figcaption { font-size: 15px; color: var(--color-dim); }
 .paper .prose-chartnote-label { letter-spacing: 0.08em; font-family: var(--font-sans); font-weight: 600; }
 
@@ -733,8 +736,8 @@ body:has(.paper) .research-glow {
   background:
     linear-gradient(to right, var(--paper) 30%, transparent) left / 24px 100% no-repeat local,
     linear-gradient(to left, var(--paper) 30%, transparent) right / 24px 100% no-repeat local,
-    radial-gradient(farthest-side at 0 50%, rgba(25, 25, 24, 0.14), transparent) left / 10px 100% no-repeat scroll,
-    radial-gradient(farthest-side at 100% 50%, rgba(25, 25, 24, 0.14), transparent) right / 10px 100% no-repeat scroll;
+    radial-gradient(farthest-side at 0 50%, rgba(244, 243, 240, 0.18), transparent) left / 10px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(244, 243, 240, 0.18), transparent) right / 10px 100% no-repeat scroll;
 }
 @media (max-width: 640px) {
   .paper .math-display .katex { font-size: 0.98em; }
@@ -742,10 +745,10 @@ body:has(.paper) .research-glow {
 
 /* Figures on paper: the value palette in quieter inks, labels in sans. */
 .paper {
-  --figure-value-0: #c4532a;
-  --figure-value-1: #2b5fc4;
-  --figure-value-2: #2f7d52;
-  --figure-value-3: #8a4fc0;
+  --figure-value-0: #ff8a5c;
+  --figure-value-1: #6ea8ff;
+  --figure-value-2: #5fd39a;
+  --figure-value-3: #c58bff;
 }
 .paper .prose-figure .font-mono {
   font-family: var(--font-sans);
