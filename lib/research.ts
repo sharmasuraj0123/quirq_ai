@@ -18,6 +18,7 @@
  * the many modules that already import `Block` from here keep working.
  */
 import type { Block } from "./prose";
+import { ATTRACTION_BODY, ATTRACTION_WORDS } from "./research-attraction";
 export type { Block };
 
 /** The coarse shelf a note sits on. `tag` stays the fine-grained label. */
@@ -1415,6 +1416,23 @@ export const POSTS: Post[] = [
       { kind: "p", text: "We thank the Levanto team for their partnership on this study. Sage gave us a way to express a routing policy as a handful of plain sentences, to change that policy without changing code, and to make each decision for a fraction of a cent." },
       { kind: "p", text: "Levanto has published its own account of the study as a case study, and a technical report with every request format, rule and result is available separately. All figures in this note come from our own measurement in this study. If you run agents at any volume, we would encourage you to treat our numbers as a method to repeat and not as a promise: classify the request, start on a layer suited to it, keep a stronger attempt in reserve for work that falls short, and measure the outcome on the tasks your own users actually send." },
     ],
+  },
+  {
+    slug: "attraction-shared-field",
+    title:
+      "Attraction: Coordinating Agents and Spaces Through a Shared Field of Information",
+    dek: "Can shared, public information replace a central coordinator in a multi-agent system?",
+    tag: "paper",
+    topic: "proving-grounds",
+    banner: {
+      src: "/research/attraction-field.jpg",
+      width: 1600,
+      height: 900,
+      alt: "Streamlines of coloured light curving into three bright points on black.",
+    },
+    date: "November 24, 2026",
+    readingMinutes: Math.round(ATTRACTION_WORDS / 230),
+    body: ATTRACTION_BODY,
   },
 ];
 

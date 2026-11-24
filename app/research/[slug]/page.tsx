@@ -16,6 +16,7 @@ import { BodyBlock } from "@/components/prose/body";
 import { Rise } from "@/components/ui/primitives";
 import { ArticleToc } from "@/components/research/toc";
 import { headingId } from "@/lib/prose";
+import { plainText } from "@/components/prose/rich-text";
 import { Source_Serif_4 } from "next/font/google";
 
 /* The reading face: a calm transitional serif for titles and body, set
@@ -131,7 +132,7 @@ export default async function ResearchPost({
   // headingId the body renderer stamps on each heading.
   const toc = post.body.flatMap((block) =>
     block.kind === "h2"
-      ? [{ id: headingId(block.text), text: block.text }]
+      ? [{ id: headingId(block.text), text: plainText(block.text) }]
       : [],
   );
 

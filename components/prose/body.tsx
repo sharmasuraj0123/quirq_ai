@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Block } from "@/lib/prose";
 import { FigureView } from "@/components/story/figure";
 import { DecisionView } from "./decision";
@@ -26,7 +27,7 @@ export function BodyBlock({ block }: { block: Block }) {
           id={headingId(block.text)}
           className="prose-h2 mt-14 text-[clamp(21px,2.4vw,28px)] font-semibold leading-[1.2] tracking-[-0.02em] text-ink"
         >
-          {block.text}
+          <RichText text={block.text} />
         </h2>
       );
     case "h3":
@@ -35,7 +36,7 @@ export function BodyBlock({ block }: { block: Block }) {
           id={headingId(block.text)}
           className="prose-h3 mt-10 text-[17px] font-semibold tracking-[-0.01em] text-ink"
         >
-          {block.text}
+          <RichText text={block.text} />
         </h3>
       );
     case "p": {
@@ -156,25 +157,55 @@ export function BodyBlock({ block }: { block: Block }) {
       );
     case "decision":
       return <DecisionView block={block} />;
-    case "list":
+    case "image":
       return (
-        <ul className="prose-list mt-5 space-y-2.5">
+        <figure className="prose-image mt-7">
+          <div className="prose-image-plate">
+            <Image
+              src={block.src}
+              alt={block.alt}
+              width={block.width}
+              height={block.height}
+              sizes="(min-width: 1200px) 712px, 92vw"
+              className="block h-auto w-full"
+            />
+          </div>
+          {block.caption && (
+            <figcaption className="prose-image-caption">
+              <RichText text={block.caption} />
+            </figcaption>
+          )}
+        </figure>
+      );
+    case "list": {
+      const List = block.ordered ? "ol" : "ul";
+      return (
+        <List
+          className={`prose-list mt-5 space-y-2.5${block.ordered ? " prose-list-ordered" : ""}`}
+        >
           {block.items.map((item, i) => (
             <li
               key={i}
               className="flex gap-3 text-[15.5px] leading-[1.7] text-ink/70"
             >
-              <span
-                aria-hidden
-                className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-[2px]"
-                style={{ background: "var(--spectrum)" }}
-              />
+              {block.ordered ? (
+                <span className="prose-list-num shrink-0 tabular-nums">
+                  {i + 1}.
+                </span>
+              ) : (
+                <span
+                  aria-hidden
+                  className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-[2px]"
+                  style={{ background: "var(--spectrum)" }}
+                />
+              )}
               <span>
                 <RichText text={item} />
               </span>
             </li>
           ))}
-        </ul>
+        </List>
       );
+    }
   }
 }

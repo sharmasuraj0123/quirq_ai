@@ -760,3 +760,45 @@ body:has(.paper) .grain {
 .paper .prose-figure > div:not(:last-child) { padding: 18px 22px; }
 /* A single-series figure with no unit leaves its legend row empty. */
 .prose-figure > div:empty { display: none; }
+
+/* Exported figures (a paper's charts): drawn for white paper, so they sit on
+   a light plate inside the dark page, captioned beneath in the figure style. */
+.prose-image { margin: 2.2em 0; }
+.prose-image-plate {
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fbfbf9;
+  padding: 14px 10px;
+}
+.prose-image-caption {
+  margin-top: 12px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-dim);
+}
+.prose-image-caption strong { color: var(--color-ink); font-weight: 600; }
+.prose-list-num { min-width: 1.4em; color: var(--color-dim); font-family: var(--font-sans); font-size: 0.85em; padding-top: 0.2em; }
+.paper .prose-p strong,
+.paper .prose-list strong,
+.paper .prose-table strong { color: var(--color-ink); font-weight: 600; }
+.paper .prose-body code,
+.paper .prose-p code { font-family: var(--font-mono); font-size: 0.85em; background: var(--paper-sunk); padding: 0.1em 0.35em; border-radius: 4px; }
+.paper .prose-table td, .paper .prose-table th { min-width: 6em; }
+
+/* Numbered display equations: KaTeX pins \tag to the right edge, so a formula
+   wider than the column runs under its number. Lay the tag out after the
+   formula instead; a too-wide line then scrolls, number included. */
+.math-display .katex-display > .katex { display: block; }
+.math-display .katex-display > .katex > .katex-html:has(> .katex-tag) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+}
+.math-display .katex-display > .katex > .katex-html > .katex-tag {
+  position: static;
+  margin-left: auto;
+  padding-left: 1.5em;
+}
+.math-display .katex-display > .katex > .katex-html:has(> .katex-tag) > .base:first-child { margin-left: auto; }
